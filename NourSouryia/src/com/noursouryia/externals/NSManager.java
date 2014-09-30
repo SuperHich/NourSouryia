@@ -328,7 +328,68 @@ public class NSManager {
 					article.setTitle(jObj.getString(TITLE));
 					article.setBody(jObj.getString(BODY));
 					article.setType(jObj.getString(TYPE));
-					article.setTypeAr(jObj.getString(TYPE_A));
+					if(jObj.has(TYPE_A))
+						article.setTypeAr(jObj.getString(TYPE_A));
+					article.setType(jObj.getString(TYPE));
+					article.setVisits(jObj.getInt(VISITS));
+					article.setCreated(jObj.getString(CREATED));
+					article.setName(jObj.getString(NAME));
+					article.setTid(jObj.getInt(TID));
+					if(jObj.has(YOUTUBE_LINK))
+						article.setYoutubeLink(jObj.getString(YOUTUBE_LINK));
+					if(jObj.has(MP4_LINK))
+						article.setMp4Link(jObj.getString(MP4_LINK));
+					if(jObj.has(MP3_LINK))
+						article.setMp3Link(jObj.getString(MP3_LINK));
+					if(jObj.has(PDF_LINK))
+						article.setPdfLink(jObj.getString(PDF_LINK));
+					
+					try{
+						JSONObject jPaths = jObj.getJSONObject(FILE_PATH);
+						int j = 0;
+						while(jPaths.has(""+j)){
+							String path = jPaths.getString(""+j);
+							article.getFilePath().add(path);
+
+							Log.i(TAG, j + " " + path);
+							j++;
+						}
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+					
+					Log.i(TAG, article.toString());
+
+					articles.add(article);
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		return articles;
+	}
+	
+	public ArrayList<Article> getArticlesByUrl(String url) {
+
+		ArrayList<Article> articles = new ArrayList<Article>();
+		
+		Log.i(TAG, "url " + url);
+		
+		JSONArray array = jsonParser.getJSONFromUrl(url);
+		if (array != null) 
+			for (int i = 0; i < array.length(); i++) {
+				try {
+					JSONObject jObj = array.getJSONObject(i);
+					Article article = new Article();
+					article.setNid(jObj.getInt(NID));
+					article.setTitle(jObj.getString(TITLE));
+					article.setBody(jObj.getString(BODY));
+					article.setType(jObj.getString(TYPE));
+					if(jObj.has(TYPE_A))
+						article.setTypeAr(jObj.getString(TYPE_A));
 					article.setType(jObj.getString(TYPE));
 					article.setVisits(jObj.getInt(VISITS));
 					article.setCreated(jObj.getString(CREATED));

@@ -1,5 +1,7 @@
 package com.noursouryia.entity;
 
+import java.util.ArrayList;
+
 public class Author {
 
 	//	a.	tid : author ID.
@@ -11,6 +13,7 @@ public class Author {
 	private String name;
 	private int count;
 	private String link;
+	private ArrayList<Article> articles = new ArrayList<Article>();
 	
 	public int getTid() {
 		return tid;
@@ -37,13 +40,20 @@ public class Author {
 		this.link = link;
 	}
 
+	public ArrayList<Article> getArticles() {
+		return articles;
+	}
+	public void setArticles(ArrayList<Article> articles) {
+		this.articles = articles;
+	}
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("tid : " 		+ getTid() + "\n");
 		sb.append("name : " 	+ getName() + "\n");
 		sb.append("count : " 	+ getCount() + "\n");
-		sb.append("link : " 	+ getLink());
+		sb.append("link : " 	+ getLink() + "\n");
+		sb.append("articles(size) : " 	+ getArticles().size());
 		return sb.toString();
 	}
 

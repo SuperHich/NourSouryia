@@ -1,7 +1,6 @@
 package com.noursouryia;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -14,13 +13,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.noursouryia.entity.Type;
-import com.noursouryia.externals.NSManager;
-import com.noursouryia.utils.NSFonts;
 
 
 public class HomeFragment extends Fragment {
 
-	private TextView txv_empty, top_header ;
+	private TextView txv_empty ;
 	
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -49,12 +46,9 @@ public class HomeFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View rootView = inflater.inflate(R.layout.fragment_places, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_expandable, container, false);
 		
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
-		top_header =  (TextView) rootView.findViewById(R.id.top_header);
-		
-		top_header.setTypeface(NSFonts.getBDRFont());
 		
 		return rootView;
 	}

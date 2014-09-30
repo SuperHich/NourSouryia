@@ -166,7 +166,9 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 		
 		switch (position) {
 		case 0:
-			fragment = new HomeFragment();
+//			fragment = new HomeFragment();
+//			fragment = new FilesFragment();
+			fragment = new AuthorsFragment();
 //			btn_search.setVisibility(View.VISIBLE);
 //			currentFragment = MOSQUES_FRAGMENT;
 //			header.setBackgroundResource(R.drawable.jana2ez);
