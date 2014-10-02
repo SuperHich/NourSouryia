@@ -11,19 +11,26 @@ import android.graphics.Typeface;
 
 public class NSFonts {
 	
-	private static Typeface bdr_gr_2;
+	private static Typeface noorFont;
 	private static Typeface arabic;
 	
-	public static void Init(Context context){
-		bdr_gr_2  				= Typeface.createFromAsset(context.getAssets(), "fonts/bdr_gr_2.ttf");
+	public void Init(Context context){
 		arabic  				= Typeface.createFromAsset(context.getAssets(), "fonts/Arabic.TTF");
+		noorFont  				= Typeface.createFromAsset(context.getAssets(), "fonts/GE_Dinar_One_Medium.otf");
 	}
 
-	public static Typeface getBDRFont() {
-		return bdr_gr_2;
-	}
 	
 	public static Typeface getArabicFont() {
 		return arabic;
+	}
+
+
+	public Typeface getNoorFont() {
+		return noorFont;
+	}
+
+
+	public void setNoorFont(Typeface noorFont) {
+		NSFonts.noorFont = noorFont;
 	}
 }

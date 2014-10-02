@@ -9,15 +9,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -37,11 +40,12 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 	
 	private DrawerLayout mDrawerLayout;
 	private ExpandableListView mDrawerList;
-	private Button btn_menu, btn_search;
-	private ImageView header ;
+	private LinearLayout mDrawerLinear ;
+	
+	private Button btn_menu_outside, btn_menu_inside;
 
 	private ActionBarDrawerToggle mDrawerToggle;
-	RelativeLayout mainView ;
+	private RelativeLayout mainView , moving_layout;
 
 	public static final int MESSAGE_START = 1;
 	private int lastPosition = 0;
@@ -53,18 +57,60 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 	
 	private boolean isBackEnabled = false;
 	
+	private int width_halfScreen ;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		header = (ImageView) findViewById(R.id.header);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ExpandableListView) findViewById(R.id.right_drawer);
+		mDrawerLinear = (LinearLayout) findViewById(R.id.drawer_linear);
+		
+		moving_layout = (RelativeLayout) findViewById(R.id.moving_layout);
+		mainView = (RelativeLayout) findViewById(R.id.content_frame);
+		
+		btn_menu_outside = (Button) findViewById(R.id.btn_menu_outside);
+		btn_menu_inside = (Button) findViewById(R.id.btn_menu_inside);
+		
+		mDrawerList.setGroupIndicator(null);
+		mDrawerList.setOnGroupExpandListener(new OnGroupExpandListener() {
+			
+			@Override
+			public void onGroupExpand(int groupPosition) {
 
+				RelativeLayout ll = (RelativeLayout) mDrawerList.getChildAt(groupPosition);
+				ImageView expand = (ImageView) ll.findViewById(R.id.expand);
+				
+				expand.setImageResource(R.drawable.minus);
+				
+			}
+		});
+		
+		mDrawerList.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+			
+			@Override
+			public void onGroupCollapse(int groupPosition) {
+
+				RelativeLayout ll = (RelativeLayout) mDrawerList.getChildAt(groupPosition);
+				ImageView expand = (ImageView) ll.findViewById(R.id.expand);
+				
+				expand.setImageResource(R.drawable.plus);
+			}
+		});
+		
+		
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		width_halfScreen = (displaymetrics.widthPixels)/2;
+		
+	    mDrawerLinear.getLayoutParams().width = width_halfScreen;
+	    
+	    
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
 		MenuCustomAdapter adapter = new MenuCustomAdapter(this, NSManager.getInstance(this).getCurrent_types());
 
 
@@ -73,7 +119,7 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		mainView = (RelativeLayout) findViewById(R.id.content_frame);
+		
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 
 
@@ -89,7 +135,7 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 			@Override
 			public void onDrawerSlide(View drawerView, float slideOffset) {
 				super.onDrawerSlide(drawerView, slideOffset);
-				mainView.setTranslationX(- slideOffset * drawerView.getWidth());
+		//		moving_layout.setTranslationX(- slideOffset * drawerView.getWidth());
 				mDrawerLayout.bringChildToFront(drawerView);
 				mDrawerLayout.requestLayout();
 			}
@@ -100,25 +146,9 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 		//			selectItem(1);
 		//		}
 
-		btn_menu = (Button) findViewById(R.id.menu);
-		btn_menu.setOnTouchListener(this);
-		btn_menu.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				if(!mDrawerLayout.isDrawerOpen(Gravity.RIGHT))
-					mDrawerLayout.openDrawer(Gravity.RIGHT);
-				else
-					mDrawerLayout.closeDrawer(Gravity.RIGHT);		
-			}
-		});
-
-		btn_search = (Button) findViewById(R.id.search);
-		btn_search.setOnTouchListener(this);
-
 		
-//		lastPosition = getIntent().getExtras().getInt(DEFAULT_FRAG_POSITION);
-//		selected_placeID = getIntent().getExtras().getInt(SELECTED_PLACE);
+		btn_menu_outside.setOnTouchListener(this);
+		btn_menu_inside.setOnTouchListener(this);
 	}
 
 	@Override
@@ -156,7 +186,6 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 
 	private void selectItem(int position) {
 		
-		btn_menu.setBackgroundResource(R.drawable.menu);
 
 		lastPosition = position;
 		boolean shouldSwitch = true;
@@ -168,7 +197,7 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 		case 0:
 //			fragment = new HomeFragment();
 //			fragment = new FilesFragment();
-			fragment = new AuthorsFragment();
+//			fragment = new AuthorsFragment();
 //			btn_search.setVisibility(View.VISIBLE);
 //			currentFragment = MOSQUES_FRAGMENT;
 //			header.setBackgroundResource(R.drawable.jana2ez);
@@ -189,12 +218,12 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 //		if(args != null)
 //			fragment.setArguments(args);
 
-		if(shouldSwitch)
-			switchTab(fragment, false);
+//		if(shouldSwitch)
+//			switchTab(fragment, false);
 
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);
-		mDrawerLayout.closeDrawer(mDrawerList);
+		mDrawerLayout.closeDrawer(mDrawerLinear);
 
 	}
 
@@ -242,7 +271,7 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 				view.invalidate();
 
 				switch (v.getId()) {
-				case R.id.menu:
+				case R.id.btn_menu_outside:
 //					if(isBackEnabled)
 //					{		
 //						onBackPressed();
@@ -254,9 +283,17 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 							mDrawerLayout.closeDrawer(Gravity.RIGHT);		
 //					}
 					break;
-				case R.id.search:
-					//show search dialog;
-					showSearchDialog();
+				case R.id.btn_menu_inside:
+///					if(isBackEnabled)
+//					{		
+//					onBackPressed();
+//				}
+//				else{
+					if(!mDrawerLayout.isDrawerOpen(Gravity.RIGHT))
+						mDrawerLayout.openDrawer(Gravity.RIGHT);
+					else
+						mDrawerLayout.closeDrawer(Gravity.RIGHT);		
+//				}
 					break;
 				default:
 					break;

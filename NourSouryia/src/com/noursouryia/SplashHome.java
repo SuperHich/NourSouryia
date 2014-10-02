@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
+import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
 
 
@@ -31,6 +32,7 @@ public class SplashHome extends Activity {
 	public static final int MESSAGE_FINISH = 2;
 	
 	private RelativeLayout principal_layout;
+	public NSFonts mNSFonts ;
 	
 	private Handler splashHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -57,12 +59,13 @@ public class SplashHome extends Activity {
 		setContentView(R.layout.splashhome);
 		
 		principal_layout = (RelativeLayout) findViewById(R.id.principal_layout);
-		
+		mNSFonts = new NSFonts() ;
 //		Message msg = Message.obtain();
 //		msg.what = MESSAGE_FINISH;
 //	    splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 		
 		initData();
+		mNSFonts.Init(this);
 		
 	}
 

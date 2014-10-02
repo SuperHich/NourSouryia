@@ -2,73 +2,117 @@
     android:id="@+id/principal_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:background="@color/color_green" >
-
-    <RelativeLayout
-        android:id="@+id/top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:background="@color/color_green"
-        >
-
-        <Button
-            android:id="@+id/search"
-            android:layout_width="50dp"
-            android:layout_height="50dp" 
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/search"/>
-        
-          <ImageView
-            android:id="@+id/header"
-            android:layout_width="265dp"
-            android:layout_height="50dp" 
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/jana2ez"/>
-        
-        <Button
-            android:id="@+id/menu"
-            android:layout_width="50dp"
-            android:layout_height="50dp" 
-            android:layout_alignParentRight="true"
-            android:background="@drawable/menu"/>
-    </RelativeLayout>
+    android:layout_gravity="center" >
 
     <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/drawer_layout"
-        android:layout_below="@id/top"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
         <RelativeLayout
-            android:id="@+id/content_frame"
+            android:id="@+id/moving_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ExpandableListView
-            android:id="@+id/right_drawer"
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@color/color_green"
-            android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp" />
+            android:background="@color/blue_top" >
 
+            <RelativeLayout
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp" >
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/btn_share"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/btn_share" />
+
+                    <Button
+                        android:id="@+id/btn_lamp"
+                        android:layout_width="22.5dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_lamp" />
+
+                    <Button
+                        android:id="@+id/btn_settings"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_settings" />
+
+                    <Button
+                        android:id="@+id/btn_rss"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_rss" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_menu_outside"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/btn_menu" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/content_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/top" >
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/drawer_linear"
+            android:layout_width="268dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@color/drawer_bg"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/drawer_header"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="@color/drawer_bg" >
+
+                <Button
+                    android:id="@+id/btn_menu_inside"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/menu_inside_drawer" />
+            </RelativeLayout>
+
+            <ExpandableListView
+                android:id="@+id/right_drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/drawer_list_bg"
+                android:choiceMode="singleChoice"
+                
+                android:divider="#007c71"
+                android:dividerHeight="1dp" />
+
+            <ImageView
+                android:id="@+id/drawer_footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/drawer_bg" />
+        </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
-    
-    <FrameLayout
-        android:id="@+id/fragment_view"
-        android:layout_width="match_parent"
-    	android:layout_height="match_parent">
-    </FrameLayout>
-    
-    <FrameLayout
-        android:id="@+id/new_fragment_view"
-        android:layout_width="match_parent"
-    	android:layout_height="match_parent">
-    </FrameLayout>
 
 </RelativeLayout>

@@ -10,23 +10,32 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.noursouryia.R;
 import com.noursouryia.entity.Type;
+import com.noursouryia.utils.NSFonts;
 
-public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTouchListener {
+public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTouchListener, OnGroupExpandListener {
 
 	IMenuListener listener;
 	ArrayList<Type> types = new ArrayList<Type>();
 	LayoutInflater inflater;
+	static Context mContext ;
+	public NSFonts mNSFonts ;
+	
 	public MenuCustomAdapter(Context context, ArrayList<Type> types)
 	{
+		
+		mContext = context ;
 		this.types.addAll(types);
 		inflater= LayoutInflater.from(context);
 		listener = (IMenuListener) context;
-
+		mNSFonts = new NSFonts() ;
+		
 	}
 //	@Override
 //	public int getCount() {
@@ -88,6 +97,9 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 	class ViewHolder
 	{
 		TextView tv;
+		ImageView puce ;
+		RelativeLayout row_bg ;
+		ImageView expand ;
 	}
 
 	@Override
@@ -129,12 +141,18 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		ViewHolder holder;
+		
 		if(convertView==null)
 		{
 			holder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.rowlv_module, null);
 			
 			holder.tv= (TextView) convertView.findViewById(R.id.trim1);
+			holder.row_bg = (RelativeLayout) convertView.findViewById(R.id.row_bg);
+			holder.expand = (ImageView) convertView.findViewById(R.id.expand);
+			
+			
+			
 //			holder.tv.setOnTouchListener(this);
 			convertView.setTag(holder);
 		}
@@ -146,7 +164,19 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 		
 		holder.tv.setTag(new Integer[]{groupPosition});
 		holder.tv.setText(sub_title);
-//		holder.tv.setBackgroundDrawable(images.getDrawable(childPosition));
+		holder.tv.setTypeface(mNSFonts.getNoorFont());
+
+	//	holder.row_bg.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_list_bg));
+		holder.row_bg.setBackgroundResource(R.drawable.drawer_list_selector);
+		
+		holder.expand.setVisibility(View.GONE);
+		
+		if (types.get(groupPosition).getCategories().size() > 0)
+		{
+			holder.expand.setVisibility(View.VISIBLE);
+		}
+		
+		
 		return convertView;
 	}
 	@Override
@@ -159,6 +189,10 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 			convertView = inflater.inflate(R.layout.rowlv_module, null);
 			
 			holder.tv= (TextView) convertView.findViewById(R.id.trim1);
+			holder.puce= (ImageView) convertView.findViewById(R.id.puce);
+			holder.row_bg = (RelativeLayout) convertView.findViewById(R.id.row_bg);
+			holder.expand = (ImageView) convertView.findViewById(R.id.expand);
+			
 //			holder.tv.setOnTouchListener(this);
 			convertView.setTag(holder);
 		}
@@ -166,18 +200,61 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
+		
+		holder.expand.setVisibility(View.GONE);
+		
 		String sub_title = types.get(groupPosition).getCategories().get(childPosition).getName(); 
 		
 		holder.tv.setTag(new Integer[]{groupPosition, childPosition});
 		holder.tv.setText(sub_title);
-//		holder.tv.setBackgroundDrawable(images.getDrawable(childPosition));
+		holder.tv.setTypeface(mNSFonts.getNoorFont());
+		
+//		holder.row_bg.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_bg));
+		holder.row_bg.setBackgroundResource(R.drawable.drawer_subitem_selector);
+		
+		
+		
+		holder.puce.setImageResource(R.drawable.blue_puce);
+		adjustViewDimensions(holder.puce, 50 , 5);
+		
+		
+		
+		
 		return convertView;
 	}
+	
+	
+	
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	
+	public static void adjustViewDimensions (View v, int myNewX, int myNewY) {
+		
+		float d = mContext.getResources().getDisplayMetrics().density;
+		
+		int dpX = (int)(myNewX * d);
+		int dpY = (int)(myNewY * d);
+		
+		
+		RelativeLayout.LayoutParams absParams = 
+				(RelativeLayout.LayoutParams)v.getLayoutParams();
+		absParams.rightMargin = dpX ;
+		absParams.width = dpY ;
+		absParams.height = dpY ;
+		v.setLayoutParams(absParams);
+	}
+
+	@Override
+	public void onGroupExpand(int groupPosition) {
+
+		
+		
+		
+	}
+	
 
 }
