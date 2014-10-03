@@ -4,7 +4,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -27,9 +26,9 @@ import android.widget.RelativeLayout;
 import com.noursouryia.SearchDialog.EditNameDialogListener;
 import com.noursouryia.adapters.IMenuListener;
 import com.noursouryia.adapters.MenuCustomAdapter;
-import com.noursouryia.externals.NSManager;
+import com.noursouryia.utils.NSActivity;
 
-public class MainActivity extends FragmentActivity implements IMenuListener, OnTouchListener, EditNameDialogListener{
+public class MainActivity extends NSActivity implements IMenuListener, OnTouchListener, EditNameDialogListener{
 
 //	public static final String MOSQUES_FRAGMENT = "mosques_fragment";
 //	public static final String JANAEZ_FRAGMENT = "janaez_fragment";
@@ -64,7 +63,7 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ExpandableListView) findViewById(R.id.right_drawer);
 		mDrawerLinear = (LinearLayout) findViewById(R.id.drawer_linear);
@@ -111,7 +110,8 @@ public class MainActivity extends FragmentActivity implements IMenuListener, OnT
 	    
 	    
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		MenuCustomAdapter adapter = new MenuCustomAdapter(this, NSManager.getInstance(this).getCurrent_types());
+		MenuCustomAdapter adapter = new MenuCustomAdapter(this, NourSouryiaDB.getAllTypes());
+//		MenuCustomAdapter adapter = new MenuCustomAdapter(this, NSManager.getInstance(this).getCurrent_types());
 
 
 		mDrawerList.setAdapter(adapter);

@@ -45,33 +45,33 @@ public class NSManager {
 	public static final String URL_ADD_VOTE 	= "http://syrianoor.net/add/vote";
 		
 	
-	private static final String NAME_EN			= "name_en";
-	private static final String NAME_AR 		= "name_ar";
-	private static final String LINK 			= "link";
-	private static final String CATS 			= "cats";
-	private static final String TID		 		= "tid";
-	private static final String NAME 			= "name";
-	private static final String COUNTRY 		= "country";
-	private static final String BODY			= "body";
-	private static final String DATE			= "date";
-	private static final String COUNT		 	= "count";
-	private static final String QID 			= "qid";
-	private static final String QUESTION 		= "question";
-	private static final String POLL_CHOICES	= "poll_choices";
-	private static final String CHID	 		= "chid";
-	private static final String CHTEXT	 		= "chtext";
-	private static final String CHVOTES	 		= "chvotes";
-	private static final String NID	 			= "nid";
-	private static final String TITLE	 		= "title";
-	private static final String TYPE	 		= "type";
-	private static final String TYPE_A	 		= "type_a";
-	private static final String VISITS	 		= "visits";
-	private static final String CREATED	 		= "created";
-	private static final String FILE_PATH	 	= "filepath";
-	private static final String YOUTUBE_LINK	= "youtube_link";
-	private static final String MP4_LINK	 	= "mp4_link";
-	private static final String MP3_LINK	 	= "mp3_link";
-	private static final String PDF_LINK	 	= "pdf_link";
+	public static final String NAME_EN			= "name_en";
+	public static final String NAME_AR 			= "name_ar";
+	public static final String LINK 			= "link";
+	public static final String CATS 			= "cats";
+	public static final String TID		 		= "tid";
+	public static final String NAME 			= "name";
+	public static final String COUNTRY 			= "country";
+	public static final String BODY				= "body";
+	public static final String DATE				= "date";
+	public static final String COUNT			= "count";
+	public static final String QID 				= "qid";
+	public static final String QUESTION 		= "question";
+	public static final String POLL_CHOICES		= "poll_choices";
+	public static final String CHID	 			= "chid";
+	public static final String CHTEXT	 		= "chtext";
+	public static final String CHVOTES	 		= "chvotes";
+	public static final String NID	 			= "nid";
+	public static final String TITLE	 		= "title";
+	public static final String TYPE	 			= "type";
+	public static final String TYPE_A	 		= "type_a";
+	public static final String VISITS	 		= "visits";
+	public static final String CREATED	 		= "created";
+	public static final String FILE_PATH		= "filepath";
+	public static final String YOUTUBE_LINK		= "youtube_link";
+	public static final String MP4_LINK	 		= "mp4_link";
+	public static final String MP3_LINK	 		= "mp3_link";
+	public static final String PDF_LINK	 		= "pdf_link";
 	
 
 	private IFragmentNotifier fragmentNotifier;
@@ -81,8 +81,6 @@ public class NSManager {
 	private SharedPreferences.Editor editor;
 	private JSONParser jsonParser;
 	private Context mContext;
-	
-	private ArrayList<Type> current_types;
 	
 	public NSManager(Context context) {
 		
@@ -142,12 +140,6 @@ public class NSManager {
 
 			}
 		
-		if(this.current_types == null)
-		{
-			this.current_types = new ArrayList<Type>();
-			this.current_types.addAll(types);
-		}
-
 		return types;
 	}
 
@@ -390,7 +382,6 @@ public class NSManager {
 					article.setType(jObj.getString(TYPE));
 					if(jObj.has(TYPE_A))
 						article.setTypeAr(jObj.getString(TYPE_A));
-					article.setType(jObj.getString(TYPE));
 					article.setVisits(jObj.getInt(VISITS));
 					article.setCreated(jObj.getString(CREATED));
 					article.setName(jObj.getString(NAME));
@@ -449,14 +440,6 @@ public class NSManager {
 
 	public void setFragmentNotifier(IFragmentNotifier fragmentNotifier) {
 		this.fragmentNotifier = fragmentNotifier;
-	}
-
-	public ArrayList<Type> getCurrent_types() {
-		return current_types;
-	}
-
-	public void setCurrent_types(ArrayList<Type> current_types) {
-		this.current_types = current_types;
 	}
 
 }

@@ -11,7 +11,6 @@ public class Type {
 //	b.	full link : when the section doesn’t has categories.
 //	4-	cats : this key will be returned only when the section has some categories. 
 
-
 	private String nameEn;
 	private String nameAr;
 	private String link; // "#" if it has categories

@@ -13,8 +13,6 @@ public class BaseFragment extends Fragment {
 		getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 	
-
-	
 	public boolean onBackPressed(){
 		return false;
 	}
