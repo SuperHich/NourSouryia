@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.noursouryia.entity.Type;
@@ -17,7 +18,8 @@ import com.noursouryia.entity.Type;
 
 public class HomeFragment extends Fragment {
 
-	private TextView txv_empty ;
+	private TextView news_feed ;
+	private Button paginate_left, paginate_right ;
 	
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -46,9 +48,11 @@ public class HomeFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View rootView = inflater.inflate(R.layout.fragment_expandable, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 		
-		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
+		news_feed = (TextView) rootView.findViewById(R.id.news_feed);
+		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);
+		paginate_right = (Button) rootView.findViewById(R.id.paginate_right_news);
 		
 		return rootView;
 	}

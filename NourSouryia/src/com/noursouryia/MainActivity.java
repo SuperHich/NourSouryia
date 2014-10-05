@@ -195,12 +195,11 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		
 		switch (position) {
 		case 0:
-//			fragment = new HomeFragment();
+			fragment = new HomeFragment();
 //			fragment = new FilesFragment();
 //			fragment = new AuthorsFragment();
 //			btn_search.setVisibility(View.VISIBLE);
 //			currentFragment = MOSQUES_FRAGMENT;
-//			header.setBackgroundResource(R.drawable.jana2ez);
 			break;
 //		case 1:
 //			fragment = new Da3waFragment();
@@ -211,6 +210,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 //			break;
 		default:
 			shouldSwitch = false;
+			switchTab(new HomeFragment(), false);
 			break;
 
 		}
@@ -218,8 +218,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 //		if(args != null)
 //			fragment.setArguments(args);
 
-//		if(shouldSwitch)
-//			switchTab(fragment, false);
+		if(shouldSwitch)
+			switchTab(fragment, false);
 
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);

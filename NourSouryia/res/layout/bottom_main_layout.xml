@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:background="@color/grey_white_bottom" />
+
+    
+    <Button
+        android:id="@+id/opener_bottom"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ctrl_open_bottom" />
+    
+    
+    <Button
+        android:id="@+id/btn_news"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/btn_news" />
+
+    <Button
+        android:id="@+id/btn_folders"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/btn_folders" />
+    
+      <Button
+        android:id="@+id/btn_researches"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_below="@id/btn_news"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="55dp"
+        android:background="@drawable/btn_researches" />
+      
+      <Button
+        android:id="@+id/btn_writers"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_below="@id/btn_folders"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="55dp"
+        android:background="@drawable/btn_writers" />
+      
+      <Button
+        android:id="@+id/btn_articles"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_below="@id/btn_researches"
+        android:layout_marginTop="-35dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_articles" />
+    
+
+
+</RelativeLayout>
