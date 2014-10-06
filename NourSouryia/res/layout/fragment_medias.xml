@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="222dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/logo_noor_sourya" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp" >
+
+        <ImageView
+            android:id="@+id/btn_folders_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bg_btn_folder_photos" />
+
+        <ImageButton
+            android:id="@+id/btn_folder_photos"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_folder_photos" />
+
+        <ImageButton
+            android:id="@+id/btn_folder_sound"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_toRightOf="@id/btn_folder_photos"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_folder_sound" />
+
+        <ImageButton
+            android:id="@+id/btn_folder_video"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_folder_video" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/grid_folders"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:numColumns="3"
+        android:verticalSpacing="30dp"
+        android:stretchMode="columnWidth" >
+    </GridView>
+    
+    
+    
+</LinearLayout>

@@ -7,7 +7,7 @@ import com.noursouryia.externals.NSDatabaseManager;
 
 public class NSActivity extends FragmentActivity{
 
-	protected NSDatabaseManager NourSouryiaDB;
+	public NSDatabaseManager NourSouryiaDB;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {

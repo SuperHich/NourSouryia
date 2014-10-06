@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.noursouryia.entity.Author;
 import com.noursouryia.entity.Category;
@@ -58,6 +59,28 @@ public class NSDatabaseManager extends NSDatabase {
 
 		return types;
 	}
+	
+	public Type getTypeByName(String name){
+
+		open();
+		Type type = new Type();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_TYPES+ " WHERE " + NSManager.NAME_EN + " LIKE '" + name+"'";
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// looping through all rows and adding to type
+		if (cursor.moveToFirst()) {
+
+				type.setNameEn(cursor.getString((cursor.getColumnIndex(NSManager.NAME_EN))));
+				type.setNameAr(cursor.getString(cursor.getColumnIndex(NSManager.NAME_AR)));
+				type.setLink(cursor.getString((cursor.getColumnIndex(NSManager.LINK))));
+				type.setCategories(getCategoriesByType(type.getNameEn()));
+				
+				Log.e(TAG,"type : " + type.toString());
+		}
+
+		return type;
+	}
+	
 	
 	public ArrayList<Category> getCategoriesByType(String type_id){
 
