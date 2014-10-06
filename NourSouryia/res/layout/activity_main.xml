@@ -103,7 +103,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/drawer_list_bg"
                 android:choiceMode="singleChoice"
-                
                 android:divider="#007c71"
                 android:dividerHeight="1dp" />
 

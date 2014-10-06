@@ -6,17 +6,18 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.noursouryia.entity.Type;
+import com.noursouryia.utils.BaseFragment;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
 
 	private TextView news_feed ;
 	private Button paginate_left, paginate_right ;
@@ -48,7 +49,7 @@ public class HomeFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_home, container, false);
 		
 		news_feed = (TextView) rootView.findViewById(R.id.news_feed);
 		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);

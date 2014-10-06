@@ -33,6 +33,9 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 //	public static final String MOSQUES_FRAGMENT = "mosques_fragment";
 //	public static final String JANAEZ_FRAGMENT = "janaez_fragment";
 //	public static final String DA3AWI_FRAGMENT = "da3awi_fragment";
+	protected static final String TAG = MainActivity.class.getSimpleName();
+	
+    public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
 	
 	public static final String 	DEFAULT_FRAG_POSITION 	= "default_frag_position";
 	public static final String 	SELECTED_PLACE 			= "selected_place";
@@ -47,6 +50,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private RelativeLayout mainView , moving_layout;
 
 	public static final int MESSAGE_START = 1;
+	
 	private int lastPosition = 0;
 	private String lastText = "";
 	private boolean isFirstStart = true;
@@ -58,7 +62,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	
 	private int width_halfScreen ;
 	
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -141,7 +145,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+		
 		//		if (savedInstanceState == null) {
 		//			selectItem(1);
 		//		}
@@ -149,6 +153,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		
 		btn_menu_outside.setOnTouchListener(this);
 		btn_menu_inside.setOnTouchListener(this);
+		
 	}
 
 	@Override
@@ -370,6 +375,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		@Override
 		public void onBackPressed() {
 			super.onBackPressed();
+			
 //			if(currentFragment.equals(JANAEZ_FRAGMENT)){
 //				currentFragment = MOSQUES_FRAGMENT;
 //				btn_menu.setBackgroundResource(R.drawable.menu);
