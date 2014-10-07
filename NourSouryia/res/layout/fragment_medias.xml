@@ -35,9 +35,9 @@
             android:id="@+id/btn_folder_sound"
             android:layout_width="100dp"
             android:layout_height="36dp"
-            android:layout_toRightOf="@id/btn_folder_photos"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="12dp"
+            android:layout_toRightOf="@id/btn_folder_photos"
             android:scaleType="fitCenter"
             android:src="@drawable/btn_folder_sound" />
 
@@ -56,13 +56,86 @@
         android:id="@+id/grid_folders"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:numColumns="3"
-        android:verticalSpacing="30dp"
-        android:stretchMode="columnWidth" >
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="30dp" >
     </GridView>
-    
-    
-    
+
+    <LinearLayout
+        android:id="@+id/one_media"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="-10dp"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="65dp" >
+
+            <ImageButton
+                android:id="@+id/item_image"
+                android:layout_width="74dp"
+                android:layout_height="65dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="2dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_folder" />
+
+            <TextView
+                android:id="@+id/item_text"
+                android:layout_width="wrap_content"
+                android:layout_height="57dp"
+                android:layout_marginRight="2dp"
+                android:layout_toLeftOf="@id/item_image"
+                android:gravity="right|bottom"
+                android:textColor="#FFF"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <ImageView
+                android:id="@+id/slide_shower"
+                android:layout_width="fill_parent"
+                android:layout_height="230dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:background="#60aec2" />
+
+            <Button
+                android:id="@+id/paginate_left_slider"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="7dp"
+                android:background="@drawable/paginate_left_selector" />
+
+            <Button
+                android:id="@+id/paginate_right_slider"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="7dp"
+                android:background="@drawable/paginate_right_selector" />
+        </RelativeLayout>
+
+        <Gallery
+            android:id="@+id/gallery"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="5dp"
+            android:spacing="2dp" />
+    </LinearLayout>
+
 </LinearLayout>
