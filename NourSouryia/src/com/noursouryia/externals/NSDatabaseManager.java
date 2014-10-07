@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Author;
 import com.noursouryia.entity.Category;
 import com.noursouryia.entity.File;
@@ -159,6 +160,7 @@ public class NSDatabaseManager extends NSDatabase {
 				file.setName(cursor.getString(cursor.getColumnIndex(NSManager.NAME)));
 				file.setCount(cursor.getInt(cursor.getColumnIndex(NSManager.COUNT)));
 				file.setLink(cursor.getString((cursor.getColumnIndex(NSManager.LINK))));
+				file.setArticles(getArticlesByID(COL_FILE_ID, file.getTid()));
 //				Log.e(TAG,"File : " + file.toString());
 				files.add(file);
 			} while (cursor.moveToNext());
@@ -167,7 +169,7 @@ public class NSDatabaseManager extends NSDatabase {
 		return files;
 	}
 
-	public void insertOrUpdateCategory(File file) {
+	public void insertOrUpdateFile(File file) {
 		open();
 
 		ContentValues values = new ContentValues();
@@ -176,11 +178,15 @@ public class NSDatabaseManager extends NSDatabase {
 		values.put(NSManager.COUNT, file.getCount());
 		values.put(NSManager.LINK, file.getLink());
 
+		for(Article art : file.getArticles()){
+			insertOrUpdateArticle(art, file.getTid(), DEFAULT_VALUE);
+		}
+		
 		int up = db.updateWithOnConflict(TABLE_FILES, values, NSManager.TID + " = ?",
 				new String[] {String.valueOf(file.getTid())}, SQLiteDatabase.CONFLICT_REPLACE);
 
 		if(up != 1){
-			db.insert(TABLE_CATEGORIES, null, values);
+			db.insert(TABLE_FILES, null, values);
 		}
 	}
 	
@@ -199,6 +205,7 @@ public class NSDatabaseManager extends NSDatabase {
 				author.setName(cursor.getString(cursor.getColumnIndex(NSManager.NAME)));
 				author.setCount(cursor.getInt(cursor.getColumnIndex(NSManager.COUNT)));
 				author.setLink(cursor.getString((cursor.getColumnIndex(NSManager.LINK))));
+				author.setArticles(getArticlesByID(COL_AUTHOR_ID, author.getTid()));
 //				Log.e(TAG,"Author : " + author.toString());
 				authors.add(author);
 			} while (cursor.moveToNext());
@@ -206,8 +213,20 @@ public class NSDatabaseManager extends NSDatabase {
 
 		return authors;
 	}
+	
+	public String getAuthorNameByID(int authorID){
 
-	public void insertOrUpdateCategory(Author author) {
+		String selectQuery = "SELECT " + NSManager.NAME + " FROM " + TABLE_AUTHORS + " WHERE " + NSManager.TID + " = " + authorID ;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		if (cursor.moveToFirst()) {
+				return cursor.getString(0);
+		}
+
+		return null;
+	}
+
+	public void insertOrUpdateAuthor(Author author) {
 		open();
 
 		ContentValues values = new ContentValues();
@@ -215,12 +234,16 @@ public class NSDatabaseManager extends NSDatabase {
 		values.put(NSManager.NAME, author.getName());
 		values.put(NSManager.COUNT, author.getCount());
 		values.put(NSManager.LINK, author.getLink());
+		
+		for(Article art : author.getArticles()){
+			insertOrUpdateArticle(art, DEFAULT_VALUE, author.getTid());
+		}
 
 		int up = db.updateWithOnConflict(TABLE_AUTHORS, values, NSManager.TID + " = ?",
 				new String[] {String.valueOf(author.getTid())}, SQLiteDatabase.CONFLICT_REPLACE);
 
 		if(up != 1){
-			db.insert(TABLE_CATEGORIES, null, values);
+			db.insert(TABLE_AUTHORS, null, values);
 		}
 	}
 	
@@ -319,11 +342,11 @@ public class NSDatabaseManager extends NSDatabase {
 			insertOrUpdatePollChoice(pc, question.getQid());
 		}
 
-		int up = db.updateWithOnConflict(TABLE_TYPES, values, NSManager.QID + " = ?",
+		int up = db.updateWithOnConflict(TABLE_QUESTIONS, values, NSManager.QID + " = ?",
 				new String[] {String.valueOf(question.getQid())}, SQLiteDatabase.CONFLICT_REPLACE);
 
 		if(up != 1){
-			db.insert(TABLE_TYPES, null, values);
+			db.insert(TABLE_QUESTIONS, null, values);
 		}
 		
 	}
@@ -344,5 +367,104 @@ public class NSDatabaseManager extends NSDatabase {
 			db.insert(TABLE_POLL_CHOICES, null, values);
 		}
 		
+	}
+	
+	
+	
+	public ArrayList<Article> getAllArticles(){
+
+		open();
+		ArrayList<Article> articles = new ArrayList<Article>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// looping through all rows and adding to type
+		if (cursor.moveToFirst()) {
+			do {
+				Article article = new Article();
+				
+				article.setNid(cursor.getInt((cursor.getColumnIndex(NSManager.NID))));
+				article.setTitle(cursor.getString((cursor.getColumnIndex(NSManager.TITLE))));
+				article.setBody(cursor.getString((cursor.getColumnIndex(NSManager.BODY))));
+				article.setType(cursor.getString((cursor.getColumnIndex(NSManager.TYPE))));
+				article.setTypeAr(cursor.getString((cursor.getColumnIndex(NSManager.TYPE_A))));
+				article.setVisits(cursor.getInt((cursor.getColumnIndex(NSManager.VISITS))));
+				article.setCreated(cursor.getString((cursor.getColumnIndex(NSManager.CREATED))));
+				article.setName(cursor.getString((cursor.getColumnIndex(NSManager.NAME))));
+				article.setTid(cursor.getInt((cursor.getColumnIndex(NSManager.TID))));
+				article.setYoutubeLink(cursor.getString((cursor.getColumnIndex(NSManager.YOUTUBE_LINK))));
+				article.setMp4Link(cursor.getString((cursor.getColumnIndex(NSManager.MP4_LINK))));
+				article.setMp3Link(cursor.getString((cursor.getColumnIndex(NSManager.MP3_LINK))));
+				article.setPdfLink(cursor.getString((cursor.getColumnIndex(NSManager.PDF_LINK))));
+
+				Log.e(TAG,"article : " + article.toString());
+				articles.add(article);
+			} while (cursor.moveToNext());
+		}
+
+		return articles;
+	}
+	
+	public ArrayList<Article> getArticlesByID(String column, int ID){
+
+		open();
+		ArrayList<Article> articles = new ArrayList<Article>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES + " WHERE " + column + " = " + ID;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// looping through all rows and adding to type
+		if (cursor.moveToFirst()) {
+			do {
+				Article article = new Article();
+				
+				article.setNid(cursor.getInt((cursor.getColumnIndex(NSManager.NID))));
+				article.setTitle(cursor.getString((cursor.getColumnIndex(NSManager.TITLE))));
+				article.setBody(cursor.getString((cursor.getColumnIndex(NSManager.BODY))));
+				article.setType(cursor.getString((cursor.getColumnIndex(NSManager.TYPE))));
+				article.setTypeAr(cursor.getString((cursor.getColumnIndex(NSManager.TYPE_A))));
+				article.setVisits(cursor.getInt((cursor.getColumnIndex(NSManager.VISITS))));
+				article.setCreated(cursor.getString((cursor.getColumnIndex(NSManager.CREATED))));
+				article.setName(cursor.getString((cursor.getColumnIndex(NSManager.NAME))));
+				article.setTid(cursor.getInt((cursor.getColumnIndex(NSManager.TID))));
+				article.setYoutubeLink(cursor.getString((cursor.getColumnIndex(NSManager.YOUTUBE_LINK))));
+				article.setMp4Link(cursor.getString((cursor.getColumnIndex(NSManager.MP4_LINK))));
+				article.setMp3Link(cursor.getString((cursor.getColumnIndex(NSManager.MP3_LINK))));
+				article.setPdfLink(cursor.getString((cursor.getColumnIndex(NSManager.PDF_LINK))));
+
+				Log.e(TAG,"article : " + article.toString());
+				articles.add(article);
+			} while (cursor.moveToNext());
+		}
+
+		return articles;
+	}
+	
+	public void insertOrUpdateArticle(Article article, int fileID, int authorID) {
+		open();
+
+		ContentValues values = new ContentValues();
+		values.put(NSManager.NID, article.getNid());
+		values.put(NSManager.TITLE, article.getTitle());
+		values.put(NSManager.BODY, article.getBody());
+		values.put(NSManager.TYPE, article.getType());
+		values.put(NSManager.TYPE_A, article.getTypeAr());
+		values.put(NSManager.VISITS, article.getVisits());
+		values.put(NSManager.CREATED, article.getCreated());
+		values.put(NSManager.NAME, article.getName());
+		values.put(NSManager.TID, article.getTid());
+		values.put(NSManager.YOUTUBE_LINK, article.getYoutubeLink());
+		values.put(NSManager.MP4_LINK, article.getMp4Link());
+		values.put(NSManager.MP3_LINK, article.getMp3Link());
+		values.put(NSManager.PDF_LINK, article.getPdfLink());
+
+		values.put(COL_FILE_ID, fileID);
+		values.put(COL_AUTHOR_ID, authorID);
+		
+		int up = db.updateWithOnConflict(TABLE_ARTICLES, values, NSManager.NID + " = ?",
+				new String[] {String.valueOf(article.getNid())}, SQLiteDatabase.CONFLICT_REPLACE);
+
+		if(up != 1){
+			db.insert(TABLE_ARTICLES, null, values);
+		}
 	}
 }

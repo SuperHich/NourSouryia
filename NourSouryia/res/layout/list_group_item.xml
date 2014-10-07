@@ -29,7 +29,7 @@
     <TextView
         android:id="@+id/trim1"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:layout_toLeftOf="@id/puce"
         android:layout_toRightOf="@+id/txv_count"
         android:gravity="center_vertical|right"
@@ -39,11 +39,15 @@
      <TextView
         android:id="@+id/txv_count"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:gravity="center_vertical"
         android:layout_alignParentLeft="true"
         android:textColor="#FFF"
         android:paddingLeft="5dp"
         android:visibility="gone"/>
+     
+     <View android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/drawer_bg"/>
      
 </RelativeLayout>

@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +16,11 @@ import android.widget.TextView;
 import com.noursouryia.adapters.AuthorsAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Author;
-import com.noursouryia.externals.NSManager;
+import com.noursouryia.utils.BaseFragment;
+import com.noursouryia.utils.NSActivity;
 
 
-public class AuthorsFragment extends Fragment {
+public class AuthorsFragment extends BaseFragment {
 
 	private AuthorsAdapter adapter;
 	private ArrayList<Author> authors = new ArrayList<Author>();
@@ -58,6 +58,8 @@ public class AuthorsFragment extends Fragment {
 		
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
 		expandableLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
+		expandableLV.setGroupIndicator(null);
+		expandableLV.setDivider(null);
 		
 		return rootView;
 	}
@@ -101,14 +103,23 @@ public class AuthorsFragment extends Fragment {
 			
 			@Override
 			protected ArrayList<Author> doInBackground(Void... params) {
-				authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
-				
-				for(int i=0; i<authors.size(); i++){
-					Author a = authors.get(i);
-					ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink());
-					authors.get(i).getArticles().addAll(arts);
-				}
-				
+//				if(NSManager.getInstance(getActivity()).isOnlineMode()){
+//					authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
+//
+//					for(int i=0; i<authors.size(); i++){
+//						Author a = authors.get(i);
+//						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink());
+//						authors.get(i).getArticles().addAll(arts);
+//					}
+//
+//					for(Author a : authors){
+//						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateAuthor(a);
+//					}
+//
+//				}
+//				else
+					authors.addAll(((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors());
+
 				return authors;
 			}
 			

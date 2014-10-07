@@ -105,7 +105,7 @@ public class SplashHome extends NSActivity {
 				ArrayList<Type> types =	NSManager.getInstance(SplashHome.this).getTypes(); // OK
 				//				NSManager.getInstance(getActivity()).getCommentsByID(6687); // OK
 				//				NSManager.getInstance(getActivity()).getFiles(); // OK
-				//				NSManager.getInstance(getActivity()).getAuthors(); // OK
+//				ArrayList<Author> auths = NSManager.getInstance(SplashHome.this).getAuthors(); // OK
 				//				NSManager.getInstance(getActivity()).getPolls(); // OK
 				//				NSManager.getInstance(getActivity()).getQuestionByID("http://syrianoor.net/get/poll?qid=5"); // OK
 				//				NSManager.getInstance(getActivity()).getArticles(Calendar.getInstance().getTimeInMillis(), 10, 1); // OK
@@ -114,6 +114,10 @@ public class SplashHome extends NSActivity {
 				for(Type t : types){
 					NourSouryiaDB.insertOrUpdateType(t);
 				}
+				
+//				for(Author a : auths){
+//					NourSouryiaDB.insertOrUpdateAuthor(a);
+//				}
 				
 				return null;
 			}

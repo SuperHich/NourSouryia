@@ -200,8 +200,9 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		
 		switch (position) {
 		case 0:
-			fragment = new HomeFragment();
-//			fragment = new FilesFragment();
+//			fragment = new MediaFragment();
+//			fragment = new HomeFragment();
+			fragment = new FilesFragment();
 //			fragment = new AuthorsFragment();
 //			btn_search.setVisibility(View.VISIBLE);
 //			currentFragment = MOSQUES_FRAGMENT;

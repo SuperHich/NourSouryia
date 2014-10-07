@@ -6,21 +6,21 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.noursouryia.adapters.FilesAdapter;
-import com.noursouryia.entity.Article;
 import com.noursouryia.entity.File;
-import com.noursouryia.externals.NSManager;
+import com.noursouryia.utils.BaseFragment;
+import com.noursouryia.utils.NSActivity;
 
 
-public class FilesFragment extends Fragment {
+public class FilesFragment extends BaseFragment {
 
 	private FilesAdapter adapter;
 	private ArrayList<File> files = new ArrayList<File>();
@@ -58,7 +58,8 @@ public class FilesFragment extends Fragment {
 		
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
 		expandableLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
-		
+		expandableLV.setGroupIndicator(null);
+		expandableLV.setDivider(null);
 		return rootView;
 	}
 	
@@ -68,19 +69,19 @@ public class FilesFragment extends Fragment {
 		
 		adapter = new FilesAdapter(getActivity(), files);
 		expandableLV.setAdapter(adapter);
-//		getListView().setCacheColorHint(Color.TRANSPARENT);
 
 		initData();
 		
-//		expandableLV.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				
-//				((IndexActivity) getActivity()).onPlaceSelected(places.get(position));
-//			}
-//		});
+		expandableLV.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				
+				Toast.makeText(getActivity(), "File at position " + childPosition + "("+ groupPosition + ")", Toast.LENGTH_LONG).show();
+				return false;
+			}
+		});
 		
 	}
 
@@ -101,13 +102,20 @@ public class FilesFragment extends Fragment {
 			
 			@Override
 			protected ArrayList<File> doInBackground(Void... params) {
-				files.addAll(NSManager.getInstance(getActivity()).getFiles());
-				
-				for(int i=0; i<files.size(); i++){
-					File f = files.get(i);
-					ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink());
-					files.get(i).getArticles().addAll(arts);
-				}
+//				if(NSManager.getInstance(getActivity()).isOnlineMode()){
+//					files.addAll(NSManager.getInstance(getActivity()).getFiles());
+//
+//					for(int i=0; i<files.size(); i++){
+//						File f = files.get(i);
+//						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink());
+//						files.get(i).getArticles().addAll(arts);
+//					}
+//
+//					for(File f : files){
+//						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateFile(f);
+//					}
+//				}else
+					files.addAll(((NSActivity)getActivity()).NourSouryiaDB.getAllFiles());
 				
 				return files;
 			}
@@ -120,11 +128,11 @@ public class FilesFragment extends Fragment {
 					adapter.notifyDataSetChanged();
 				}
 				
-				for(File f : files){
-					Log.v("", f.getName());
-					for(Article a : f.getArticles())
-						Log.i("", a.getName());
-				}
+//				for(File f : files){
+//					Log.v("", f.getName());
+//					for(Article a : f.getArticles())
+//						Log.i("", a.getName());
+//				}
 				
 				toggleEmptyMessage();
 			}

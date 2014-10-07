@@ -25,7 +25,7 @@ public class NSFonts {
 	}
 
 
-	public Typeface getNoorFont() {
+	public static Typeface getNoorFont() {
 		return noorFont;
 	}
 

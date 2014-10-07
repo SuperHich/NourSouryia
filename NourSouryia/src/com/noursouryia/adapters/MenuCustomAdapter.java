@@ -19,7 +19,7 @@ import com.noursouryia.R;
 import com.noursouryia.entity.Type;
 import com.noursouryia.utils.NSFonts;
 
-public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTouchListener, OnGroupExpandListener {
+public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTouchListener {
 
 	IMenuListener listener;
 	ArrayList<Type> types = new ArrayList<Type>();
@@ -37,38 +37,6 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 		mNSFonts = new NSFonts() ;
 		
 	}
-//	@Override
-//	public int getCount() {
-//		return images.length();
-//	}
-//	@Override
-//	public Object getItem(int arg0) {
-//		return arg0;
-//	}
-//	@Override
-//	public long getItemId(int position) {
-//		return 0;
-//	}
-//	@Override
-//	public View getView(int position, View convertView, ViewGroup parent) {
-//		ViewHolder holder;
-//		if(convertView==null)
-//		{
-//			holder = new ViewHolder();
-//			convertView = inflater.inflate(R.layout.rowlv_module, null);
-//			
-//			holder.iv= (ImageView) convertView.findViewById(R.id.trim1);
-//			holder.iv.setOnTouchListener(this);
-//			convertView.setTag(holder);
-//		}
-//		else {
-//			holder = (ViewHolder)convertView.getTag();
-//		}
-//		
-//		holder.iv.setTag(position);
-//		holder.iv.setBackgroundDrawable(images.getDrawable(position));
-//		return convertView;
-//	}
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -151,7 +119,11 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 			holder.row_bg = (RelativeLayout) convertView.findViewById(R.id.row_bg);
 			holder.expand = (ImageView) convertView.findViewById(R.id.expand);
 			
+			holder.tv.setTypeface(NSFonts.getNoorFont());
+
+			holder.row_bg.setBackgroundResource(R.drawable.drawer_list_selector);
 			
+			holder.expand.setVisibility(View.GONE);
 			
 //			holder.tv.setOnTouchListener(this);
 			convertView.setTag(holder);
@@ -164,12 +136,7 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 		
 		holder.tv.setTag(new Integer[]{groupPosition});
 		holder.tv.setText(sub_title);
-		holder.tv.setTypeface(mNSFonts.getNoorFont());
-
-	//	holder.row_bg.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_list_bg));
-		holder.row_bg.setBackgroundResource(R.drawable.drawer_list_selector);
-		
-		holder.expand.setVisibility(View.GONE);
+	
 		
 		if (types.get(groupPosition).getCategories().size() > 0)
 		{
@@ -193,7 +160,14 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 			holder.row_bg = (RelativeLayout) convertView.findViewById(R.id.row_bg);
 			holder.expand = (ImageView) convertView.findViewById(R.id.expand);
 			
-//			holder.tv.setOnTouchListener(this);
+			holder.tv.setTypeface(NSFonts.getNoorFont());
+			
+			holder.row_bg.setBackgroundResource(R.drawable.drawer_subitem_selector);
+			holder.puce.setImageResource(R.drawable.blue_puce);
+			adjustViewDimensions(holder.puce, 50 , 5);
+			
+			holder.expand.setVisibility(View.GONE);
+			
 			convertView.setTag(holder);
 		}
 		else {
@@ -201,24 +175,10 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 		}
 		
 		
-		holder.expand.setVisibility(View.GONE);
-		
 		String sub_title = types.get(groupPosition).getCategories().get(childPosition).getName(); 
 		
 		holder.tv.setTag(new Integer[]{groupPosition, childPosition});
 		holder.tv.setText(sub_title);
-		holder.tv.setTypeface(mNSFonts.getNoorFont());
-		
-//		holder.row_bg.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_bg));
-		holder.row_bg.setBackgroundResource(R.drawable.drawer_subitem_selector);
-		
-		
-		
-		holder.puce.setImageResource(R.drawable.blue_puce);
-		adjustViewDimensions(holder.puce, 50 , 5);
-		
-		
-		
 		
 		return convertView;
 	}
@@ -228,7 +188,7 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	
@@ -247,14 +207,5 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 		absParams.height = dpY ;
 		v.setLayoutParams(absParams);
 	}
-
-	@Override
-	public void onGroupExpand(int groupPosition) {
-
-		
-		
-		
-	}
-	
 
 }

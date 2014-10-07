@@ -16,6 +16,8 @@ public abstract class NSDatabase {
 	private NSSQLiteOpenHelper nsDBHelper;
 	private Context context;
 
+	protected static final int DEFAULT_VALUE = -1;
+	
 	// Tables names
 	protected static final String TABLE_ARTICLES 		= "articles";
 	protected static final String TABLE_TYPES 			= "types";
@@ -47,10 +49,11 @@ public abstract class NSDatabase {
 			+ NSManager.CREATED 		+ " TEXT, "
 			+ NSManager.NAME 			+ " TEXT, "
 			+ NSManager.TID 			+ " INTEGER, "
+			+ NSManager.FILE_PATH 		+ " TEXT, "
 			+ NSManager.YOUTUBE_LINK 	+ " TEXT, "
 			+ NSManager.MP4_LINK 		+ " TEXT, "
 			+ NSManager.MP3_LINK 		+ " TEXT, "
-			+ NSManager.FILE_PATH 		+ " TEXT, "
+			+ NSManager.PDF_LINK 		+ " TEXT, "
 			+ COL_FILE_ID 				+ " INTEGER, "
 			+ COL_AUTHOR_ID 			+ " INTEGER);";
 	

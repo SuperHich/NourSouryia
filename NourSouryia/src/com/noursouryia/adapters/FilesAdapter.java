@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,21 +11,28 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.noursouryia.R;
+import com.noursouryia.entity.Article;
 import com.noursouryia.entity.File;
+import com.noursouryia.utils.NSActivity;
+import com.noursouryia.utils.NSFonts;
 
 public class FilesAdapter extends BaseExpandableListAdapter implements OnTouchListener {
 
 	IMenuListener listener;
 	ArrayList<File> files = new ArrayList<File>();
 	LayoutInflater inflater;
+	Context mContext;
+	
 	public FilesAdapter(Context context, ArrayList<File> files)
 	{
 		this.files = files;
 		inflater= LayoutInflater.from(context);
 		listener = (IMenuListener) context;
+		mContext = context;
 
 	}
 
@@ -57,6 +63,19 @@ public class FilesAdapter extends BaseExpandableListAdapter implements OnTouchLi
 	class ViewHolder
 	{
 		TextView tv;
+		TextView txv_count;
+		ImageView puce ;
+		RelativeLayout row_bg ;
+		ImageView expand ;
+	}
+	
+	class ChildViewHolder
+	{
+		TextView txv_title;
+		TextView txv_author;
+		TextView txv_date;
+		ImageView puce;
+		RelativeLayout row_bg ;
 	}
 
 	@Override
@@ -98,12 +117,25 @@ public class FilesAdapter extends BaseExpandableListAdapter implements OnTouchLi
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		ViewHolder holder;
+		
 		if(convertView==null)
 		{
 			holder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.rowlv_module, null);
+			convertView = inflater.inflate(R.layout.list_group_item, null);
 			
-			holder.tv= (TextView) convertView.findViewById(R.id.trim1);
+			holder.tv			= (TextView) convertView.findViewById(R.id.trim1);
+			holder.txv_count 	= (TextView) convertView.findViewById(R.id.txv_count);
+			holder.row_bg 		= (RelativeLayout) convertView.findViewById(R.id.row_bg);
+			holder.expand 		= (ImageView) convertView.findViewById(R.id.expand);
+			
+			holder.tv.setTypeface(NSFonts.getNoorFont());
+//			holder.txv_count.setTypeface(NSFonts.getNoorFont());
+			holder.txv_count.setVisibility(View.VISIBLE);
+			
+			holder.expand.setVisibility(View.GONE);
+			
+			holder.row_bg.setBackgroundResource(R.drawable.drawer_list_selector);
+
 //			holder.tv.setOnTouchListener(this);
 			convertView.setTag(holder);
 		}
@@ -111,43 +143,63 @@ public class FilesAdapter extends BaseExpandableListAdapter implements OnTouchLi
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
-		String sub_title = files.get(groupPosition).getName(); 
+		File f = files.get(groupPosition);
 		
 		holder.tv.setTag(new Integer[]{groupPosition});
-		holder.tv.setText(sub_title);
-		Log.i("","group " + sub_title);
-//		holder.tv.setBackgroundDrawable(images.getDrawable(childPosition));
+		holder.tv.setText(f.getName());
+		
+		holder.txv_count.setText(""+f.getCount());
+
+//		if (files.get(groupPosition).getArticles().size() > 0)
+//		{
+//			holder.expand.setVisibility(View.VISIBLE);
+//		}
+		
+		
 		return convertView;
 	}
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+		ChildViewHolder holder;
 		if(convertView==null)
 		{
-			holder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.rowlv_module, null);
+			holder = new ChildViewHolder();
+			convertView = inflater.inflate(R.layout.list_child_layout, null);
 			
-			holder.tv= (TextView) convertView.findViewById(R.id.trim1);
-//			holder.tv.setOnTouchListener(this);
+			holder.txv_title 	= (TextView) convertView.findViewById(R.id.txv_title);
+			holder.txv_author 	= (TextView) convertView.findViewById(R.id.txv_author);
+			holder.txv_date 	= (TextView) convertView.findViewById(R.id.txv_date);
+			holder.row_bg 		= (RelativeLayout) convertView.findViewById(R.id.row_bg);
+
+			holder.txv_title.setTypeface(NSFonts.getNoorFont());
+			holder.txv_author.setTypeface(NSFonts.getNoorFont());
+//			holder.txv_date.setTypeface(NSFonts.getNoorFont());
+			holder.txv_author.setVisibility(View.VISIBLE);
+			
+			holder.row_bg.setBackgroundResource(R.drawable.drawer_subitem_selector);
+			
 			convertView.setTag(holder);
 		}
 		else {
-			holder = (ViewHolder)convertView.getTag();
+			holder = (ChildViewHolder)convertView.getTag();
 		}
 		
-		String sub_title = files.get(groupPosition).getArticles().get(childPosition).getName(); 
+		Article art = files.get(groupPosition).getArticles().get(childPosition);
+//		String authName = ((NSActivity) mContext).NourSouryiaDB.getAuthorNameByID(art.getTid());
 		
-		holder.tv.setTag(new Integer[]{groupPosition, childPosition});
-		holder.tv.setText(sub_title);
-		Log.i("","Child " + sub_title);
+//		holder.txv_title.setTag(new Integer[]{groupPosition, childPosition});
+		holder.txv_title.setText(art.getTitle());
+		holder.txv_author.setText(art.getName());
+		holder.txv_date.setText(art.getCreated());
+//		Log.i("","Child " + art.getName());
 //		holder.tv.setBackgroundDrawable(images.getDrawable(childPosition));
 		return convertView;
 	}
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 

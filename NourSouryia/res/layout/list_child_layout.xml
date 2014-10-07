@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/row_bg"
+    android:layout_gravity="right" >
+    
+    <ImageView 
+        android:id="@+id/puce"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_alignParentRight="true" 
+        android:layout_marginRight="20dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/blue_puce"
+        />
+    
+    <TextView
+        android:id="@+id/txv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_toLeftOf="@id/puce"
+        android:layout_toRightOf="@+id/txv_date"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:gravity="center_vertical"
+        android:textColor="#FFF"/>
+    
+     <TextView
+        android:id="@+id/txv_author"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_toLeftOf="@+id/puce"
+        android:layout_toRightOf="@+id/txv_date"
+        android:layout_below="@id/txv_title"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:gravity="center_vertical"
+        android:textColor="#FFF"       
+        android:visibility="gone"/>
+     
+     <TextView
+        android:id="@+id/txv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:gravity="center_vertical|left"
+        android:layout_alignParentLeft="true"
+        android:textColor="#FFF"
+        android:paddingLeft="5dp"/>
+     
+     <View android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/blue_dark"/>
+
+</RelativeLayout>

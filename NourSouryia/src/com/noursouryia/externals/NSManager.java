@@ -73,7 +73,8 @@ public class NSManager {
 	public static final String MP3_LINK	 		= "mp3_link";
 	public static final String PDF_LINK	 		= "pdf_link";
 	
-
+	public static final String PREF_ONLINE_MODE	= "pref_online_mode";
+	
 	private IFragmentNotifier fragmentNotifier;
 	
 	private static NSManager mInstance = null;
@@ -95,6 +96,15 @@ public class NSManager {
 			mInstance = new NSManager(context);
 
 		return mInstance;
+	}
+	
+	public boolean setOnLineMode(boolean isOnline){
+		editor.putBoolean(PREF_ONLINE_MODE, isOnline);
+		return editor.commit();
+	}
+
+	public boolean isOnlineMode(){
+		return settings.getBoolean(PREF_ONLINE_MODE, true);		
 	}
 	
 	public ArrayList<Type> getTypes() {
@@ -322,11 +332,12 @@ public class NSManager {
 					article.setType(jObj.getString(TYPE));
 					if(jObj.has(TYPE_A))
 						article.setTypeAr(jObj.getString(TYPE_A));
-					article.setType(jObj.getString(TYPE));
 					article.setVisits(jObj.getInt(VISITS));
 					article.setCreated(jObj.getString(CREATED));
-					article.setName(jObj.getString(NAME));
-					article.setTid(jObj.getInt(TID));
+					if(jObj.has(NAME) && !jObj.getString(NAME).equals("null"))
+						article.setName(jObj.getString(NAME));
+					if(jObj.has(TID) && !jObj.getString(TID).equals("null"))
+						article.setTid(jObj.getInt(TID));
 					if(jObj.has(YOUTUBE_LINK))
 						article.setYoutubeLink(jObj.getString(YOUTUBE_LINK));
 					if(jObj.has(MP4_LINK))
@@ -384,8 +395,10 @@ public class NSManager {
 						article.setTypeAr(jObj.getString(TYPE_A));
 					article.setVisits(jObj.getInt(VISITS));
 					article.setCreated(jObj.getString(CREATED));
-					article.setName(jObj.getString(NAME));
-					article.setTid(jObj.getInt(TID));
+					if(jObj.has(NAME) && !jObj.getString(NAME).equals("null"))
+						article.setName(jObj.getString(NAME));
+					if(jObj.has(TID) && !jObj.getString(TID).equals("null"))
+						article.setTid(jObj.getInt(TID));
 					if(jObj.has(YOUTUBE_LINK))
 						article.setYoutubeLink(jObj.getString(YOUTUBE_LINK));
 					if(jObj.has(MP4_LINK))

@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_green" >
+    android:background="@color/drawer_bg" >
 
     <TextView
         android:id="@+id/txv_emptyList"
@@ -23,10 +23,22 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="50dp"
-        android:background="@android:color/white"
         android:cacheColorHint="@null"
-        android:divider="@color/color_green"
+        android:divider="@color/blue_dark"
         android:dividerHeight="1px"
         android:gravity="center" />
+    
+    <com.slidinglayer.SlidingLayer
+        xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
+        android:id="@+id/slidingLayer1"
+        android:layout_width="@dimen/layer_width"
+        android:layout_height="match_parent" >
+
+        <include
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/bottom_main_layout" />
+    </com.slidinglayer.SlidingLayer>
 
 </RelativeLayout>
