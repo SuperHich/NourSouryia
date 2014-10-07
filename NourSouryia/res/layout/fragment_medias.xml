@@ -1,147 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/logo_sourya"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="100dp"
-        android:layout_marginRight="100dp"
-        android:layout_marginTop="-20dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo_noor_sourya" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-20dp" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
         <ImageView
-            android:id="@+id/btn_folders_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/bg_btn_folder_photos" />
-
-        <ImageButton
-            android:id="@+id/btn_folder_photos"
-            android:layout_width="100dp"
-            android:layout_height="36dp"
-            android:layout_marginLeft="22dp"
-            android:layout_marginTop="12dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_folder_photos" />
-
-        <ImageButton
-            android:id="@+id/btn_folder_sound"
-            android:layout_width="100dp"
-            android:layout_height="36dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="12dp"
-            android:layout_toRightOf="@id/btn_folder_photos"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_folder_sound" />
-
-        <ImageButton
-            android:id="@+id/btn_folder_video"
-            android:layout_width="100dp"
-            android:layout_height="36dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="12dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_folder_video" />
-    </RelativeLayout>
-
-    <GridView
-        android:id="@+id/grid_folders"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="30dp" >
-    </GridView>
-
-    <LinearLayout
-        android:id="@+id/one_media"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="-15dp"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <RelativeLayout
+            android:id="@+id/logo_sourya"
             android:layout_width="fill_parent"
-            android:layout_height="60dp" >
-
-            <ImageButton
-                android:id="@+id/item_image"
-                android:layout_width="68dp"
-                android:layout_height="60dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="2dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/icon_folder" />
-
-            <TextView
-                android:id="@+id/item_text"
-                android:layout_width="wrap_content"
-                android:layout_height="53dp"
-                android:layout_marginRight="2dp"
-                android:layout_toLeftOf="@id/item_image"
-                android:gravity="right|bottom"
-                android:textColor="#FFF"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginTop="-20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_noor_sourya" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" >
+            android:layout_marginTop="-20dp" >
 
             <ImageView
-                android:id="@+id/slide_shower"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="100dp"
-                android:background="#60aec2" />
+                android:id="@+id/btn_folders_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bg_btn_folder_photos" />
 
-            <Button
-                android:id="@+id/paginate_left_slider"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="7dp"
-                android:background="@drawable/paginate_left_selector" />
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+            <ImageButton
+                android:id="@+id/btn_folder_photos"
+                android:layout_width="0dip"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_folder_photos" />
 
-            <Button
-                android:id="@+id/paginate_right_slider"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="7dp"
-                android:background="@drawable/paginate_right_selector" />
+            <ImageButton
+                android:id="@+id/btn_folder_sound"
+                android:layout_width="0dip"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_folder_sound" />
+
+            <ImageButton
+                android:id="@+id/btn_folder_video"
+                android:layout_width="0dip"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_folder_video" />
+            </LinearLayout>
         </RelativeLayout>
 
-        <Gallery
-            android:id="@+id/gallery"
+        <GridView
+            android:id="@+id/grid_folders"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="5dp"
-            android:spacing="2dp" />
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="30dp" >
+        </GridView>
+
+        <LinearLayout
+            android:id="@+id/one_media"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="-15dp"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp" >
+
+                <ImageButton
+                    android:id="@+id/item_image"
+                    android:layout_width="68dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="2dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_folder" />
+
+                <TextView
+                    android:id="@+id/item_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="53dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toLeftOf="@id/item_image"
+                    android:gravity="right|bottom"
+                    android:textColor="#FFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" >
+
+                <ImageView
+                    android:id="@+id/slide_shower"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="150dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="#60aec2" />
+
+                <Button
+                    android:id="@+id/paginate_left_slider"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:background="@drawable/paginate_left_selector" />
+
+                <Button
+                    android:id="@+id/paginate_right_slider"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="7dp"
+                    android:background="@drawable/paginate_right_selector" />
+            </RelativeLayout>
+
+            <Gallery
+                android:id="@+id/gallery"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="-50dp"
+                android:spacing="2dp" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <com.slidinglayer.SlidingLayer
+        xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
+        android:id="@+id/slidingLayer1"
+        android:layout_width="@dimen/layer_width"
+        android:layout_height="match_parent" >
+
+        <include
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/bottom_main_layout" />
+    </com.slidinglayer.SlidingLayer>
+
+</RelativeLayout>

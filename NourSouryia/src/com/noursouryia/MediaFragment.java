@@ -28,6 +28,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,12 +44,12 @@ import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Category;
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
+import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
 
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-public class MediaFragment extends Fragment {
+public class MediaFragment extends BaseFragment {
 
 	private ImageButton btn_folder_sound, btn_folder_photos, btn_folder_video, item_image ;
 	private TextView item_text ;
@@ -83,7 +84,7 @@ public class MediaFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.fragment_medias, container, false);
+		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_medias, container, false);
 
 		mNSFonts = new NSFonts() ;
 		mManager = new NSManager(getActivity());

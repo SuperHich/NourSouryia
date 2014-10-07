@@ -48,7 +48,7 @@ public class GalleryAdapter extends BaseAdapter {
 				ImageLoader.getInstance().displayImage(url_image, i );
 	        	
 	            i.setScaleType(ImageView.ScaleType.FIT_CENTER);
-	            i.setLayoutParams(new Gallery.LayoutParams(getDPI(74), getDPI(65)));
+	            i.setLayoutParams(new Gallery.LayoutParams(getDPI(60), getDPI(50)));
 	            return i;
 	        }
 
