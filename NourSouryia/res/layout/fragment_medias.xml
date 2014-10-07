@@ -5,16 +5,20 @@
     android:orientation="vertical" >
 
     <ImageView
-        android:layout_width="222dp"
-        android:layout_height="80dp"
+        android:id="@+id/logo_sourya"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginTop="-20dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/logo_noor_sourya" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp" >
+        android:layout_marginTop="-20dp" >
 
         <ImageView
             android:id="@+id/btn_folders_container"
@@ -68,17 +72,18 @@
         android:id="@+id/one_media"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="-10dp"
-        android:orientation="vertical" >
+        android:layout_marginTop="-15dp"
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="65dp" >
+            android:layout_height="60dp" >
 
             <ImageButton
                 android:id="@+id/item_image"
-                android:layout_width="74dp"
-                android:layout_height="65dp"
+                android:layout_width="68dp"
+                android:layout_height="60dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="2dp"
                 android:scaleType="fitCenter"
@@ -87,7 +92,7 @@
             <TextView
                 android:id="@+id/item_text"
                 android:layout_width="wrap_content"
-                android:layout_height="57dp"
+                android:layout_height="53dp"
                 android:layout_marginRight="2dp"
                 android:layout_toLeftOf="@id/item_image"
                 android:gravity="right|bottom"
@@ -99,15 +104,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" >
+            android:layout_marginTop="5dp" >
 
             <ImageView
                 android:id="@+id/slide_shower"
                 android:layout_width="fill_parent"
-                android:layout_height="230dp"
+                android:layout_height="fill_parent"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
+                android:layout_marginBottom="100dp"
                 android:background="#60aec2" />
 
             <Button

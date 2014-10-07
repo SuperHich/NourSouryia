@@ -52,7 +52,7 @@ public class MediaFragment extends Fragment {
 
 	private ImageButton btn_folder_sound, btn_folder_photos, btn_folder_video, item_image ;
 	private TextView item_text ;
-	private ImageView btn_folders_container , slide_shower;
+	private ImageView btn_folders_container , slide_shower, logo_sourya;
 	private Gallery gallery ;
 	private Button paginate_left_slider, paginate_right_slider ;
 	private Type type_photo, type_video, type_sound ;
@@ -118,6 +118,7 @@ public class MediaFragment extends Fragment {
 		btn_folder_photos = (ImageButton) rootView.findViewById(R.id.btn_folder_photos);
 		btn_folder_video = (ImageButton) rootView.findViewById(R.id.btn_folder_video);
 
+		logo_sourya = (ImageView) rootView.findViewById(R.id.logo_sourya);
 		btn_folders_container = (ImageView) rootView.findViewById(R.id.btn_folders_container);
 		gridView = (GridView) rootView.findViewById(R.id.grid_folders);
 
@@ -139,10 +140,11 @@ public class MediaFragment extends Fragment {
 			}
 		});
 
-		btn_folder_sound.setBackground(null);
-		btn_folder_photos.setBackground(null);
-		btn_folder_video.setBackground(null);
-		item_image.setBackground(null);
+		logo_sourya.setBackgroundDrawable(null);
+		btn_folder_sound.setBackgroundDrawable(null);
+		btn_folder_photos.setBackgroundDrawable(null);
+		btn_folder_video.setBackgroundDrawable(null);
+		item_image.setBackgroundDrawable(null);
 
 		initData();
 

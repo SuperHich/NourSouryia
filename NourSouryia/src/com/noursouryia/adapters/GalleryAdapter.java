@@ -2,14 +2,16 @@ package com.noursouryia.adapters;
 
 import java.util.ArrayList;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
+import android.app.Activity;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 public class GalleryAdapter extends BaseAdapter {
@@ -36,7 +38,8 @@ public class GalleryAdapter extends BaseAdapter {
 	            return position;
 	        }
 
-	        public View getView(int position, View convertView, ViewGroup parent) {
+	        @SuppressWarnings("deprecation")
+			public View getView(int position, View convertView, ViewGroup parent) {
 	      	
 	        	ImageView i = new ImageView(mContext);
 
@@ -45,12 +48,18 @@ public class GalleryAdapter extends BaseAdapter {
 				ImageLoader.getInstance().displayImage(url_image, i );
 	        	
 	            i.setScaleType(ImageView.ScaleType.FIT_CENTER);
-	            i.setLayoutParams(new Gallery.LayoutParams(74, 65));
+	            i.setLayoutParams(new Gallery.LayoutParams(getDPI(74), getDPI(65)));
 	            return i;
 	        }
 
 	       
-
+	        public  int getDPI(int size){
+	        	DisplayMetrics metrics;
+	        	metrics = new DisplayMetrics();         
+	        	((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+	        	
+	        	return (size * metrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT;        
+	        }
 	      
 	
 	
