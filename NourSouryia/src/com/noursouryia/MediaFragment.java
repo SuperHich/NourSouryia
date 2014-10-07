@@ -29,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -378,7 +379,7 @@ public class MediaFragment extends Fragment {
 				all_photo_URLS.clear();
 
 				if(articles.size() > 0 ){
-					
+
 					for (int i = 0; i < articles.size(); i++) {
 
 						ArrayList<String> images_urls = articles.get(i).getFilePath();
@@ -403,8 +404,8 @@ public class MediaFragment extends Fragment {
 				if (result.size() > 0){
 
 					switchView(gridView, one_media);
-					
-					
+
+
 					String url_image = result.get(0);
 					ImageLoader.getInstance().displayImage(url_image, slide_shower);
 
@@ -417,7 +418,7 @@ public class MediaFragment extends Fragment {
 								View view, int position, long id) {
 
 							Log.e("SIZE ALL PHOTOS", all_photo_URLS.size()+"");
-							
+
 							String url_image = all_photo_URLS.get(position);
 							ImageLoader.getInstance().displayImage(url_image, slide_shower);
 
@@ -430,20 +431,17 @@ public class MediaFragment extends Fragment {
 						public void onItemSelected(AdapterView<?> parent,
 								View view, int position, long id) {
 
-
-							if ( all_photo_URLS.size() == 1) {
-								paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selected);
+							if( position == all_photo_URLS.size()-1) {
 								paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selected);
-							}	
-							else if( position == all_photo_URLS.size()-1) {
-								paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selected);
+							} else {
+								paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selector);
 							}
-							else if( position == 0) {
+
+							if( position == 0) {
 								paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selected);
 							}
 							else {
 								paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selector);
-								paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selector);
 							}
 
 						}
@@ -485,7 +483,9 @@ public class MediaFragment extends Fragment {
 						}
 					});
 
+				} else {
 
+					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.empty_list), Toast.LENGTH_SHORT).show();
 
 				}
 
