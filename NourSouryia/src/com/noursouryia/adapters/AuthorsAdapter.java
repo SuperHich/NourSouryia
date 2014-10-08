@@ -126,6 +126,7 @@ public class AuthorsAdapter extends BaseExpandableListAdapter implements OnTouch
 //			holder.txv_count.setTypeface(NSFonts.getNoorFont());
 			holder.txv_count.setVisibility(View.VISIBLE);
 			
+			holder.expand.setVisibility(View.GONE);
 			holder.row_bg.setBackgroundResource(R.drawable.drawer_list_selector);
 
 //			holder.tv.setOnTouchListener(this);
@@ -142,14 +143,6 @@ public class AuthorsAdapter extends BaseExpandableListAdapter implements OnTouch
 		
 		holder.txv_count.setText(""+a.getCount());
 
-		holder.expand.setVisibility(View.GONE);
-		
-//		if (files.get(groupPosition).getArticles().size() > 0)
-//		{
-//			holder.expand.setVisibility(View.VISIBLE);
-//		}
-		
-		
 		return convertView;
 	}
 	@Override

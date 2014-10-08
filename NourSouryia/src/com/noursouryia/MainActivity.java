@@ -1,5 +1,7 @@
 package com.noursouryia;
 
+import java.util.ArrayList;
+
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -18,7 +20,6 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -26,13 +27,17 @@ import android.widget.RelativeLayout;
 import com.noursouryia.SearchDialog.EditNameDialogListener;
 import com.noursouryia.adapters.IMenuListener;
 import com.noursouryia.adapters.MenuCustomAdapter;
+import com.noursouryia.entity.Type;
 import com.noursouryia.utils.NSActivity;
 
 public class MainActivity extends NSActivity implements IMenuListener, OnTouchListener, EditNameDialogListener{
 
-//	public static final String MOSQUES_FRAGMENT = "mosques_fragment";
-//	public static final String JANAEZ_FRAGMENT = "janaez_fragment";
-//	public static final String DA3AWI_FRAGMENT = "da3awi_fragment";
+	public static final String NEWS_FRAGMENT 		= "news_fragment";
+	public static final String RESEARCH_FRAGMENT 	= "research_fragment";
+	public static final String FILES_FRAGMENT 		= "files_fragment";
+	public static final String AUTHORS_FRAGMENT 	= "authors_fragment";
+	public static final String MEDIA_FRAGMENT 		= "media_fragment";
+	
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	
     public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
@@ -62,6 +67,9 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	
 	private int width_halfScreen ;
 	
+	private ArrayList<Type> mTypes;
+	private MenuCustomAdapter adapter;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +91,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			
 			@Override
 			public void onGroupExpand(int groupPosition) {
-
-				RelativeLayout ll = (RelativeLayout) mDrawerList.getChildAt(groupPosition);
-				ImageView expand = (ImageView) ll.findViewById(R.id.expand);
-				
-				expand.setImageResource(R.drawable.minus);
-				
+				adapter.notifyDataSetChanged();
 			}
 		});
 		
@@ -96,11 +99,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			
 			@Override
 			public void onGroupCollapse(int groupPosition) {
-
-				RelativeLayout ll = (RelativeLayout) mDrawerList.getChildAt(groupPosition);
-				ImageView expand = (ImageView) ll.findViewById(R.id.expand);
-				
-				expand.setImageResource(R.drawable.plus);
+				adapter.notifyDataSetChanged();
 			}
 		});
 		
@@ -114,9 +113,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	    
 	    
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		MenuCustomAdapter adapter = new MenuCustomAdapter(this, NourSouryiaDB.getAllTypes());
-//		MenuCustomAdapter adapter = new MenuCustomAdapter(this, NSManager.getInstance(this).getCurrent_types());
-
+		mTypes = NourSouryiaDB.getAllTypes();
+		adapter = new MenuCustomAdapter(this, mTypes);
 
 		mDrawerList.setAdapter(adapter);
 		mDrawerList.setDivider(null);
@@ -200,8 +198,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		
 		switch (position) {
 		case 0:
-			fragment = new MediaFragment();
-//			fragment = new HomeFragment();
+//			fragment = new MediaFragment();
+			fragment = new HomeFragment();
 //			fragment = new FilesFragment();
 //			fragment = new AuthorsFragment();
 //			btn_search.setVisibility(View.VISIBLE);
@@ -256,6 +254,45 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	@Override
 	public void onMenuItemClicked(int position) {
 		selectItem(position);
+	}
+	
+	public void onTypeItemClicked(String fragmentTAG){
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+
+		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(fragmentTAG);
+
+		if(fragment1 == null){
+			fragment1 = getFragmentByTag(fragmentTAG);
+
+			if(fragment1 != null){
+				transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
+				transaction.addToBackStack(fragmentTAG);
+			}
+		}else{
+			transaction.attach(fragment1);
+		}
+
+		transaction.commit();
+		
+		currentFragment = fragmentTAG;
+	}
+	
+	private Fragment getFragmentByTag(String fragTAG){
+//		if(fragTAG.equals(NEWS_FRAGMENT))
+//			return new FilesFragment();
+//		else if(fragTAG.equals(RESEARCH_FRAGMENT))
+//			return new FilesFragment();
+//		else 
+		if(fragTAG.equals(FILES_FRAGMENT))
+			return new FilesFragment();
+		else if(fragTAG.equals(AUTHORS_FRAGMENT))
+			return new AuthorsFragment();
+		else if(fragTAG.equals(MEDIA_FRAGMENT))
+			return new MediaFragment();
+		
+		return null;
 	}
 
 

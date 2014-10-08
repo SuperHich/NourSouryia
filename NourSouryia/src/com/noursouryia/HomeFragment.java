@@ -8,19 +8,27 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.noursouryia.entity.Type;
+import com.noursouryia.entity.Article;
+import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
+import com.noursouryia.utils.NSActivity;
+import com.noursouryia.utils.NSFonts;
 
 
 public class HomeFragment extends BaseFragment {
 
 	private TextView news_feed ;
 	private Button paginate_left, paginate_right ;
+	private int currentFeedPosition = 0;
+	private Article currentArticle;
+	
+	private ArrayList<Article> mArticles = new ArrayList<Article>();
 	
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -55,6 +63,8 @@ public class HomeFragment extends BaseFragment {
 		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);
 		paginate_right = (Button) rootView.findViewById(R.id.paginate_right_news);
 		
+		news_feed.setTypeface(NSFonts.getNoorFont());
+		
 		return rootView;
 	}
 	
@@ -64,17 +74,32 @@ public class HomeFragment extends BaseFragment {
 		
 		initData();
 		
+		paginate_left.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				nextFeed();
+			}
+		});
+		
+		paginate_right.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				previousFeed();
+			}
+		});
+		
 	}
 
 	private void initData(){
 		
-		new AsyncTask<Void, Void, ArrayList<Type>>() {
+		new AsyncTask<Void, Void, ArrayList<Article>>() {
 
 			private ProgressDialog loading;
 
 			@Override
 			protected void onPreExecute() {
-//				places.clear();
 				loading = new ProgressDialog(getActivity());
 				loading.setCancelable(false);
 				loading.setMessage(getString(R.string.please_wait));
@@ -82,7 +107,16 @@ public class HomeFragment extends BaseFragment {
 			}
 			
 			@Override
-			protected ArrayList<Type> doInBackground(Void... params) {
+			protected ArrayList<Article> doInBackground(Void... params) {
+				
+				mArticles = NSManager.getInstance(getActivity()).getArticles(NSManager.DEFAULT_TIMESTAMP, 
+						NSManager.DEFAULT_VALUE, 
+						NSManager.DEFAULT_VALUE);
+				
+				for(Article a : mArticles){
+					((NSActivity) getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
+				}
+				
 //				NSManager.getInstance(getActivity()).getTypes(); // OK
 //				NSManager.getInstance(getActivity()).getCommentsByID(6687); // OK
 //				NSManager.getInstance(getActivity()).getFiles(); // OK
@@ -90,25 +124,59 @@ public class HomeFragment extends BaseFragment {
 //				NSManager.getInstance(getActivity()).getPolls(); // OK
 //				NSManager.getInstance(getActivity()).getQuestionByID("http://syrianoor.net/get/poll?qid=5"); // OK
 //				NSManager.getInstance(getActivity()).getArticles(Calendar.getInstance().getTimeInMillis(), 10, 1); // OK
-				return null;
+				return mArticles;
 			}
 			
 			@Override
-			protected void onPostExecute(ArrayList<Type> result) {
+			protected void onPostExecute(ArrayList<Article> result) {
 				loading.dismiss();
 				
-				if(result != null){
+				if(result.size() > 0){
+					showFeed();
 				}
-//				toggleEmptyMessage();
 			}
 		}.execute();
 
 	}
 	
-//	private void toggleEmptyMessage() {
-//		if(places.size() == 0)
-//			txv_empty.setVisibility(View.VISIBLE);
-//		else
-//			txv_empty.setVisibility(View.GONE);
-//	}
+	private void showFeed(){
+		if(currentFeedPosition < mArticles.size()){
+			currentArticle = mArticles.get(currentFeedPosition);
+			news_feed.setText(currentArticle.getTitle());
+			
+			if(currentFeedPosition == 0)
+			{
+				paginate_left.setBackgroundResource(R.drawable.paginate_left_selector);
+				paginate_right.setBackgroundResource(R.drawable.paginate_right_selected);
+			}
+			else if(currentFeedPosition == mArticles.size() - 1)
+			{
+				paginate_left.setBackgroundResource(R.drawable.paginate_left_selected);
+				paginate_right.setBackgroundResource(R.drawable.paginate_right_selector);
+			}
+			else
+			{
+				paginate_left.setBackgroundResource(R.drawable.paginate_left_selector);
+				paginate_right.setBackgroundResource(R.drawable.paginate_right_selector);
+			}
+		}
+	}
+	
+	private void nextFeed(){
+		
+		if(currentFeedPosition + 1 < mArticles.size()){
+			currentFeedPosition += 1;
+			showFeed();
+		}
+		
+	}
+	
+	private void previousFeed(){
+		
+		if(currentFeedPosition - 1 >= 0 ){
+			currentFeedPosition -= 1;
+			showFeed();
+		}
+		
+	}
 }

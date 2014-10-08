@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,12 +20,13 @@ import com.noursouryia.utils.NSFonts;
 
 public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTouchListener {
 
+	static final String TAG = MenuCustomAdapter.class.getSimpleName();
 	IMenuListener listener;
 	ArrayList<Type> types = new ArrayList<Type>();
 	LayoutInflater inflater;
 	static Context mContext ;
 	public NSFonts mNSFonts ;
-	
+
 	public MenuCustomAdapter(Context context, ArrayList<Type> types)
 	{
 		
@@ -83,12 +83,12 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 	@Override
 	public Object getGroup(int groupPosition) {
 		// TODO Auto-generated method stub
-		return null;
+		return types.get(groupPosition);
 	}
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
-		return null;
+		return types.get(groupPosition).getCategories().get(childPosition);
 	}
 	@Override
 	public long getGroupId(int groupPosition) {
@@ -103,14 +103,14 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 	@Override
 	public boolean hasStableIds() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		
-		if(convertView==null)
+		if(convertView == null)
 		{
 			holder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.rowlv_module, null);
@@ -123,26 +123,28 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 
 			holder.row_bg.setBackgroundResource(R.drawable.drawer_list_selector);
 			
-			holder.expand.setVisibility(View.GONE);
-			
-//			holder.tv.setOnTouchListener(this);
 			convertView.setTag(holder);
 		}
 		else {
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
-		String sub_title = types.get(groupPosition).getNameAr(); 
+		Type type = types.get(groupPosition);
 		
 		holder.tv.setTag(new Integer[]{groupPosition});
-		holder.tv.setText(sub_title);
+		holder.tv.setText(type.getNameAr());
 	
-		
-		if (types.get(groupPosition).getCategories().size() > 0)
+		if (type.getCategories().size() > 0)
 		{
 			holder.expand.setVisibility(View.VISIBLE);
-		}
-		
+			
+			if(isExpanded)
+				holder.expand.setImageResource(R.drawable.minus);
+			else
+				holder.expand.setImageResource(R.drawable.plus);
+			
+		}else
+			holder.expand.setVisibility(View.GONE);
 		
 		return convertView;
 	}
@@ -153,7 +155,7 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 		if(convertView==null)
 		{
 			holder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.rowlv_module, null);
+			convertView = inflater.inflate(R.layout.rowlv_child, null);
 			
 			holder.tv= (TextView) convertView.findViewById(R.id.trim1);
 			holder.puce= (ImageView) convertView.findViewById(R.id.puce);

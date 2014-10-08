@@ -2,21 +2,26 @@ package com.noursouryia.utils;
 
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.noursouryia.HomeFragment;
+import com.noursouryia.MainActivity;
 import com.noursouryia.R;
 import com.slidinglayer.SlidingLayer;
 import com.slidinglayer.SlidingLayer.ISlidingLayerOpenCloseListener;
 
-public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseListener{
+public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseListener, OnTouchListener{
 
 	final String TAG = getClass().getSimpleName();
 
@@ -66,8 +71,22 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			}
 		});
 		
-		// start with opened sliding layer
-		mSlidingLayer.openLayer(true);
+		btn_news.setOnTouchListener(this); 
+		btn_folders.setOnTouchListener(this);
+		btn_researches.setOnTouchListener(this);
+		btn_writers.setOnTouchListener(this);
+		btn_articles.setOnTouchListener(this);
+		
+		btn_news.setTag(MainActivity.NEWS_FRAGMENT); 
+		btn_folders.setTag(MainActivity.MEDIA_FRAGMENT);
+		btn_researches.setTag(MainActivity.RESEARCH_FRAGMENT);
+		btn_writers.setTag(MainActivity.AUTHORS_FRAGMENT);
+		btn_articles.setTag(MainActivity.FILES_FRAGMENT);
+		
+		if(this instanceof HomeFragment){
+			// start with opened sliding layer
+			mSlidingLayer.openLayer(true);
+		}
 	}
 
 	public void buttonClicked(View v) {
@@ -103,6 +122,30 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN: {
+			Button view = (Button) v;
+			view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+			v.invalidate();
+			break;
+		}
+		case MotionEvent.ACTION_UP: {
+			String fragTAG = (String) v.getTag();
+			((MainActivity) getActivity()).onTypeItemClicked(fragTAG);
+
+		}
+		case MotionEvent.ACTION_CANCEL: {
+			Button view = (Button) v;
+			view.getBackground().clearColorFilter();
+			view.invalidate();
+			break;
+		}
+		}
+		return true;
 	}
 
 	@Override

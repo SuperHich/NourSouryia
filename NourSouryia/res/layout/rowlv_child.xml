@@ -3,7 +3,6 @@
     android:layout_height="wrap_content"
     android:id="@+id/row_bg"
     android:layout_gravity="right" >
-
     
     <ImageView 
         android:id="@+id/expand"
@@ -33,8 +32,8 @@
         android:textColor="#FFF"
         android:paddingRight="5dp"/>
     
-      <View android:layout_width="match_parent"
+       <View android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/drawer_bg"/>
+        android:background="@color/blue_dark"/>
      
 </RelativeLayout>

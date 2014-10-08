@@ -3,6 +3,8 @@ package com.noursouryia.entity;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.noursouryia.externals.NSManager;
+
 public class Article {
 	
 //	1-	nid : material ID.
@@ -20,15 +22,15 @@ public class Article {
 //	12-	mp3_link: audio link for material if it is exist.
 //	13-	pdf_link: book link for material if it is exist.
 
-	private int nid;
+	private int nid = NSManager.DEFAULT_VALUE;
 	private String title;
 	private String body;
 	private String type;
 	private String typeAr;
-	private int visits;
+	private int visits = 0;
 	private String created;
 	private String name;
-	private int tid;
+	private int tid = NSManager.DEFAULT_VALUE;
 	private ArrayList<String> filePath = new ArrayList<String>();
 	private String youtubeLink;
 	private String mp4Link;

@@ -457,8 +457,11 @@ public class NSDatabaseManager extends NSDatabase {
 		values.put(NSManager.MP3_LINK, article.getMp3Link());
 		values.put(NSManager.PDF_LINK, article.getPdfLink());
 
-		values.put(COL_FILE_ID, fileID);
-		values.put(COL_AUTHOR_ID, authorID);
+		if(fileID != DEFAULT_VALUE)
+			values.put(COL_FILE_ID, fileID);
+		
+		if(authorID != DEFAULT_VALUE)
+			values.put(COL_AUTHOR_ID, authorID);
 		
 		int up = db.updateWithOnConflict(TABLE_ARTICLES, values, NSManager.NID + " = ?",
 				new String[] {String.valueOf(article.getNid())}, SQLiteDatabase.CONFLICT_REPLACE);

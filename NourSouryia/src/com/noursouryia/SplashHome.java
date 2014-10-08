@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
 
+import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.NSActivity;
@@ -108,7 +109,9 @@ public class SplashHome extends NSActivity {
 //				ArrayList<Author> auths = NSManager.getInstance(SplashHome.this).getAuthors(); // OK
 				//				NSManager.getInstance(getActivity()).getPolls(); // OK
 				//				NSManager.getInstance(getActivity()).getQuestionByID("http://syrianoor.net/get/poll?qid=5"); // OK
-				//				NSManager.getInstance(getActivity()).getArticles(Calendar.getInstance().getTimeInMillis(), 10, 1); // OK
+//				ArrayList<Article> articles = NSManager.getInstance(SplashHome.this).getArticles(NSManager.DEFAULT_TIMESTAMP, 
+//										NSManager.DEFAULT_VALUE, 
+//										NSManager.DEFAULT_VALUE); // OK
 				
 								
 				for(Type t : types){
@@ -117,6 +120,10 @@ public class SplashHome extends NSActivity {
 				
 //				for(Author a : auths){
 //					NourSouryiaDB.insertOrUpdateAuthor(a);
+//				}
+				
+//				for(Article a : articles){
+//					NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
 //				}
 				
 				return null;

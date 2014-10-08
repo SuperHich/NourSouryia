@@ -31,7 +31,7 @@ public class NSManager {
 	static final String TAG = NSManager.class.getSimpleName();
 	
 	public static final long DEFAULT_TIMESTAMP 	= -1;
-	public static final int DEFAULT_NUMPAGER 	= -1;
+	public static final int DEFAULT_VALUE 	= -1;
 	
 	public static final String URL_MATERIALS 	= "http://syrianoor.net/get/materials?";
 	public static final String URL_SEARCH 		= "http://syrianoor.net/app/search";
@@ -313,9 +313,9 @@ public class NSManager {
 		String url = URL_MATERIALS;
 		if(timeStamp != DEFAULT_TIMESTAMP)
 			url += "timestamp=" + timeStamp + "&";
-		if(numPager != DEFAULT_NUMPAGER)
+		if(numPager != DEFAULT_VALUE)
 			url += "NumPager=" + numPager + "&";
-		if(page != DEFAULT_NUMPAGER)
+		if(page != DEFAULT_VALUE)
 			url += "page=" + page;
 
 		Log.i(TAG, "url " + url);
