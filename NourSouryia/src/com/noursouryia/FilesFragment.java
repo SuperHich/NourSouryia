@@ -80,7 +80,11 @@ public class FilesFragment extends BaseFragment {
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
 				
-				Toast.makeText(getActivity(), "File at position " + childPosition + "("+ groupPosition + ")", Toast.LENGTH_LONG).show();
+//				Toast.makeText(getActivity(), "File at position " + childPosition + "("+ groupPosition + ")", Toast.LENGTH_LONG).show();
+				
+				Article selectedArticle = files.get(groupPosition).getArticles().get(childPosition);
+				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle);
+				
 				return false;
 			}
 		});

@@ -182,12 +182,16 @@ public class HomeFragment extends BaseFragment {
 			@Override
 			protected ArrayList<Article> doInBackground(Void... params) {
 				
-				mArticles = NSManager.getInstance(getActivity()).getArticles(NSManager.DEFAULT_TIMESTAMP, 
-						NSManager.DEFAULT_VALUE, 
-						NSManager.DEFAULT_VALUE);
-				
-				for(Article a : mArticles){
-					((NSActivity) getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
+				try{
+					mArticles = NSManager.getInstance(getActivity()).getArticles(NSManager.DEFAULT_TIMESTAMP, 
+							NSManager.DEFAULT_VALUE, 
+							NSManager.DEFAULT_VALUE);
+
+					for(Article a : mArticles){
+						((NSActivity) getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
+					}
+				}catch(Exception e){
+					e.printStackTrace();
 				}
 				
 //				NSManager.getInstance(getActivity()).getTypes(); // OK

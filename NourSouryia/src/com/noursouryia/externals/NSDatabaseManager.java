@@ -61,6 +61,42 @@ public class NSDatabaseManager extends NSDatabase {
 		return types;
 	}
 	
+	public ArrayList<Type> getTypesExcept(String... exceptedType){
+
+		open();
+		ArrayList<Type> types = new ArrayList<Type>();
+		
+		String exceptQuery = "SELECT  * FROM " + TABLE_TYPES + " WHERE ";
+		int counter = -1;
+		for(String et : exceptedType){
+			counter++;
+			if(counter > 0)
+				exceptQuery += " OR ";
+			
+			exceptQuery += NSManager.NAME_EN + " LIKE '" + et + "'";
+		}
+		
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_TYPES + " EXCEPT " + exceptQuery;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// looping through all rows and adding to type
+		if (cursor.moveToFirst()) {
+			do {
+				Type type = new Type();
+
+				type.setNameEn(cursor.getString((cursor.getColumnIndex(NSManager.NAME_EN))));
+				type.setNameAr(cursor.getString(cursor.getColumnIndex(NSManager.NAME_AR)));
+				type.setLink(cursor.getString((cursor.getColumnIndex(NSManager.LINK))));
+				type.setCategories(getCategoriesByType(type.getNameEn()));
+				
+//				Log.e(TAG,"type : " + type.toString());
+				types.add(type);
+			} while (cursor.moveToNext());
+		}
+
+		return types;
+	}
+	
 	public Type getTypeByName(String name){
 
 		open();
@@ -411,6 +447,40 @@ public class NSDatabaseManager extends NSDatabase {
 		ArrayList<Article> articles = new ArrayList<Article>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES + " WHERE " + column + " = " + ID;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// looping through all rows and adding to type
+		if (cursor.moveToFirst()) {
+			do {
+				Article article = new Article();
+				
+				article.setNid(cursor.getInt((cursor.getColumnIndex(NSManager.NID))));
+				article.setTitle(cursor.getString((cursor.getColumnIndex(NSManager.TITLE))));
+				article.setBody(cursor.getString((cursor.getColumnIndex(NSManager.BODY))));
+				article.setType(cursor.getString((cursor.getColumnIndex(NSManager.TYPE))));
+				article.setTypeAr(cursor.getString((cursor.getColumnIndex(NSManager.TYPE_A))));
+				article.setVisits(cursor.getInt((cursor.getColumnIndex(NSManager.VISITS))));
+				article.setCreated(cursor.getString((cursor.getColumnIndex(NSManager.CREATED))));
+				article.setName(cursor.getString((cursor.getColumnIndex(NSManager.NAME))));
+				article.setTid(cursor.getInt((cursor.getColumnIndex(NSManager.TID))));
+				article.setYoutubeLink(cursor.getString((cursor.getColumnIndex(NSManager.YOUTUBE_LINK))));
+				article.setMp4Link(cursor.getString((cursor.getColumnIndex(NSManager.MP4_LINK))));
+				article.setMp3Link(cursor.getString((cursor.getColumnIndex(NSManager.MP3_LINK))));
+				article.setPdfLink(cursor.getString((cursor.getColumnIndex(NSManager.PDF_LINK))));
+
+				Log.e(TAG,"article : " + article.toString());
+				articles.add(article);
+			} while (cursor.moveToNext());
+		}
+
+		return articles;
+	}
+	
+	public ArrayList<Article> getArticlesByStringID(String column, String value){
+
+		open();
+		ArrayList<Article> articles = new ArrayList<Article>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES + " WHERE " + column + " LIKE '" + value + "'";
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		// looping through all rows and adding to type
 		if (cursor.moveToFirst()) {

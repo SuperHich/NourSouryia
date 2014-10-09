@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,6 +114,21 @@ public class AuthorsFragment extends BaseFragment {
 
 		});
 		
+		
+		expandableLV.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				
+//				Toast.makeText(getActivity(), "File at position " + childPosition + "("+ groupPosition + ")", Toast.LENGTH_LONG).show();
+				
+				Article selectedArticle = authors.get(groupPosition).getArticles().get(childPosition);
+				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle);
+				
+				return false;
+			}
+		});
 	}
 
 	private void initData(){

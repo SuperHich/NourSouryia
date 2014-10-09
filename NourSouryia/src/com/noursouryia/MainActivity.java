@@ -18,6 +18,8 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.LinearLayout;
@@ -28,6 +30,7 @@ import com.noursouryia.SearchDialog.EditNameDialogListener;
 import com.noursouryia.adapters.IMenuListener;
 import com.noursouryia.adapters.MenuCustomAdapter;
 import com.noursouryia.entity.Article;
+import com.noursouryia.entity.Category;
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.NSActivity;
@@ -40,6 +43,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String AUTHORS_FRAGMENT 	= "authors_fragment";
 	public static final String MEDIA_FRAGMENT 		= "media_fragment";
 	public static final String ARTICLE_FRAGMENT 	= "article_fragment";
+	public static final String LIST_ARTICLE_FRAGMENT 	= "list_article_fragment";
+
 	
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	
@@ -116,14 +121,44 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	    
 	    
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		mTypes = NourSouryiaDB.getAllTypes();
+		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos");
 		adapter = new MenuCustomAdapter(this, mTypes);
 
 		mDrawerList.setAdapter(adapter);
 		mDrawerList.setDivider(null);
 
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
+//		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		mDrawerList.setOnGroupClickListener(new OnGroupClickListener() {
+			
+			@Override
+			public boolean onGroupClick(ExpandableListView arg0, View arg1, int arg2,
+					long arg3) {
+				
+				Type selectedType = mTypes.get(arg2);
+				if(selectedType.getCategories().size() == 0){
+					gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn());
+				}
+				
+				mDrawerLayout.closeDrawer(mDrawerLinear);
+				
+				return false;
+			}
+		});
+		
+		mDrawerList.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				
+				Category selectedCategory = mTypes.get(groupPosition).getCategories().get(childPosition);
+				gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName());
+				
+				mDrawerLayout.closeDrawer(mDrawerLinear);
+				
+				return false;
+			}
+		});
 		
 
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 
@@ -260,28 +295,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	}
 	
 	public void onTypeItemClicked(String fragmentTAG){
-		
-		gotoFragmentByTag(fragmentTAG);
-//		FragmentManager fragmentManager = getSupportFragmentManager();
-//		FragmentTransaction transaction = fragmentManager.beginTransaction();
-//		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-//
-//		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(fragmentTAG);
-//
-//		if(fragment1 == null){
-//			fragment1 = getFragmentByTag(fragmentTAG);
-//
-//			if(fragment1 != null){
-//				transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
-//				transaction.addToBackStack(fragmentTAG);
-//			}
-//		}else{
-//			transaction.attach(fragment1);
-//		}
-//
-//		transaction.commit();
-//		
-//		currentFragment = fragmentTAG;
+		gotoFragmentByTag(fragmentTAG, null);
 	}
 	
 	private Fragment getFragmentByTag(String fragTAG){
@@ -298,7 +312,9 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new MediaFragment();
 		else if(fragTAG.equals(ARTICLE_FRAGMENT))
 			return new ArticleFragment();
-		
+		else if(fragTAG.equals(LIST_ARTICLE_FRAGMENT))
+			return new ListArticlesFragment();
+			
 		return null;
 	}
 
@@ -378,7 +394,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		}
 
 		
-		public void gotoFragmentByTag(String fragmentTAG){
+		public void gotoFragmentByTag(String fragmentTAG, Bundle arguments){
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			FragmentTransaction transaction = fragmentManager.beginTransaction();
 			transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
@@ -387,6 +403,9 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 			if(fragment1 == null){
 				fragment1 = getFragmentByTag(fragmentTAG);
+				
+				if(arguments != null)
+					fragment1.setArguments(arguments);
 
 				if(fragment1 != null){
 					transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
@@ -404,7 +423,34 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		public void gotoArticleFragment(Article article){
 			
 			NSManager.getInstance(this).setCurrentArticle(article);
-			gotoFragmentByTag(ARTICLE_FRAGMENT);
+			gotoFragmentByTag(ARTICLE_FRAGMENT, null);
+			
+		}
+		
+		public void gotoListArticlesFragment(String link, String categoryName){
+
+			Bundle args = new Bundle();
+			args.putString(ListArticlesFragment.ARG_ARTICLE_LINK, link);
+			args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, categoryName);
+//			gotoFragmentByTag(LIST_ARTICLE_FRAGMENT, args);
+			
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			FragmentTransaction transaction = fragmentManager.beginTransaction();
+			transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+
+			fragment1 = getFragmentByTag(LIST_ARTICLE_FRAGMENT);
+
+			if(args != null)
+				fragment1.setArguments(args);
+
+			if(fragment1 != null){
+				transaction.replace(R.id.content_frame, fragment1, LIST_ARTICLE_FRAGMENT);
+				transaction.addToBackStack(LIST_ARTICLE_FRAGMENT);
+			}
+
+			transaction.commit();
+			
+			currentFragment = LIST_ARTICLE_FRAGMENT;
 			
 		}
 		
