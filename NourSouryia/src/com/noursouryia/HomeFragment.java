@@ -90,6 +90,15 @@ public class HomeFragment extends BaseFragment {
 			}
 		});
 		
+		news_feed.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(currentArticle != null)
+					((MainActivity) getActivity()).gotoArticleFragment(currentArticle);
+			}
+		});
+		
 	}
 
 	private void initData(){

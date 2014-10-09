@@ -194,7 +194,7 @@ public class NSDatabaseManager extends NSDatabase {
 
 		ArrayList<Author> authors = new ArrayList<Author>();
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_AUTHORS;
+		String selectQuery = "SELECT  * FROM " + TABLE_AUTHORS + " ORDER BY " + NSManager.NAME + " ASC";
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
 		if (cursor.moveToFirst()) {

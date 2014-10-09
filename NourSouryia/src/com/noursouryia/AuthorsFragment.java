@@ -10,22 +10,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.noursouryia.adapters.AlphabetAdapter;
 import com.noursouryia.adapters.AuthorsAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Author;
+import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 
 
 public class AuthorsFragment extends BaseFragment {
 
+	final String[] alphabaticalList = { "أ", "ب", "ت", "ث", "ج",
+			"ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ظ", "ط",
+			"ق", "ف", "ع", "غ", "ك", "ل", "م", "ه", "و", "ن", "ي"};
+	
 	private AuthorsAdapter adapter;
 	private ArrayList<Author> authors = new ArrayList<Author>();
 	private TextView txv_empty;
 	private ExpandableListView expandableLV;
+	private ListView sideList;
 	
 	public AuthorsFragment() {
 		// Empty constructor required for fragment subclasses
@@ -54,7 +66,9 @@ public class AuthorsFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View rootView = inflater.inflate(R.layout.fragment_expandable, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_indexed_list, container, false);
+		
+		sideList = (ListView) rootView.findViewById(R.id.sideIndex);
 		
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
 		expandableLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
@@ -68,21 +82,37 @@ public class AuthorsFragment extends BaseFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
+		// side list
+		AlphabetAdapter alphabaticalListAdapter = new AlphabetAdapter(getActivity(), R.layout.alphabet_item, alphabaticalList);
+		sideList.setAdapter(alphabaticalListAdapter);
+		
 		adapter = new AuthorsAdapter(getActivity(), authors);
 		expandableLV.setAdapter(adapter);
-//		getListView().setCacheColorHint(Color.TRANSPARENT);
 
 		initData();
 		
-//		expandableLV.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				
-//				((IndexActivity) getActivity()).onPlaceSelected(places.get(position));
-//			}
-//		});
+		sideList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+				String item = (String) sideList.getAdapter().getItem(position);
+				int posToGo = -1;
+				for (int i = 0; i < authors.size(); i++) {
+					String name = authors.get(i).getName();
+					String subName = name.substring(0, 1);
+					if (subName.startsWith(item)) {
+						posToGo = i;
+						break;
+					}
+				}
+				
+				if(posToGo != -1){
+					expandableLV.setSelection(posToGo);
+					Toast.makeText(getActivity(), "Going to item at position " + posToGo, Toast.LENGTH_LONG).show();
+				}
+				
+			}
+
+		});
 		
 	}
 
@@ -103,22 +133,26 @@ public class AuthorsFragment extends BaseFragment {
 			
 			@Override
 			protected ArrayList<Author> doInBackground(Void... params) {
-//				if(NSManager.getInstance(getActivity()).isOnlineMode()){
-//					authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
-//
-//					for(int i=0; i<authors.size(); i++){
-//						Author a = authors.get(i);
-//						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink());
-//						authors.get(i).getArticles().addAll(arts);
-//					}
-//
-//					for(Author a : authors){
-//						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateAuthor(a);
-//					}
-//
-//				}
-//				else
-					authors.addAll(((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors());
+				
+				ArrayList<Author> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors();
+				
+				if(list.size() > 0)
+					authors.addAll(list);
+				
+				else if(NSManager.getInstance(getActivity()).isOnlineMode()){
+					authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
+
+					for(int i=0; i<authors.size(); i++){
+						Author a = authors.get(i);
+						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink());
+						authors.get(i).getArticles().addAll(arts);
+					}
+
+					for(Author a : authors){
+						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateAuthor(a);
+					}
+
+				}
 
 				return authors;
 			}

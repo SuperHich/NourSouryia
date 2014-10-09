@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.noursouryia.adapters.FilesAdapter;
+import com.noursouryia.entity.Article;
 import com.noursouryia.entity.File;
+import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 
@@ -102,20 +104,25 @@ public class FilesFragment extends BaseFragment {
 			
 			@Override
 			protected ArrayList<File> doInBackground(Void... params) {
-//				if(NSManager.getInstance(getActivity()).isOnlineMode()){
-//					files.addAll(NSManager.getInstance(getActivity()).getFiles());
-//
-//					for(int i=0; i<files.size(); i++){
-//						File f = files.get(i);
-//						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink());
-//						files.get(i).getArticles().addAll(arts);
-//					}
-//
-//					for(File f : files){
-//						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateFile(f);
-//					}
-//				}else
-					files.addAll(((NSActivity)getActivity()).NourSouryiaDB.getAllFiles());
+				
+				ArrayList<File> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllFiles();
+				
+				if(list.size() > 0)
+					files.addAll(list);
+				
+				else if(NSManager.getInstance(getActivity()).isOnlineMode()){
+					files.addAll(NSManager.getInstance(getActivity()).getFiles());
+
+					for(int i=0; i<files.size(); i++){
+						File f = files.get(i);
+						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink());
+						files.get(i).getArticles().addAll(arts);
+					}
+
+					for(File f : files){
+						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateFile(f);
+					}
+				}
 				
 				return files;
 			}

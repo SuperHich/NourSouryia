@@ -27,7 +27,9 @@ import android.widget.RelativeLayout;
 import com.noursouryia.SearchDialog.EditNameDialogListener;
 import com.noursouryia.adapters.IMenuListener;
 import com.noursouryia.adapters.MenuCustomAdapter;
+import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Type;
+import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.NSActivity;
 
 public class MainActivity extends NSActivity implements IMenuListener, OnTouchListener, EditNameDialogListener{
@@ -37,6 +39,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String FILES_FRAGMENT 		= "files_fragment";
 	public static final String AUTHORS_FRAGMENT 	= "authors_fragment";
 	public static final String MEDIA_FRAGMENT 		= "media_fragment";
+	public static final String ARTICLE_FRAGMENT 	= "article_fragment";
 	
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	
@@ -257,26 +260,28 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	}
 	
 	public void onTypeItemClicked(String fragmentTAG){
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-
-		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(fragmentTAG);
-
-		if(fragment1 == null){
-			fragment1 = getFragmentByTag(fragmentTAG);
-
-			if(fragment1 != null){
-				transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
-				transaction.addToBackStack(fragmentTAG);
-			}
-		}else{
-			transaction.attach(fragment1);
-		}
-
-		transaction.commit();
 		
-		currentFragment = fragmentTAG;
+		gotoFragmentByTag(fragmentTAG);
+//		FragmentManager fragmentManager = getSupportFragmentManager();
+//		FragmentTransaction transaction = fragmentManager.beginTransaction();
+//		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+//
+//		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(fragmentTAG);
+//
+//		if(fragment1 == null){
+//			fragment1 = getFragmentByTag(fragmentTAG);
+//
+//			if(fragment1 != null){
+//				transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
+//				transaction.addToBackStack(fragmentTAG);
+//			}
+//		}else{
+//			transaction.attach(fragment1);
+//		}
+//
+//		transaction.commit();
+//		
+//		currentFragment = fragmentTAG;
 	}
 	
 	private Fragment getFragmentByTag(String fragTAG){
@@ -291,6 +296,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new AuthorsFragment();
 		else if(fragTAG.equals(MEDIA_FRAGMENT))
 			return new MediaFragment();
+		else if(fragTAG.equals(ARTICLE_FRAGMENT))
+			return new ArticleFragment();
 		
 		return null;
 	}
@@ -315,28 +322,16 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 				switch (v.getId()) {
 				case R.id.btn_menu_outside:
-//					if(isBackEnabled)
-//					{		
-//						onBackPressed();
-//					}
-//					else{
-						if(!mDrawerLayout.isDrawerOpen(Gravity.RIGHT))
-							mDrawerLayout.openDrawer(Gravity.RIGHT);
-						else
-							mDrawerLayout.closeDrawer(Gravity.RIGHT);		
-//					}
-					break;
-				case R.id.btn_menu_inside:
-///					if(isBackEnabled)
-//					{		
-//					onBackPressed();
-//				}
-//				else{
 					if(!mDrawerLayout.isDrawerOpen(Gravity.RIGHT))
 						mDrawerLayout.openDrawer(Gravity.RIGHT);
 					else
 						mDrawerLayout.closeDrawer(Gravity.RIGHT);		
-//				}
+					break;
+				case R.id.btn_menu_inside:
+					if(!mDrawerLayout.isDrawerOpen(Gravity.RIGHT))
+						mDrawerLayout.openDrawer(Gravity.RIGHT);
+					else
+						mDrawerLayout.closeDrawer(Gravity.RIGHT);		
 					break;
 				default:
 					break;
@@ -383,32 +378,35 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		}
 
 		
-//		public void goToJanaezFragment(){
-//			
-//			FragmentManager fragmentManager = getSupportFragmentManager();
-//			FragmentTransaction transaction = fragmentManager.beginTransaction();
-//			transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-//
-//			fragment1 = (ListFragment) getSupportFragmentManager().findFragmentByTag(JANAEZ_FRAGMENT);
-//
-//			if(fragment1 == null){
-//				fragment1 = new JanaezFragment();
-//
-//				transaction.replace(R.id.fragment_view, fragment1, JANAEZ_FRAGMENT);
-//				transaction.addToBackStack(JANAEZ_FRAGMENT);
-//			}else{
-//				transaction.attach(fragment1);
-//			}
-//
-//			transaction.commit();
-//			
-//			header.setBackgroundResource(R.drawable.jana2ez);
-//			btn_menu.setBackgroundResource(R.drawable.back_list);
-//			currentFragment = JANAEZ_FRAGMENT;
-//			
-//			isBackEnabled = true;
-//
-//		}
+		public void gotoFragmentByTag(String fragmentTAG){
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			FragmentTransaction transaction = fragmentManager.beginTransaction();
+			transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+
+			fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(fragmentTAG);
+
+			if(fragment1 == null){
+				fragment1 = getFragmentByTag(fragmentTAG);
+
+				if(fragment1 != null){
+					transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
+					transaction.addToBackStack(fragmentTAG);
+				}
+			}else{
+				transaction.attach(fragment1);
+			}
+
+			transaction.commit();
+			
+			currentFragment = fragmentTAG;
+		}
+		
+		public void gotoArticleFragment(Article article){
+			
+			NSManager.getInstance(this).setCurrentArticle(article);
+			gotoFragmentByTag(ARTICLE_FRAGMENT);
+			
+		}
 		
 		@Override
 		public void onBackPressed() {

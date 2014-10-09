@@ -83,6 +83,8 @@ public class NSManager {
 	private JSONParser jsonParser;
 	private Context mContext;
 	
+	private Article currentArticle;
+	
 	public NSManager(Context context) {
 		
 		mContext = context;
@@ -453,6 +455,14 @@ public class NSManager {
 
 	public void setFragmentNotifier(IFragmentNotifier fragmentNotifier) {
 		this.fragmentNotifier = fragmentNotifier;
+	}
+
+	public Article getCurrentArticle() {
+		return currentArticle;
+	}
+
+	public void setCurrentArticle(Article currentArticle) {
+		this.currentArticle = currentArticle;
 	}
 
 }

@@ -17,16 +17,25 @@
 
     <ExpandableListView
         android:id="@+id/android:list"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="2dp"
         android:layout_marginTop="50dp"
         android:cacheColorHint="@null"
         android:divider="@color/blue_dark"
         android:dividerHeight="1px"
-        android:gravity="center" />
+        android:layout_toLeftOf="@+id/sideIndex"/>
+    
+    <ListView
+        android:id="@+id/sideIndex"
+        android:layout_width="20dp"
+        android:background="#FFF"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="50dp" />
     
     <com.slidinglayer.SlidingLayer
         xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
