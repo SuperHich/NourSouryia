@@ -1,53 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.noursouryia"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:id="@+id/main_layout">
+    android:orientation="vertical" >
 
     <ImageView
-        android:layout_width="222dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/logo_noor_sourya"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/top_img" />
+        android:id="@+id/top_img"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="90dp"
+        android:layout_marginRight="90dp"
+        android:layout_marginTop="-10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo_noor_sourya" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp" 
-        android:layout_below="@+id/top_img">
+        android:layout_below="@id/top_img"
+         >
 
         <TextView
             android:id="@+id/news_feed"
-            android:layout_width="250dp"
-            android:layout_height="90dp"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
-            android:gravity="center_vertical"
-            android:background="#60aec2" 
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="#60aec2"
+            android:gravity="center"
             android:padding="5dp"
-            android:textColor="#FFF"/>
+            android:textColor="#fff"
+            android:textSize="15sp" />
+
+        <FrameLayout
+            android:id="@+id/loading_feeds"
+            android:layout_width="fill_parent"
+            android:layout_height="90dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:clickable="true"
+            android:padding="15dp" >
+
+            <com.noursouryia.utils.GifMovieView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                custom:gif="@drawable/earth" >
+            </com.noursouryia.utils.GifMovieView>
+        </FrameLayout>
+
+        <!-- custom:gif="@drawable/load_syria_flag" -->
 
         <Button
             android:id="@+id/paginate_left_news"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="7dp"
-            android:layout_toLeftOf="@id/news_feed"
-            android:background="@drawable/paginate_left" />
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/paginate_left_selector" />
 
         <Button
             android:id="@+id/paginate_right_news"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="7dp"
-            android:layout_toRightOf="@id/news_feed"
-            android:background="@drawable/paginate_right" />
+            android:layout_marginRight="7dp"
+            android:background="@drawable/paginate_right_selector" />
     </RelativeLayout>
-    
+
     <com.slidinglayer.SlidingLayer
         xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
         android:id="@+id/slidingLayer1"
@@ -60,4 +87,5 @@
             android:layout_height="match_parent"
             layout="@layout/bottom_main_layout" />
     </com.slidinglayer.SlidingLayer>
+
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +28,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 
 	protected RelativeLayout rootView;
 	private Button opener_bottom, btn_news, btn_folders, btn_researches, btn_writers, btn_articles;
-
+	private int height_halfScreen ;
 	private SlidingLayer mSlidingLayer;
 
 	@Override
@@ -59,8 +60,16 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
 		rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		rlp.width = LayoutParams.MATCH_PARENT;
-		rlp.height = getResources().getDimensionPixelSize(R.dimen.layer_width);
+//		rlp.height = getResources().getDimensionPixelSize(R.dimen.layer_width);
 
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		height_halfScreen = (displaymetrics.heightPixels)/2;
+		
+		rlp.height = height_halfScreen;
+		
+		
 		mSlidingLayer.setLayoutParams(rlp);
 
 		opener_bottom.setOnClickListener(new OnClickListener() {

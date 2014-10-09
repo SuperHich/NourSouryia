@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
 
@@ -64,6 +65,9 @@ public class SplashHome extends NSActivity {
 //		Message msg = Message.obtain();
 //		msg.what = MESSAGE_FINISH;
 //	    splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 		
 		initData();
 		mNSFonts.Init(this);
