@@ -44,6 +44,7 @@ import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Category;
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
+import com.noursouryia.utils.Airy;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
@@ -74,6 +75,7 @@ public class MediaFragment extends BaseFragment {
 
 	private NSFonts mNSFonts ;
 	private NSManager mManager ;
+	private Airy mAiry ;
 
 	public MediaFragment() {
 		// Empty constructor required for fragment subclasses
@@ -460,31 +462,71 @@ public class MediaFragment extends BaseFragment {
 						@Override
 						public void onClick(View v) {
 
-							int gallery_position = gallery.getSelectedItemPosition();
-
-							if(gallery_position < all_photo_URLS.size()-1){
-								gallery.setSelection(gallery_position + 1);
-								String url_image = all_photo_URLS.get(gallery_position + 1);
-								ImageLoader.getInstance().displayImage(url_image, slide_shower);
-							}
+							sliderGoNext();
 
 						}
+
+						
 					});
 
 					paginate_left_slider.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
 
-							int gallery_position = gallery.getSelectedItemPosition();
-
-							if(gallery_position > 0 ){
-								gallery.setSelection(gallery_position - 1);
-								String url_image = all_photo_URLS.get(gallery_position - 1);
-								ImageLoader.getInstance().displayImage(url_image, slide_shower);
-							}
+							sliderGoBack();
 
 						}
+
+						
 					});
+					
+					
+					mAiry = new Airy(getActivity()) {
+					    @Override
+					    public void onGesture(View pView, int pGestureId) {
+					        if (pView == slide_shower) {
+					            switch (pGestureId) {
+					                case Airy.INVALID_GESTURE:
+					                    break;
+					                case Airy.TAP:
+					                	
+					                    break;
+					                case Airy.SWIPE_UP:
+					                    break;
+					                case Airy.SWIPE_DOWN:
+					                    break;
+					                case Airy.SWIPE_LEFT:
+					                	
+					                	sliderGoNext();
+					                	
+					                    break;
+					                case Airy.SWIPE_RIGHT:
+					                	
+					                	sliderGoBack();			
+					                	
+					                    break;
+					                case Airy.TWO_FINGER_TAP:
+					                    break;
+					                case Airy.TWO_FINGER_SWIPE_UP:
+					                    break;
+					                case Airy.TWO_FINGER_SWIPE_DOWN:
+					                    break;
+					                case Airy.TWO_FINGER_SWIPE_LEFT:
+					                    break;
+					                case Airy.TWO_FINGER_SWIPE_RIGHT:
+					                    break;
+					                case Airy.TWO_FINGER_PINCH_IN:
+					                    break;
+					                case Airy.TWO_FINGER_PINCH_OUT:
+					                    break;
+					            }
+					        }
+					    }
+					};
+
+					slide_shower.setOnTouchListener(mAiry);
+					
+					
 
 				} else {
 
@@ -533,5 +575,27 @@ public class MediaFragment extends BaseFragment {
 		firstLayout.startAnimation(out);
 	}
 
+	
+	private void sliderGoBack() {
+
+		int gallery_position = gallery.getSelectedItemPosition();
+
+		if(gallery_position > 0 ){
+			gallery.setSelection(gallery_position - 1);
+			String url_image = all_photo_URLS.get(gallery_position - 1);
+			ImageLoader.getInstance().displayImage(url_image, slide_shower);
+		}
+	}
+	
+	private void sliderGoNext() {
+
+		int gallery_position = gallery.getSelectedItemPosition();
+
+		if(gallery_position < all_photo_URLS.size()-1){
+			gallery.setSelection(gallery_position + 1);
+			String url_image = all_photo_URLS.get(gallery_position + 1);
+			ImageLoader.getInstance().displayImage(url_image, slide_shower);
+		}
+	}
 
 }
