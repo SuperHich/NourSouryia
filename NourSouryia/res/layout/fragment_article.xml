@@ -24,8 +24,8 @@
         android:layout_marginTop="15dp"
         android:layout_toRightOf="@+id/btn_share"
         android:gravity="center_horizontal"
-        android:text="Title"
-        android:textColor="@color/color_green"
+        android:padding="5dp"
+        android:textColor="#37a13d"
         android:textSize="20sp" />
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_below="@+id/txv_article_title"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
-        android:text="Author"
+        android:padding="5dp"
         android:textColor="@color/blue_turquoise"
         android:textSize="16sp" />
 
@@ -72,8 +72,9 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/img_article"
                     android:gravity="right"
-                    android:paddingRight="5dp"
-                    android:text="Bla bla bla"
+                    android:paddingRight="10dp"
+                    android:textDirection="anyRtl"
+                    android:padding="5dp"
                     android:textColor="@color/blue_dark"
                     android:textSize="14sp" />
             </RelativeLayout>
@@ -84,10 +85,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/layout_header"
-                android:layout_marginTop="10dp"
                 android:gravity="right"
-                android:paddingRight="5dp"
-                android:text="Bla bla bla"
+                android:padding="10dp"
                 android:textColor="#000"
                 android:textSize="14sp" />
         </RelativeLayout>

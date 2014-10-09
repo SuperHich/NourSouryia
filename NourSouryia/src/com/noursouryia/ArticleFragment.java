@@ -4,10 +4,12 @@ import java.io.File;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -23,6 +25,7 @@ import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSFonts;
+import com.noursouryia.utils.TextJustifyUtils;
 
 
 public class ArticleFragment extends BaseFragment {
@@ -61,6 +64,30 @@ public class ArticleFragment extends BaseFragment {
 		txv_article_content1.setTypeface(NSFonts.getNoorFont());
 		txv_article_content2.setTypeface(NSFonts.getNoorFont());
 		
+		currentArticle = NSManager.getInstance(getActivity()).getCurrentArticle();
+		initData();
+		
+		
+		
+//		txv_article_content1.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener()
+//	    {           
+//	        boolean isJustified = false;
+//
+//	        @Override
+//	        public boolean onPreDraw() 
+//	        {
+//	            if(!isJustified)
+//	            {
+//	                TextJustifyUtils.run(txv_article_content1, 300);
+//	                isJustified = true;
+//	            }
+//
+//	            return true;
+//	        }
+//
+//	    });
+		
+		
 		return rootView;
 	}
 	
@@ -94,8 +121,6 @@ public class ArticleFragment extends BaseFragment {
 			ImageLoader.getInstance().init(config);
 		}
 
-		currentArticle = NSManager.getInstance(getActivity()).getCurrentArticle();
-		initData();
 		
 		btn_share.setOnClickListener(new OnClickListener() {
 			
@@ -111,10 +136,13 @@ public class ArticleFragment extends BaseFragment {
 		
 		String[] contentParts = splitContent(currentArticle.getBody());
 		
+		Log.w("FULL TEXT", currentArticle.getBody());
+		
+		
 		txv_article_title.setText(currentArticle.getTitle());
 		txv_author_name.setText(currentArticle.getName());
-		txv_article_content1.setText(Html.fromHtml(contentParts[0]));
-		txv_article_content2.setText(contentParts[1]);
+		txv_article_content1.setText(formatText(contentParts[0]));
+		txv_article_content2.setText(formatText(contentParts[1]));
 		
 		if(currentArticle.getFilePath().size() > 0)
 			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_article);
@@ -138,6 +166,23 @@ public class ArticleFragment extends BaseFragment {
 		}
 		
 		return parts;
+	}
+	
+	
+	private String formatText (String body){
+		
+		
+		body = body.replaceAll("\\r\\n|\\r|\\n", "LINE_RETURN");
+		
+		body = Html.fromHtml(body).toString() ;
+		
+		
+		body = body.replaceAll("LINE_RETURN", System.getProperty("line.separator"));
+		
+		
+		return body;
+		
+		
 	}
 	
 }
