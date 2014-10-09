@@ -137,10 +137,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				Type selectedType = mTypes.get(arg2);
 				if(selectedType.getCategories().size() == 0){
 					gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn());
+					mDrawerLayout.closeDrawer(mDrawerLinear);
 				}
-				
-				mDrawerLayout.closeDrawer(mDrawerLinear);
-				
 				return false;
 			}
 		});

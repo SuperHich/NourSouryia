@@ -1,7 +1,6 @@
 package com.noursouryia.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.noursouryia.externals.NSManager;
 

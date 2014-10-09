@@ -2,12 +2,13 @@ package com.noursouryia.utils;
 
 
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import java.util.ArrayList;
 
 public class Airy implements OnTouchListener {
 

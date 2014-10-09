@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.noursouryia.R;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.File;
-import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
 
 public class FilesAdapter extends BaseExpandableListAdapter implements OnTouchListener {

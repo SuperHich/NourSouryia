@@ -11,7 +11,6 @@ import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
 
-import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.NSActivity;

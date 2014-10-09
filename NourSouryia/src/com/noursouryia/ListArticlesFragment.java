@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.noursouryia.adapters.ArticlesAdapter;
 import com.noursouryia.entity.Article;
@@ -87,7 +86,9 @@ public class ListArticlesFragment extends BaseFragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Toast.makeText(getActivity(), "Article at position " + arg2 , Toast.LENGTH_LONG).show();
+//				Toast.makeText(getActivity(), "Article at position " + arg2 , Toast.LENGTH_LONG).show();
+				Article selectedArticle = articles.get(arg2);
+				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle);
 				
 			}
 		});

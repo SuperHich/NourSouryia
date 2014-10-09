@@ -19,7 +19,6 @@ import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.Airy;
 import com.noursouryia.utils.BaseFragment;
-import com.noursouryia.utils.GifMovieView;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
 
