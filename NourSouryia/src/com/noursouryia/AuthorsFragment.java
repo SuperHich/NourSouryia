@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,9 +28,13 @@ import com.noursouryia.entity.Author;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
+import com.noursouryia.utils.NSFonts;
 
 
 public class AuthorsFragment extends BaseFragment {
+	
+	static final int SHOW_TOAST = 10;
+	static final int HIDE_TOAST = 20;
 
 	final String[] alphabaticalList = { "أ", "ب", "ت", "ث", "ج",
 			"ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ظ", "ط",
@@ -38,6 +45,31 @@ public class AuthorsFragment extends BaseFragment {
 	private TextView txv_empty;
 	private ExpandableListView expandableLV;
 	private ListView sideList;
+	private RelativeLayout section_toast_layout;
+	private TextView section_toast_text;
+	
+	private Handler mHandler = new Handler(){
+		@Override
+		public void dispatchMessage(Message msg) {
+			switch (msg.what) {
+			case SHOW_TOAST:
+				section_toast_layout.setVisibility(View.VISIBLE);
+				section_toast_text.setText((String)msg.obj);
+				
+				removeMessages(HIDE_TOAST);
+				
+				Message toSendMsg = new Message();
+				toSendMsg.what = HIDE_TOAST;
+				sendMessageDelayed(toSendMsg, 2000);
+				break;
+			case HIDE_TOAST:
+				section_toast_layout.setVisibility(View.GONE);
+				break;
+			default:
+				break;
+			}
+		}
+	};
 	
 	public AuthorsFragment() {
 		// Empty constructor required for fragment subclasses
@@ -69,6 +101,9 @@ public class AuthorsFragment extends BaseFragment {
 		View rootView = inflater.inflate(R.layout.fragment_indexed_list, container, false);
 		
 		sideList = (ListView) rootView.findViewById(R.id.sideIndex);
+		section_toast_layout = (RelativeLayout) rootView.findViewById(R.id.section_toast_layout);
+		section_toast_text = (TextView) rootView.findViewById(R.id.section_toast_text);
+		section_toast_text.setTypeface(NSFonts.getNoorFont());
 		
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
 		expandableLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
@@ -95,6 +130,9 @@ public class AuthorsFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				String item = (String) sideList.getAdapter().getItem(position);
+				
+				requestToast(item);
+				
 				int posToGo = -1;
 				for (int i = 0; i < authors.size(); i++) {
 					String name = authors.get(i).getName();
@@ -159,8 +197,11 @@ public class AuthorsFragment extends BaseFragment {
 
 					for(int i=0; i<authors.size(); i++){
 						Author a = authors.get(i);
-						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink());
-						authors.get(i).getArticles().addAll(arts);
+						int nbPage = (int) Math.ceil((double)(a.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
+						for(int j=0; j<nbPage; j++){
+							ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink()+"&page="+j);
+							authors.get(i).getArticles().addAll(arts);
+						}
 					}
 
 					for(Author a : authors){
@@ -197,5 +238,14 @@ public class AuthorsFragment extends BaseFragment {
 			txv_empty.setVisibility(View.VISIBLE);
 		else
 			txv_empty.setVisibility(View.GONE);
+	}
+	
+	private void requestToast(String text){
+		
+		Message msg = new Message();
+		msg.what = SHOW_TOAST;
+		msg.obj = text;
+		mHandler.sendMessage(msg);
+			
 	}
 }

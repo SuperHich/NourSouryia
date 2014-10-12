@@ -37,6 +37,23 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="50dp" />
     
+    <RelativeLayout
+        android:id="@+id/section_toast_layout"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_centerInParent="true"
+        android:background="@drawable/current_letter_bubble"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/section_toast_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#8E8E8E"
+            android:textSize="30sp" />
+    </RelativeLayout>
+    
     <com.slidinglayer.SlidingLayer
         xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
         android:id="@+id/slidingLayer1"

@@ -65,8 +65,6 @@ public class ArticleFragment extends BaseFragment {
 		txv_article_content2.setTypeface(NSFonts.getNoorFont());
 		
 		currentArticle = NSManager.getInstance(getActivity()).getCurrentArticle();
-		initData();
-		
 		
 		
 //		txv_article_content1.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener()
@@ -121,6 +119,7 @@ public class ArticleFragment extends BaseFragment {
 			ImageLoader.getInstance().init(config);
 		}
 
+		initData();
 		
 		btn_share.setOnClickListener(new OnClickListener() {
 			

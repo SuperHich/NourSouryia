@@ -88,30 +88,31 @@ public class MediaFragment extends BaseFragment {
 		mNSFonts = new NSFonts() ;
 		mManager = new NSManager(getActivity());
 
-		File cacheDir = StorageUtils.getCacheDirectory(getActivity());
+		if(!ImageLoader.getInstance().isInited())
+		{
+			File cacheDir = StorageUtils.getCacheDirectory(getActivity());
 
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
-		.showImageOnLoading(R.drawable.btn_folder_photos) // resource or drawable
-		.showImageForEmptyUri(R.drawable.btn_folder_photos) // resource or drawable
-		.showImageOnFail(R.drawable.btn_folder_photos) // resource or drawable
-		.cacheInMemory(true)
-		.cacheOnDisk(true) 
-		.build();
+			DisplayImageOptions options = new DisplayImageOptions.Builder()
+			.showImageOnLoading(R.drawable.btn_folder_photos) // resource or drawable
+			.showImageForEmptyUri(R.drawable.btn_folder_photos) // resource or drawable
+			.showImageOnFail(R.drawable.btn_folder_photos) // resource or drawable
+			.cacheInMemory(true)
+			.cacheOnDisk(true) 
+			.build();
 
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getActivity())
-		.denyCacheImageMultipleSizesInMemory()
-		.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-		.memoryCacheSize(2 * 1024 * 1024)
-		.diskCache(new UnlimitedDiscCache(cacheDir)) // default
-		.diskCacheSize(50 * 1024 * 1024)
-		.diskCacheFileCount(100)
-		.writeDebugLogs()
-		.defaultDisplayImageOptions(options)
-		.build();
+			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getActivity())
+			.denyCacheImageMultipleSizesInMemory()
+			.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+			.memoryCacheSize(2 * 1024 * 1024)
+			.diskCache(new UnlimitedDiscCache(cacheDir)) // default
+			.diskCacheSize(50 * 1024 * 1024)
+			.diskCacheFileCount(100)
+			.writeDebugLogs()
+			.defaultDisplayImageOptions(options)
+			.build();
 
-		ImageLoader.getInstance().init(config);
-
-
+			ImageLoader.getInstance().init(config);
+		}
 
 
 		btn_folder_sound = (ImageButton) rootView.findViewById(R.id.btn_folder_sound);

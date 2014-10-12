@@ -118,8 +118,11 @@ public class FilesFragment extends BaseFragment {
 
 					for(int i=0; i<files.size(); i++){
 						File f = files.get(i);
-						ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink());
-						files.get(i).getArticles().addAll(arts);
+						int nbPage = (int) Math.ceil((double)(f.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
+						for(int j=0; j<nbPage; j++){
+							ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink()+"&page="+j);
+							files.get(i).getArticles().addAll(arts);
+						}
 					}
 
 					for(File f : files){

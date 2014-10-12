@@ -32,6 +32,7 @@ public class NSManager {
 	
 	public static final long DEFAULT_TIMESTAMP 	= -1;
 	public static final int DEFAULT_VALUE 	= -1;
+	public static final int MAX_ARTICLE_PER_PAGE = 10;
 	
 	public static final String URL_MATERIALS 	= "http://syrianoor.net/get/materials?";
 	public static final String URL_SEARCH 		= "http://syrianoor.net/app/search";
