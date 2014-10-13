@@ -152,7 +152,7 @@ public class AuthorsAdapter extends BaseExpandableListAdapter implements OnTouch
 		if(convertView==null)
 		{
 			holder = new ChildViewHolder();
-			convertView = inflater.inflate(R.layout.list_child_layout, null);
+			convertView = inflater.inflate(R.layout.author_child_layout, null);
 			
 			holder.txv_title 	= (TextView) convertView.findViewById(R.id.txv_title);
 			holder.txv_date 	= (TextView) convertView.findViewById(R.id.txv_date);
@@ -170,13 +170,9 @@ public class AuthorsAdapter extends BaseExpandableListAdapter implements OnTouch
 		}
 		
 		Article art = authors.get(groupPosition).getArticles().get(childPosition);
-//		String authName = ((NSActivity) mContext).NourSouryiaDB.getAuthorNameByID(art.getTid());
 		
-//		holder.txv_title.setTag(new Integer[]{groupPosition, childPosition});
 		holder.txv_title.setText(art.getTitle());
 		holder.txv_date.setText(art.getCreated());
-//		Log.i("","Child " + art.getName());
-//		holder.tv.setBackgroundDrawable(images.getDrawable(childPosition));
 		return convertView;
 	}
 	@Override

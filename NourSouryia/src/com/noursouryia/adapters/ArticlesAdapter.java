@@ -57,7 +57,6 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
 			holder.txv_title.setTypeface(NSFonts.getNoorFont());
 			holder.txv_author.setTypeface(NSFonts.getNoorFont());
 //			holder.txv_date.setTypeface(NSFonts.getNoorFont());
-			holder.txv_author.setVisibility(View.VISIBLE);
 			
 			holder.row_bg.setBackgroundResource(R.drawable.drawer_subitem_selector);
 			
@@ -68,14 +67,10 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
 		}
 		
 		Article art = articles.get(position);
-//		String authName = ((NSActivity) mContext).NourSouryiaDB.getAuthorNameByID(art.getTid());
 		
-//		holder.txv_title.setTag(new Integer[]{groupPosition, childPosition});
 		holder.txv_title.setText(art.getTitle());
 		holder.txv_author.setText(art.getName());
 		holder.txv_date.setText(art.getCreated());
-//		Log.i("","Child " + art.getName());
-//		holder.tv.setBackgroundDrawable(images.getDrawable(childPosition));
 		return convertView;
 	}
 

@@ -174,7 +174,6 @@ public class FilesAdapter extends BaseExpandableListAdapter implements OnTouchLi
 			holder.txv_title.setTypeface(NSFonts.getNoorFont());
 			holder.txv_author.setTypeface(NSFonts.getNoorFont());
 //			holder.txv_date.setTypeface(NSFonts.getNoorFont());
-			holder.txv_author.setVisibility(View.VISIBLE);
 			
 			holder.row_bg.setBackgroundResource(R.drawable.drawer_subitem_selector);
 			
