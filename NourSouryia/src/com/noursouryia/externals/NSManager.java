@@ -351,14 +351,16 @@ public class NSManager {
 						article.setPdfLink(jObj.getString(PDF_LINK));
 					
 					try{
-						JSONObject jPaths = jObj.getJSONObject(FILE_PATH);
-						int j = 0;
-						while(jPaths.has(""+j)){
-							String path = jPaths.getString(""+j);
-							article.getFilePath().add(path);
+						if(jObj.has(FILE_PATH)){
+							JSONObject jPaths = jObj.getJSONObject(FILE_PATH);
+							int j = 0;
+							while(jPaths.has(""+j)){
+								String path = jPaths.getString(""+j);
+								article.getFilePath().add(path);
 
-							Log.i(TAG, j + " " + path);
-							j++;
+								Log.i(TAG, j + " " + path);
+								j++;
+							}
 						}
 					}catch(Exception ex){
 						ex.printStackTrace();
@@ -412,14 +414,16 @@ public class NSManager {
 						article.setPdfLink(jObj.getString(PDF_LINK));
 					
 					try{
-						JSONObject jPaths = jObj.getJSONObject(FILE_PATH);
-						int j = 0;
-						while(jPaths.has(""+j)){
-							String path = jPaths.getString(""+j);
-							article.getFilePath().add(path);
+						if(jObj.has(FILE_PATH)){
+							JSONObject jPaths = jObj.getJSONObject(FILE_PATH);
+							int j = 0;
+							while(jPaths.has(""+j)){
+								String path = jPaths.getString(""+j);
+								article.getFilePath().add(path);
 
-							Log.i(TAG, j + " " + path);
-							j++;
+								Log.i(TAG, j + " " + path);
+								j++;
+							}
 						}
 					}catch(Exception ex){
 						ex.printStackTrace();

@@ -32,7 +32,7 @@
         android:id="@+id/sideIndex"
         android:layout_width="20dp"
         android:background="#FFF"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentRight="true"
         android:layout_marginTop="50dp" />

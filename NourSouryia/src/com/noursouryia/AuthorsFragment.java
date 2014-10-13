@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,7 @@ import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
+import com.noursouryia.utils.Utils;
 
 
 public class AuthorsFragment extends BaseFragment {
@@ -192,15 +192,21 @@ public class AuthorsFragment extends BaseFragment {
 				if(list.size() > 0)
 					authors.addAll(list);
 				
-				else if(NSManager.getInstance(getActivity()).isOnlineMode()){
+				else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
 					authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
 
 					for(int i=0; i<authors.size(); i++){
 						Author a = authors.get(i);
-						int nbPage = (int) Math.ceil((double)(a.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
-						for(int j=0; j<nbPage; j++){
-							ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink()+"&page="+j);
-							authors.get(i).getArticles().addAll(arts);
+						
+						if(a.getCount() > 0){
+							int nbPage = (int) ((a.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
+							if(a.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
+								nbPage += 1;
+							
+							for(int j=0; j<nbPage; j++){
+								ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink()+"&page="+j);
+								authors.get(i).getArticles().addAll(arts);
+							}
 						}
 					}
 
@@ -221,11 +227,11 @@ public class AuthorsFragment extends BaseFragment {
 					adapter.notifyDataSetChanged();
 				}
 				
-				for(Author au : authors){
-					Log.v("", au.getName());
-					for(Article a : au.getArticles())
-						Log.i("", a.getName());
-				}
+//				for(Author au : authors){
+//					Log.v("", au.getName());
+//					for(Article a : au.getArticles())
+//						Log.i("", a.getName());
+//				}
 				
 				toggleEmptyMessage();
 			}
@@ -234,10 +240,13 @@ public class AuthorsFragment extends BaseFragment {
 	}
 	
 	private void toggleEmptyMessage() {
-		if(authors.size() == 0)
+		if(authors.size() == 0){
 			txv_empty.setVisibility(View.VISIBLE);
-		else
+			sideList.setVisibility(View.GONE);
+		}else{
 			txv_empty.setVisibility(View.GONE);
+			sideList.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	private void requestToast(String text){

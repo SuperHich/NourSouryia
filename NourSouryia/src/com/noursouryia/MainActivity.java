@@ -25,6 +25,7 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.noursouryia.SearchDialog.EditNameDialogListener;
 import com.noursouryia.adapters.IMenuListener;
@@ -37,6 +38,8 @@ import com.noursouryia.utils.NSActivity;
 
 public class MainActivity extends NSActivity implements IMenuListener, OnTouchListener, EditNameDialogListener{
 
+	protected static final String TAG = MainActivity.class.getSimpleName();
+	
 	public static final String NEWS_FRAGMENT 		= "news_fragment";
 	public static final String RESEARCH_FRAGMENT 	= "research_fragment";
 	public static final String FILES_FRAGMENT 		= "files_fragment";
@@ -44,9 +47,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String MEDIA_FRAGMENT 		= "media_fragment";
 	public static final String ARTICLE_FRAGMENT 	= "article_fragment";
 	public static final String LIST_ARTICLE_FRAGMENT 	= "list_article_fragment";
-
-	
-	protected static final String TAG = MainActivity.class.getSimpleName();
 	
     public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
 	
@@ -57,7 +57,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private ExpandableListView mDrawerList;
 	private LinearLayout mDrawerLinear ;
 	
-	private Button btn_menu_outside, btn_menu_inside;
+	private Button btn_menu_outside, btn_menu_inside, btn_share, btn_lamp, btn_settings, btn_rss;
 
 	private ActionBarDrawerToggle mDrawerToggle;
 	private RelativeLayout mainView , moving_layout;
@@ -65,24 +65,24 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final int MESSAGE_START = 1;
 	
 	private int lastPosition = 0;
-	private String lastText = "";
 	private boolean isFirstStart = true;
 	
 	private Fragment fragment, fragment1;
 	private String currentFragment;
-	
-	private boolean isBackEnabled = false;
 	
 	private int width_halfScreen ;
 	
 	private ArrayList<Type> mTypes;
 	private MenuCustomAdapter adapter;
 	
+	private NSManager mManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		mManager = NSManager.getInstance(this);
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ExpandableListView) findViewById(R.id.right_drawer);
@@ -91,8 +91,17 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		moving_layout = (RelativeLayout) findViewById(R.id.moving_layout);
 		mainView = (RelativeLayout) findViewById(R.id.content_frame);
 		
-		btn_menu_outside = (Button) findViewById(R.id.btn_menu_outside);
-		btn_menu_inside = (Button) findViewById(R.id.btn_menu_inside);
+		btn_menu_outside 	= (Button) findViewById(R.id.btn_menu_outside);
+		btn_menu_inside 	= (Button) findViewById(R.id.btn_menu_inside);
+		btn_share 			= (Button) findViewById(R.id.btn_share); 
+		btn_lamp 			= (Button) findViewById(R.id.btn_lamp); 
+		btn_settings 		= (Button) findViewById(R.id.btn_settings); 
+		btn_rss 			= (Button) findViewById(R.id.btn_rss);
+		
+		btn_share.setOnTouchListener(this); 
+		btn_lamp.setOnTouchListener(this);
+		btn_settings.setOnTouchListener(this); 
+		btn_rss.setOnTouchListener(this);
 		
 		mDrawerList.setGroupIndicator(null);
 		mDrawerList.setOnGroupExpandListener(new OnGroupExpandListener() {
@@ -241,22 +250,11 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 //			btn_search.setVisibility(View.VISIBLE);
 //			currentFragment = MOSQUES_FRAGMENT;
 			break;
-//		case 1:
-//			fragment = new Da3waFragment();
-//			btn_search.setVisibility(View.VISIBLE);
-//			currentFragment = DA3AWI_FRAGMENT;
-//			header.setBackgroundResource(R.drawable.dawrat_header);
-//			
-//			break;
 		default:
 			shouldSwitch = false;
-			switchTab(new HomeFragment(), false);
 			break;
 
 		}
-
-//		if(args != null)
-//			fragment.setArguments(args);
 
 		if(shouldSwitch)
 			switchTab(fragment, false);
@@ -347,6 +345,20 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					else
 						mDrawerLayout.closeDrawer(Gravity.RIGHT);		
 					break;
+				case R.id.btn_lamp :
+					if(mManager.isOnlineMode())
+						mManager.setOnLineMode(false);
+					else
+						mManager.setOnLineMode(true);
+					
+					Toast.makeText(MainActivity.this, mManager.isOnlineMode() ? getString(R.string.online_on) : getString(R.string.online_off), Toast.LENGTH_LONG).show();
+					
+				case R.id.btn_share :
+					// Share App
+				case R.id.btn_settings :
+					// Go to settings
+				case R.id.btn_rss :
+					// RSS
 				default:
 					break;
 				}
@@ -360,12 +372,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			}
 			}
 			return true;
-		}
-
-		private void showSearchDialog() {
-			FragmentManager fm = getSupportFragmentManager();
-			SearchDialog searchDialog = new SearchDialog(lastText);
-			searchDialog.show(fm, "fragment_search_keyword");
 		}
 
 		@Override

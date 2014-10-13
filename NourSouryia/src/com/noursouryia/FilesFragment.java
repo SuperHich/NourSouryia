@@ -19,6 +19,7 @@ import com.noursouryia.entity.File;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
+import com.noursouryia.utils.Utils;
 
 
 public class FilesFragment extends BaseFragment {
@@ -113,15 +114,21 @@ public class FilesFragment extends BaseFragment {
 				if(list.size() > 0)
 					files.addAll(list);
 				
-				else if(NSManager.getInstance(getActivity()).isOnlineMode()){
+				else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
 					files.addAll(NSManager.getInstance(getActivity()).getFiles());
 
 					for(int i=0; i<files.size(); i++){
 						File f = files.get(i);
-						int nbPage = (int) Math.ceil((double)(f.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
-						for(int j=0; j<nbPage; j++){
-							ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink()+"&page="+j);
-							files.get(i).getArticles().addAll(arts);
+						
+						if(f.getCount() > 0){
+							int nbPage = (int) ((f.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
+							if(f.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
+								nbPage += 1;
+							
+							for(int j=0; j<nbPage; j++){
+								ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink()+"&page="+j);
+								files.get(i).getArticles().addAll(arts);
+							}
 						}
 					}
 

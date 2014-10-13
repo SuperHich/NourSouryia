@@ -10,6 +10,7 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
@@ -33,21 +34,24 @@ public class SplashHome extends NSActivity {
 	public static final int MESSAGE_FINISH = 2;
 	
 	private RelativeLayout principal_layout;
-	public NSFonts mNSFonts ;
+	private NSManager mManager;
+	
 	
 	private Handler splashHandler = new Handler() {
 		public void handleMessage(Message msg) {
 
 			switch (msg.what) {
-				
-			case MESSAGE_FINISH :
-				
+			
+			case MESSAGE_START :
 				SplashHome.this.startActivity(new Intent(SplashHome.this, MainActivity.class));
 				Utils.animateSlide(SplashHome.this);
 				SplashHome.this.finish();
-				
 				break;
-
+			
+			case MESSAGE_FINISH :
+				Toast.makeText(SplashHome.this, "No DATA Found!", Toast.LENGTH_LONG).show();
+				SplashHome.this.finish();
+				break;
 			}
 			
 
@@ -59,17 +63,16 @@ public class SplashHome extends NSActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splashhome);
 		
+		mManager = NSManager.getInstance(this);
+		new NSFonts().Init(this);
+		
 		principal_layout = (RelativeLayout) findViewById(R.id.principal_layout);
-		mNSFonts = new NSFonts() ;
-//		Message msg = Message.obtain();
-//		msg.what = MESSAGE_FINISH;
-//	    splashHandler.sendMessageDelayed(msg, SPLASHTIME);
 		
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
 		initData();
-		mNSFonts.Init(this);
+		
 		
 	}
 
@@ -93,20 +96,24 @@ public class SplashHome extends NSActivity {
 
 		new AsyncTask<Void, Void, ArrayList<Type>>() {
 
-//			private ProgressDialog loading;
-
 			@Override
 			protected void onPreExecute() {
-				//				places.clear();
-//				loading = new ProgressDialog(SplashHome.this);
-//				loading.setCancelable(false);
-//				loading.setMessage(getString(R.string.please_wait));
-//				loading.show();
 			}
 
 			@Override
 			protected ArrayList<Type> doInBackground(Void... params) {
-				ArrayList<Type> types =	NSManager.getInstance(SplashHome.this).getTypes(); // OK
+				ArrayList<Type> types = new ArrayList<Type>();
+				if(Utils.isOnline(SplashHome.this) && mManager.isOnlineMode())
+				{
+					types =	NSManager.getInstance(SplashHome.this).getTypes(); // OK
+
+					for(Type t : types){
+						NourSouryiaDB.insertOrUpdateType(t);
+					}
+				}else{
+					types = NourSouryiaDB.getAllTypes();
+				}
+				
 				//				NSManager.getInstance(getActivity()).getCommentsByID(6687); // OK
 				//				NSManager.getInstance(getActivity()).getFiles(); // OK
 //				ArrayList<Author> auths = NSManager.getInstance(SplashHome.this).getAuthors(); // OK
@@ -116,11 +123,6 @@ public class SplashHome extends NSActivity {
 //										NSManager.DEFAULT_VALUE, 
 //										NSManager.DEFAULT_VALUE); // OK
 				
-								
-				for(Type t : types){
-					NourSouryiaDB.insertOrUpdateType(t);
-				}
-				
 //				for(Author a : auths){
 //					NourSouryiaDB.insertOrUpdateAuthor(a);
 //				}
@@ -129,19 +131,19 @@ public class SplashHome extends NSActivity {
 //					NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
 //				}
 				
-				return null;
+				return types;
 			}
 
 			@Override
 			protected void onPostExecute(ArrayList<Type> result) {
-//				loading.dismiss();
-
-				if(result != null){
-				}
-				//				toggleEmptyMessage();
 				Message msg = Message.obtain();
-				msg.what = MESSAGE_FINISH;
+				if(result.size() > 0){
+					msg.what = MESSAGE_START;
+				}else
+					msg.what = MESSAGE_FINISH;
+				
 				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+				
 			}
 		}.execute();
 

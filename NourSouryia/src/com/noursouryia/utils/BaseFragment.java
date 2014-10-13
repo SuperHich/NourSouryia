@@ -24,7 +24,7 @@ import com.slidinglayer.SlidingLayer.ISlidingLayerOpenCloseListener;
 
 public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseListener, OnTouchListener{
 
-	final String TAG = getClass().getSimpleName();
+	public final String TAG = getClass().getSimpleName();
 
 	protected RelativeLayout rootView;
 	private Button opener_bottom, btn_news, btn_folders, btn_researches, btn_writers, btn_articles;
