@@ -145,7 +145,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				
 				Type selectedType = mTypes.get(arg2);
 				if(selectedType.getCategories().size() == 0){
-					gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn());
+					gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn(), selectedType.getNameAr());
 					mDrawerLayout.closeDrawer(mDrawerLinear);
 				}
 				return false;
@@ -159,7 +159,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					int groupPosition, int childPosition, long id) {
 				
 				Category selectedCategory = mTypes.get(groupPosition).getCategories().get(childPosition);
-				gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName());
+				gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName(), selectedCategory.getName());
 				
 				mDrawerLayout.closeDrawer(mDrawerLinear);
 				
@@ -431,11 +431,12 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			
 		}
 		
-		public void gotoListArticlesFragment(String link, String categoryName){
+		public void gotoListArticlesFragment(String link, String categoryName, String title){
 
 			Bundle args = new Bundle();
 			args.putString(ListArticlesFragment.ARG_ARTICLE_LINK, link);
 			args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, categoryName);
+			args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, title);
 //			gotoFragmentByTag(LIST_ARTICLE_FRAGMENT, args);
 			
 			FragmentManager fragmentManager = getSupportFragmentManager();

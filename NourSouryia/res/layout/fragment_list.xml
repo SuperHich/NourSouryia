@@ -1,7 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.noursouryia"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
+
+    <TextView
+        android:id="@+id/txv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:maxLines="1"
+        android:paddingRight="20dp"
+        android:textColor="#fff"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/txv_emptyList"
@@ -15,25 +28,48 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
+    <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <com.noursouryia.utils.GifMovieView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            custom:gif="@drawable/loading_square" >
+        </com.noursouryia.utils.GifMovieView>
+
+        <TextView
+            android:id="@+id/txv_wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/please_wait"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="50dp"
+        android:layout_below="@id/txv_title"
+        android:layout_marginTop="5dp"
         android:cacheColorHint="@null"
         android:divider="@color/blue_dark"
         android:dividerHeight="1px"
         android:gravity="center" />
-    
+
     <com.slidinglayer.SlidingLayer
         xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
         android:id="@+id/slidingLayer1"
         android:layout_width="@dimen/layer_width"
-        android:layout_height="match_parent" 
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:visibility="gone" >
 
         <include
             android:id="@+id/dragView"

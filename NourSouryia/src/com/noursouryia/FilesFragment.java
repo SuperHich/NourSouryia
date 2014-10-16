@@ -3,14 +3,15 @@ package com.noursouryia;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noursouryia.adapters.FilesAdapter;
@@ -19,6 +20,7 @@ import com.noursouryia.entity.File;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
+import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
 
 
@@ -26,8 +28,10 @@ public class FilesFragment extends BaseFragment {
 
 	private FilesAdapter adapter;
 	private ArrayList<File> files = new ArrayList<File>();
-	private TextView txv_empty;
+	private TextView txv_empty, txv_wait;
 	private ExpandableListView expandableLV;
+	private LinearLayout loading;
+	private boolean isCanceled = false;
 	
 	public FilesFragment() {
 		// Empty constructor required for fragment subclasses
@@ -42,6 +46,8 @@ public class FilesFragment extends BaseFragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
+		
+		isCanceled = true;
 		
 	}
 	
@@ -58,10 +64,15 @@ public class FilesFragment extends BaseFragment {
 		
 		View rootView = inflater.inflate(R.layout.fragment_expandable, container, false);
 		
+		loading = (LinearLayout) rootView.findViewById(R.id.loading);
+		txv_wait = (TextView) rootView.findViewById(R.id.txv_wait);
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
+		
+		txv_wait.setTypeface(NSFonts.getNoorFont());
+		txv_empty.setTypeface(NSFonts.getNoorFont());
+		
 		expandableLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
 		expandableLV.setGroupIndicator(null);
-		expandableLV.setDivider(null);
 		return rootView;
 	}
 	
@@ -80,8 +91,6 @@ public class FilesFragment extends BaseFragment {
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
 				
-//				Toast.makeText(getActivity(), "File at position " + childPosition + "("+ groupPosition + ")", Toast.LENGTH_LONG).show();
-				
 				Article selectedArticle = files.get(groupPosition).getArticles().get(childPosition);
 				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle);
 				
@@ -95,46 +104,45 @@ public class FilesFragment extends BaseFragment {
 		
 		new AsyncTask<Void, Void, ArrayList<File>>() {
 
-			private ProgressDialog loading;
-
 			@Override
 			protected void onPreExecute() {
 				files.clear();
-				loading = new ProgressDialog(getActivity());
-				loading.setCancelable(false);
-				loading.setMessage(getString(R.string.please_wait));
-				loading.show();
+				loading.setVisibility(View.VISIBLE);
+				expandableLV.setVisibility(View.GONE);
 			}
 			
 			@Override
 			protected ArrayList<File> doInBackground(Void... params) {
-				
-				ArrayList<File> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllFiles();
-				
-				if(list.size() > 0)
-					files.addAll(list);
-				
-				else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
-					files.addAll(NSManager.getInstance(getActivity()).getFiles());
+				try{
+					ArrayList<File> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllFiles();
 
-					for(int i=0; i<files.size(); i++){
-						File f = files.get(i);
-						
-						if(f.getCount() > 0){
-							int nbPage = (int) ((f.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
-							if(f.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
-								nbPage += 1;
-							
-							for(int j=0; j<nbPage; j++){
-								ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink()+"&page="+j);
-								files.get(i).getArticles().addAll(arts);
+					if(list.size() > 0)
+						files.addAll(list);
+
+					else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
+						files.addAll(NSManager.getInstance(getActivity()).getFiles());
+
+						for(int i=0; i<files.size(); i++){
+							File f = files.get(i);
+
+							if(f.getCount() > 0){
+								int nbPage = (int) ((f.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
+								if(f.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
+									nbPage += 1;
+
+								for(int j=0; j<nbPage; j++){
+									ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink()+"&page="+j);
+									files.get(i).getArticles().addAll(arts);
+								}
 							}
 						}
-					}
 
-					for(File f : files){
-						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateFile(f);
+						for(File f : files){
+							((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateFile(f);
+						}
 					}
+				}catch(Exception e){
+					Log.e(TAG, "Error while initData !");
 				}
 				
 				return files;
@@ -142,17 +150,15 @@ public class FilesFragment extends BaseFragment {
 			
 			@Override
 			protected void onPostExecute(ArrayList<File> result) {
-				loading.dismiss();
+				loading.setVisibility(View.GONE);
+				expandableLV.setVisibility(View.VISIBLE);
+				
+				if(isCanceled)
+					return;
 				
 				if(result != null){
 					adapter.notifyDataSetChanged();
 				}
-				
-//				for(File f : files){
-//					Log.v("", f.getName());
-//					for(Article a : f.getArticles())
-//						Log.i("", a.getName());
-//				}
 				
 				toggleEmptyMessage();
 			}

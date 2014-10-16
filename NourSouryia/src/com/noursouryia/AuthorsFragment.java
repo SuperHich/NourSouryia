@@ -3,11 +3,11 @@ package com.noursouryia;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,11 +43,13 @@ public class AuthorsFragment extends BaseFragment {
 	
 	private AuthorsAdapter adapter;
 	private ArrayList<Author> authors = new ArrayList<Author>();
-	private TextView txv_empty;
+	private TextView txv_empty, txv_wait;
 	private ExpandableListView expandableLV;
 	private ListView sideList;
 	private RelativeLayout section_toast_layout;
 	private TextView section_toast_text;
+	private LinearLayout loading;
+	private boolean isCanceled = false;
 	
 	private Handler mHandler = new Handler(){
 		@Override
@@ -85,6 +88,7 @@ public class AuthorsFragment extends BaseFragment {
 	public void onDetach() {
 		super.onDetach();
 		
+		isCanceled = true;
 	}
 	
 
@@ -105,7 +109,13 @@ public class AuthorsFragment extends BaseFragment {
 		section_toast_text = (TextView) rootView.findViewById(R.id.section_toast_text);
 		section_toast_text.setTypeface(NSFonts.getNoorFont());
 		
+		loading = (LinearLayout) rootView.findViewById(R.id.loading);
+		txv_wait = (TextView) rootView.findViewById(R.id.txv_wait);
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
+		
+		txv_wait.setTypeface(NSFonts.getNoorFont());
+		txv_empty.setTypeface(NSFonts.getNoorFont());
+		
 		expandableLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
 		expandableLV.setGroupIndicator(null);
 		expandableLV.setDivider(null);
@@ -159,8 +169,6 @@ public class AuthorsFragment extends BaseFragment {
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
 				
-//				Toast.makeText(getActivity(), "File at position " + childPosition + "("+ groupPosition + ")", Toast.LENGTH_LONG).show();
-				
 				Article selectedArticle = authors.get(groupPosition).getArticles().get(childPosition);
 				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle);
 				
@@ -173,47 +181,47 @@ public class AuthorsFragment extends BaseFragment {
 		
 		new AsyncTask<Void, Void, ArrayList<Author>>() {
 
-			private ProgressDialog loading;
-
 			@Override
 			protected void onPreExecute() {
 				authors.clear();
-				loading = new ProgressDialog(getActivity());
-				loading.setCancelable(false);
-				loading.setMessage(getString(R.string.please_wait));
-				loading.show();
+				loading.setVisibility(View.VISIBLE);
+				sideList.setVisibility(View.GONE);
+				expandableLV.setVisibility(View.GONE);
 			}
 			
 			@Override
 			protected ArrayList<Author> doInBackground(Void... params) {
-				
-				ArrayList<Author> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors();
-				
-				if(list.size() > 0)
-					authors.addAll(list);
-				
-				else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
-					authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
+				try{
+					ArrayList<Author> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors();
 
-					for(int i=0; i<authors.size(); i++){
-						Author a = authors.get(i);
-						
-						if(a.getCount() > 0){
-							int nbPage = (int) ((a.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
-							if(a.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
-								nbPage += 1;
-							
-							for(int j=0; j<nbPage; j++){
-								ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink()+"&page="+j);
-								authors.get(i).getArticles().addAll(arts);
+					if(list.size() > 0)
+						authors.addAll(list);
+
+					else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
+						authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
+
+						for(int i=0; i<authors.size(); i++){
+							Author a = authors.get(i);
+
+							if(a.getCount() > 0){
+								int nbPage = (int) ((a.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
+								if(a.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
+									nbPage += 1;
+
+								for(int j=0; j<nbPage; j++){
+									ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink()+"&page="+j);
+									authors.get(i).getArticles().addAll(arts);
+								}
 							}
 						}
-					}
 
-					for(Author a : authors){
-						((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateAuthor(a);
-					}
+						for(Author a : authors){
+							((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateAuthor(a);
+						}
 
+					}
+				}catch(Exception e){
+					Log.e(TAG, "Error while initData !");
 				}
 
 				return authors;
@@ -221,17 +229,16 @@ public class AuthorsFragment extends BaseFragment {
 			
 			@Override
 			protected void onPostExecute(ArrayList<Author> result) {
-				loading.dismiss();
+				loading.setVisibility(View.GONE);
+				sideList.setVisibility(View.VISIBLE);
+				expandableLV.setVisibility(View.VISIBLE);
+				
+				if(isCanceled)
+					return;
 				
 				if(result != null){
 					adapter.notifyDataSetChanged();
 				}
-				
-//				for(Author au : authors){
-//					Log.v("", au.getName());
-//					for(Article a : au.getArticles())
-//						Log.i("", a.getName());
-//				}
 				
 				toggleEmptyMessage();
 			}
@@ -257,4 +264,5 @@ public class AuthorsFragment extends BaseFragment {
 		mHandler.sendMessage(msg);
 			
 	}
+	
 }

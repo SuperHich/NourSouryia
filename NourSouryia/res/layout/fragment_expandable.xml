@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.noursouryia"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
@@ -15,14 +16,37 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
+     <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <com.noursouryia.utils.GifMovieView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            custom:gif="@drawable/loading_square" >
+        </com.noursouryia.utils.GifMovieView>
+
+        <TextView
+            android:id="@+id/txv_wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/please_wait"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    
     <ExpandableListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:cacheColorHint="@null"
         android:divider="@color/blue_dark"
         android:dividerHeight="1px"

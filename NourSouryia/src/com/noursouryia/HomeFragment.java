@@ -3,7 +3,6 @@ package com.noursouryia;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -100,15 +99,10 @@ public class HomeFragment extends BaseFragment {
 		                case Airy.SWIPE_DOWN:
 		                    break;
 		                case Airy.SWIPE_LEFT:
-		                	
 		                	previousFeed();
-		                	
 		                    break;
 		                case Airy.SWIPE_RIGHT:
-		                	
 		                	nextFeed();
-		                	
-		                	
 		                    break;
 		                case Airy.TWO_FINGER_TAP:
 		                    break;
@@ -131,8 +125,6 @@ public class HomeFragment extends BaseFragment {
 
 		news_feed.setOnTouchListener(mAiry);
 		
-		
-		
 		paginate_left.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -149,33 +141,18 @@ public class HomeFragment extends BaseFragment {
 			}
 		});
 		
-//		news_feed.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				if(currentArticle != null)
-//					((MainActivity) getActivity()).gotoArticleFragment(currentArticle);
-//			}
-//		});
-		
 	}
 
 	private void initData(){
 		
 		new AsyncTask<Void, Void, ArrayList<Article>>() {
 
-			private ProgressDialog loading;
-
 			@Override
 			protected void onPreExecute() {
-//				loading = new ProgressDialog(getActivity());
-//				loading.setCancelable(false);
-//				loading.setMessage(getString(R.string.please_wait));
-//				loading.show();
-				
+				news_feed.setEnabled(false);
+				paginate_left.setEnabled(false);
+				paginate_right.setEnabled(false);
 				loading_feeds.setVisibility(View.VISIBLE);
-				
-				
 			}
 			
 			@Override
@@ -192,23 +169,17 @@ public class HomeFragment extends BaseFragment {
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-				
-//				NSManager.getInstance(getActivity()).getTypes(); // OK
-//				NSManager.getInstance(getActivity()).getCommentsByID(6687); // OK
-//				NSManager.getInstance(getActivity()).getFiles(); // OK
-//				NSManager.getInstance(getActivity()).getAuthors(); // OK
-//				NSManager.getInstance(getActivity()).getPolls(); // OK
-//				NSManager.getInstance(getActivity()).getQuestionByID("http://syrianoor.net/get/poll?qid=5"); // OK
-//				NSManager.getInstance(getActivity()).getArticles(Calendar.getInstance().getTimeInMillis(), 10, 1); // OK
+
 				return mArticles;
 			}
 			
 			@Override
 			protected void onPostExecute(ArrayList<Article> result) {
-			//	loading.dismiss();
-				
+
+				news_feed.setEnabled(true);
+				paginate_left.setEnabled(true);
+				paginate_right.setEnabled(true);
 				loading_feeds.setVisibility(View.GONE);
-				news_feed.bringToFront();
 				
 				if(result.size() > 0){
 					showFeed();
