@@ -421,7 +421,7 @@ public class NSManager {
 								String path = jPaths.getString(""+j);
 								article.getFilePath().add(path);
 
-								Log.i(TAG, j + " " + path);
+//								Log.i(TAG, j + " " + path);
 								j++;
 							}
 						}
@@ -429,8 +429,8 @@ public class NSManager {
 						ex.printStackTrace();
 					}
 					
-					Log.i(TAG, article.toString());
-
+//					Log.i(TAG, article.toString());
+					Log.e(TAG, article.getNid() + " : " + article.getTitle() + article.getType());
 					articles.add(article);
 
 				} catch (JSONException e) {

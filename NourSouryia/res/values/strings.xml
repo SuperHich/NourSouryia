@@ -38,7 +38,6 @@
     <string name="no_hadith_found">لم يتم العثور على أي حديث يحتوي على</string>
     <string name="hadith">حديث</string>
     <string name="share">شارك</string>
-    <string name="cancel">إلغاء</string>
     <string name="already_exist">ملف الصوت موجود</string>
     <string name="download_success">تم تحميل الحديث بنجاح</string>
     <string name="download_error">خطا في تحميل الحديث، حاول لاحقاً</string>
@@ -60,5 +59,9 @@
     
     <string name="online_on">تم تفعيل التواصل مع الأنترنت</string>
     <string name="online_off">تم إيقاف التواصل مع الأنترنت</string>
+    <string name="request_online_mode">يجب تفعيل الوضع المتواصل مع الأنترنت</string>
+    <string name="ok">موافق</string>
+    <string name="cancel">إلغاء</string>
+    <string name="show_more">المزيد...</string>
     
 </resources>

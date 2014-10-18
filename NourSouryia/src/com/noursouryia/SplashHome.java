@@ -2,15 +2,17 @@ package com.noursouryia;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
@@ -32,6 +34,7 @@ public class SplashHome extends NSActivity {
 	
 	public static final int MESSAGE_START = 1;
 	public static final int MESSAGE_FINISH = 2;
+	protected static final String TAG = null;
 	
 	private RelativeLayout principal_layout;
 	private NSManager mManager;
@@ -49,8 +52,9 @@ public class SplashHome extends NSActivity {
 				break;
 			
 			case MESSAGE_FINISH :
-				Toast.makeText(SplashHome.this, "No DATA Found!", Toast.LENGTH_LONG).show();
-				SplashHome.this.finish();
+				showWarningPopup();
+//				Toast.makeText(SplashHome.this, "No DATA Found!", Toast.LENGTH_LONG).show();
+//				SplashHome.this.finish();
 				break;
 			}
 			
@@ -103,34 +107,22 @@ public class SplashHome extends NSActivity {
 			@Override
 			protected ArrayList<Type> doInBackground(Void... params) {
 				ArrayList<Type> types = new ArrayList<Type>();
-				if(Utils.isOnline(SplashHome.this) && mManager.isOnlineMode())
-				{
-					types =	NSManager.getInstance(SplashHome.this).getTypes(); // OK
+				try{
 
-					for(Type t : types){
-						NourSouryiaDB.insertOrUpdateType(t);
-					}
-				}else{
-					types = NourSouryiaDB.getAllTypes();
+					if(Utils.isOnline(SplashHome.this) && mManager.isOnlineMode())
+					{
+						types =	NSManager.getInstance(SplashHome.this).getTypes(); // OK
+
+						for(Type t : types){
+							NourSouryiaDB.insertOrUpdateType(t);
+						}
+					}else
+						types = NourSouryiaDB.getAllTypes();
+					
+
+				}catch(Exception e){
+					Log.e(TAG, "Error while initData !");
 				}
-				
-				//				NSManager.getInstance(getActivity()).getCommentsByID(6687); // OK
-				//				NSManager.getInstance(getActivity()).getFiles(); // OK
-//				ArrayList<Author> auths = NSManager.getInstance(SplashHome.this).getAuthors(); // OK
-				//				NSManager.getInstance(getActivity()).getPolls(); // OK
-				//				NSManager.getInstance(getActivity()).getQuestionByID("http://syrianoor.net/get/poll?qid=5"); // OK
-//				ArrayList<Article> articles = NSManager.getInstance(SplashHome.this).getArticles(NSManager.DEFAULT_TIMESTAMP, 
-//										NSManager.DEFAULT_VALUE, 
-//										NSManager.DEFAULT_VALUE); // OK
-				
-//				for(Author a : auths){
-//					NourSouryiaDB.insertOrUpdateAuthor(a);
-//				}
-				
-//				for(Article a : articles){
-//					NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
-//				}
-				
 				return types;
 			}
 
@@ -147,6 +139,19 @@ public class SplashHome extends NSActivity {
 			}
 		}.execute();
 
+	}
+	
+	private void showWarningPopup(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(SplashHome.this);
+        builder.setMessage(R.string.error_internet_connexion)
+               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                	   finish();
+                   }
+               });
+        // Create the AlertDialog object and return it
+        builder.create();
+        builder.show();
 	}
 
 }

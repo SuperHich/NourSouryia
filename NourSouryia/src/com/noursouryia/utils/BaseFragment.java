@@ -1,6 +1,8 @@
 package com.noursouryia.utils;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.noursouryia.HomeFragment;
 import com.noursouryia.MainActivity;
 import com.noursouryia.R;
+import com.noursouryia.SplashHome;
 import com.slidinglayer.SlidingLayer;
 import com.slidinglayer.SlidingLayer.ISlidingLayerOpenCloseListener;
 
@@ -168,4 +171,5 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		hideShowViews(false);
 		Log.v(TAG, "onSlidingLayerClosed : " + mSlidingLayer.isOpened());
 	}
+	
 }

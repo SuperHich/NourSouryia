@@ -12,8 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.noursouryia.adapters.FilesAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.File;
@@ -29,6 +33,7 @@ public class FilesFragment extends BaseFragment {
 	private FilesAdapter adapter;
 	private ArrayList<File> files = new ArrayList<File>();
 	private TextView txv_empty, txv_wait;
+	private PullToRefreshScrollView pullToRefreshView;
 	private ExpandableListView expandableLV;
 	private LinearLayout loading;
 	private boolean isCanceled = false;
@@ -64,6 +69,7 @@ public class FilesFragment extends BaseFragment {
 		
 		View rootView = inflater.inflate(R.layout.fragment_expandable, container, false);
 		
+		pullToRefreshView = (PullToRefreshScrollView) rootView.findViewById(R.id.pullToRefreshView);
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 		txv_wait = (TextView) rootView.findViewById(R.id.txv_wait);
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
@@ -98,6 +104,22 @@ public class FilesFragment extends BaseFragment {
 			}
 		});
 		
+		pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				{	
+					((MainActivity)getActivity()).showOnLineModePopup();
+					pullToRefreshView.onRefreshComplete();
+				}
+				else{
+					files.clear();
+					initData();
+				}
+			}
+		});
+		
 	}
 
 	private void initData(){
@@ -106,7 +128,6 @@ public class FilesFragment extends BaseFragment {
 
 			@Override
 			protected void onPreExecute() {
-				files.clear();
 				loading.setVisibility(View.VISIBLE);
 				expandableLV.setVisibility(View.GONE);
 			}
@@ -114,49 +135,49 @@ public class FilesFragment extends BaseFragment {
 			@Override
 			protected ArrayList<File> doInBackground(Void... params) {
 				try{
-					ArrayList<File> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllFiles();
+					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !pullToRefreshView.isRefreshing())
+					{
+						return ((NSActivity)getActivity()).NourSouryiaDB.getAllFiles();
+					}
+					else if(Utils.isOnline(getActivity())){
+						ArrayList<File> list = NSManager.getInstance(getActivity()).getFiles();
 
-					if(list.size() > 0)
-						files.addAll(list);
-
-					else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
-						files.addAll(NSManager.getInstance(getActivity()).getFiles());
-
-						for(int i=0; i<files.size(); i++){
-							File f = files.get(i);
+						for(int i=0; i<list.size(); i++){
+							File f = list.get(i);
 
 							if(f.getCount() > 0){
-								int nbPage = (int) ((f.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
-								if(f.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
-									nbPage += 1;
-
-								for(int j=0; j<nbPage; j++){
-									ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink()+"&page="+j);
-									files.get(i).getArticles().addAll(arts);
-								}
+								ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(f.getLink()+"&NumPager="+f.getCount());
+								list.get(i).getArticles().addAll(arts);
 							}
 						}
 
-						for(File f : files){
+						for(File f : list){
 							((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateFile(f);
 						}
+						
+						return list;
 					}
 				}catch(Exception e){
 					Log.e(TAG, "Error while initData !");
 				}
 				
-				return files;
+				return null;
 			}
 			
 			@Override
 			protected void onPostExecute(ArrayList<File> result) {
-				loading.setVisibility(View.GONE);
-				expandableLV.setVisibility(View.VISIBLE);
-				
 				if(isCanceled)
 					return;
 				
+				loading.setVisibility(View.GONE);
+				expandableLV.setVisibility(View.VISIBLE);
+				
+				if(pullToRefreshView.isRefreshing())
+					pullToRefreshView.onRefreshComplete();
+				
 				if(result != null){
+					files.clear();
+					files.addAll(result);
 					adapter.notifyDataSetChanged();
 				}
 				

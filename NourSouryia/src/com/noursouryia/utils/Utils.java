@@ -1,5 +1,10 @@
 package com.noursouryia.utils;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -49,10 +54,41 @@ public class Utils {
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-			return true;
+//			return true;
+			return isInternetAccess(context);
 		}
 		return false;
 	}
+	
+	public static boolean isInternetAccess(Context context) {
+	     ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	     NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	     if (netInfo != null && netInfo.isAvailable() && netInfo.isConnected()) {
+	         
+//	      msgNoInternet = "Connexion Internet défaillante, veuillez vérifier votre connexion.";
+	      
+	      try {
+	          
+	             URL url = new URL("http://m.google.com");
+	             HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+	             urlc.setConnectTimeout(1000);
+	             urlc.connect();
+	             if (urlc.getResponseCode() == 200) {
+	                 return true;
+	             } 
+	             
+	             
+	         } catch (MalformedURLException e1) {
+	             e1.printStackTrace();
+	         } catch (IOException e) {
+	             e.printStackTrace();
+	         }
+	     } else {
+//	       msgNoInternet = "Cette application requière une connexion Internet. Merci de l'activer." ;
+	  }
+	    
+	     return false;
+	 }
 	
 	/**
 	 * Removes the reference to the activity from every view in a view hierarchy (listeners, images etc.).

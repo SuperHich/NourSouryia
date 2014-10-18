@@ -501,7 +501,8 @@ public class NSDatabaseManager extends NSDatabase {
 				article.setMp3Link(cursor.getString((cursor.getColumnIndex(NSManager.MP3_LINK))));
 				article.setPdfLink(cursor.getString((cursor.getColumnIndex(NSManager.PDF_LINK))));
 
-				Log.e(TAG,"article : " + article.toString());
+//				Log.e(TAG,"article : " + article.toString());
+				Log.e(TAG, article.getNid() + " " + article.getTitle() + article.getType());
 				articles.add(article);
 			} while (cursor.moveToNext());
 		}

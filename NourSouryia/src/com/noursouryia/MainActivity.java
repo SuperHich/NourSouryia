@@ -2,6 +2,8 @@ package com.noursouryia;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -136,7 +138,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		mDrawerList.setAdapter(adapter);
 		mDrawerList.setDivider(null);
 
-//		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		mDrawerList.setOnGroupClickListener(new OnGroupClickListener() {
 			
 			@Override
@@ -475,6 +476,26 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 //				finish();
 //			}
 			
+		}
+		
+		
+		protected void showOnLineModePopup(){
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+	        builder.setMessage(R.string.request_online_mode)
+	               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   mManager.setOnLineMode(true);
+	                   }
+	               })
+	               .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   return;
+	                   }
+	               })
+	               ;
+	        // Create the AlertDialog object and return it
+	        builder.create();
+	        builder.show();
 		}
 		
 }

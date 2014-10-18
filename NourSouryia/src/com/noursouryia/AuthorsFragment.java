@@ -18,9 +18,13 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.noursouryia.adapters.AlphabetAdapter;
 import com.noursouryia.adapters.AuthorsAdapter;
 import com.noursouryia.entity.Article;
@@ -44,6 +48,7 @@ public class AuthorsFragment extends BaseFragment {
 	private AuthorsAdapter adapter;
 	private ArrayList<Author> authors = new ArrayList<Author>();
 	private TextView txv_empty, txv_wait;
+	private PullToRefreshScrollView pullToRefreshView;
 	private ExpandableListView expandableLV;
 	private ListView sideList;
 	private RelativeLayout section_toast_layout;
@@ -104,6 +109,7 @@ public class AuthorsFragment extends BaseFragment {
 		
 		View rootView = inflater.inflate(R.layout.fragment_indexed_list, container, false);
 		
+		pullToRefreshView = (PullToRefreshScrollView) rootView.findViewById(R.id.pullToRefreshView);
 		sideList = (ListView) rootView.findViewById(R.id.sideIndex);
 		section_toast_layout = (RelativeLayout) rootView.findViewById(R.id.section_toast_layout);
 		section_toast_text = (TextView) rootView.findViewById(R.id.section_toast_text);
@@ -175,6 +181,22 @@ public class AuthorsFragment extends BaseFragment {
 				return false;
 			}
 		});
+		
+		pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				{	
+					((MainActivity)getActivity()).showOnLineModePopup();
+					pullToRefreshView.onRefreshComplete();
+				}
+				else{
+					authors.clear();
+					initData();
+				}
+			}
+		});
 	}
 
 	private void initData(){
@@ -183,7 +205,6 @@ public class AuthorsFragment extends BaseFragment {
 
 			@Override
 			protected void onPreExecute() {
-				authors.clear();
 				loading.setVisibility(View.VISIBLE);
 				sideList.setVisibility(View.GONE);
 				expandableLV.setVisibility(View.GONE);
@@ -192,51 +213,49 @@ public class AuthorsFragment extends BaseFragment {
 			@Override
 			protected ArrayList<Author> doInBackground(Void... params) {
 				try{
-					ArrayList<Author> list = ((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors();
+					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !pullToRefreshView.isRefreshing())
+						return ((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors();
 
-					if(list.size() > 0)
-						authors.addAll(list);
+					else if(Utils.isOnline(getActivity())){
+						ArrayList<Author> list = NSManager.getInstance(getActivity()).getAuthors();
 
-					else if(NSManager.getInstance(getActivity()).isOnlineMode() && Utils.isOnline(getActivity())){
-						authors.addAll(NSManager.getInstance(getActivity()).getAuthors());
-
-						for(int i=0; i<authors.size(); i++){
-							Author a = authors.get(i);
+						for(int i=0; i<list.size(); i++){
+							Author a = list.get(i);
 
 							if(a.getCount() > 0){
-								int nbPage = (int) ((a.getCount() / NSManager.MAX_ARTICLE_PER_PAGE));
-								if(a.getCount() % NSManager.MAX_ARTICLE_PER_PAGE != 0)
-									nbPage += 1;
-
-								for(int j=0; j<nbPage; j++){
-									ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink()+"&page="+j);
-									authors.get(i).getArticles().addAll(arts);
-								}
+								ArrayList<Article> arts = NSManager.getInstance(getActivity()).getArticlesByUrl(a.getLink()+"&NumPager="+a.getCount());
+								list.get(i).getArticles().addAll(arts);
 							}
 						}
 
-						for(Author a : authors){
+						for(Author a : list){
 							((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateAuthor(a);
 						}
 
+						return list;
 					}
 				}catch(Exception e){
 					Log.e(TAG, "Error while initData !");
 				}
 
-				return authors;
+				return null;
 			}
 			
 			@Override
 			protected void onPostExecute(ArrayList<Author> result) {
+				if(isCanceled)
+					return;
+				
 				loading.setVisibility(View.GONE);
 				sideList.setVisibility(View.VISIBLE);
 				expandableLV.setVisibility(View.VISIBLE);
 				
-				if(isCanceled)
-					return;
+				if(pullToRefreshView.isRefreshing())
+					pullToRefreshView.onRefreshComplete();
 				
 				if(result != null){
+					authors.clear();
+					authors.addAll(result);
 					adapter.notifyDataSetChanged();
 				}
 				

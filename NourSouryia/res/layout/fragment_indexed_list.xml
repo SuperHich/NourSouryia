@@ -4,6 +4,27 @@
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
 
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/pullToRefreshView"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" >
+
+            <ImageView
+                android:id="@+id/img_title"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="right"
+                android:background="@drawable/btn_writers" />
+        </LinearLayout>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
     <TextView
         android:id="@+id/txv_emptyList"
         android:layout_width="match_parent"
@@ -16,7 +37,7 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
-     <LinearLayout
+    <LinearLayout
         android:id="@+id/loading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,25 +62,26 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-
     <ExpandableListView
         android:id="@+id/android:list"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_toLeftOf="@+id/sideIndex"
         android:cacheColorHint="@null"
         android:divider="@color/blue_dark"
-        android:dividerHeight="1px" />
+        android:dividerHeight="1px" 
+        android:layout_below="@+id/pullToRefreshView"/>
 
     <ListView
         android:id="@+id/sideIndex"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:background="#FFF"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:layout_below="@+id/pullToRefreshView" />
 
     <RelativeLayout
         android:id="@+id/section_toast_layout"
