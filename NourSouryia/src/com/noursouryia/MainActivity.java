@@ -42,18 +42,17 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	
-	public static final String NEWS_FRAGMENT 		= "news_fragment";
-	public static final String RESEARCH_FRAGMENT 	= "research_fragment";
-	public static final String FILES_FRAGMENT 		= "files_fragment";
-	public static final String AUTHORS_FRAGMENT 	= "authors_fragment";
-	public static final String MEDIA_FRAGMENT 		= "media_fragment";
-	public static final String ARTICLE_FRAGMENT 	= "article_fragment";
+	public static final String NEWS_FRAGMENT 			= "news_fragment";
+	public static final String RESEARCH_FRAGMENT 		= "research_fragment";
+	public static final String FILES_FRAGMENT 			= "files_fragment";
+	public static final String AUTHORS_FRAGMENT 		= "authors_fragment";
+	public static final String MEDIA_FRAGMENT 			= "media_fragment";
+	public static final String ARTICLE_FRAGMENT 		= "article_fragment";
 	public static final String LIST_ARTICLE_FRAGMENT 	= "list_article_fragment";
+	public static final String COMMENTS_FRAGMENT 		= "comments_fragment";
+	public static final String ADD_COMMENT_FRAGMENT 	= "add_comment_fragment";
 	
     public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
-	
-	public static final String 	DEFAULT_FRAG_POSITION 	= "default_frag_position";
-	public static final String 	SELECTED_PLACE 			= "selected_place";
 	
 	private DrawerLayout mDrawerLayout;
 	private ExpandableListView mDrawerList;
@@ -311,6 +310,10 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new ArticleFragment();
 		else if(fragTAG.equals(LIST_ARTICLE_FRAGMENT))
 			return new ListArticlesFragment();
+		else if(fragTAG.equals(COMMENTS_FRAGMENT))
+			return new CommentsFragment();
+		else if(fragTAG.equals(ADD_COMMENT_FRAGMENT))
+			return new AddCommentFragment();
 			
 		return null;
 	}
@@ -409,10 +412,10 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			if(fragment1 == null){
 				fragment1 = getFragmentByTag(fragmentTAG);
 				
-				if(arguments != null)
-					fragment1.setArguments(arguments);
-
 				if(fragment1 != null){
+					if(arguments != null)
+						fragment1.setArguments(arguments);
+					
 					transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
 					transaction.addToBackStack(fragmentTAG);
 				}
@@ -431,6 +434,23 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			gotoFragmentByTag(ARTICLE_FRAGMENT, null);
 			
 		}
+		
+		public void gotoCommentsFragment(int articleNID){
+
+			Bundle args = new Bundle();
+			args.putInt(NSManager.NID, articleNID);
+			gotoFragmentByTag(COMMENTS_FRAGMENT, args);
+
+		}
+		
+		public void gotoAddCommentFragment(int articleNID){
+
+			Bundle args = new Bundle();
+			args.putInt(NSManager.NID, articleNID);
+			gotoFragmentByTag(ADD_COMMENT_FRAGMENT, args);
+
+		}
+		
 		
 		public void gotoListArticlesFragment(String link, String categoryName, String title){
 
@@ -493,6 +513,33 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	                   }
 	               })
 	               ;
+	        // Create the AlertDialog object and return it
+	        builder.create();
+	        builder.show();
+		}
+		
+		protected void showConnectionErrorPopup(){
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+	        builder.setMessage(R.string.error_internet_connexion)
+	               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   return;
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        builder.create();
+	        builder.show();
+		}
+		
+		protected void showInfoPopup(String message){
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+	        builder.setMessage(R.string.error_internet_connexion)
+	        		.setMessage(message)
+	        		.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   return;
+	                   }
+	               });
 	        // Create the AlertDialog object and return it
 	        builder.create();
 	        builder.show();

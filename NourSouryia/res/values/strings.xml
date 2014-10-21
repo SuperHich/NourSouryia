@@ -46,6 +46,7 @@
     <string name="error_internet_connexion">تأكد من الاتصال بالانترنت</string>
     <string name="comment_name">العنوان :</string>
     <string name="comment_email">الإيميل :</string>
+    <string name="comment_country">المدينة :</string>
     <string name="comment_text">التعليق :</string>
     <string name="please_fill">الرجاء ملء كل الفراغات</string>
     <string name="empty_list">قائمة فارغة</string>
@@ -63,5 +64,10 @@
     <string name="ok">موافق</string>
     <string name="cancel">إلغاء</string>
     <string name="show_more">المزيد...</string>
+    <string name="comments_title">تعليقات القراء</string>
+    <string name="add">أضف</string>
+    <string name="fill_empty_data">الرجاء ملء الفراغات</string>
+    <string name="comment_added">تمت إضافة التعليق بنجاح</string>
+    <string name="comment_not_added">لم يتم إضافة التعليق</string>
     
 </resources>

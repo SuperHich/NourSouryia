@@ -281,13 +281,6 @@ public class MediaFragment extends BaseFragment {
 				sound_categories  = type_sound.getCategories() ;
 				video_categories  = type_video.getCategories() ;
 
-				//				NSManager.getInstance(getActivity()).getTypes(); // OK
-				//				NSManager.getInstance(getActivity()).getCommentsByID(6687); // OK
-				//				NSManager.getInstance(getActivity()).getFiles(); // OK
-				//				NSManager.getInstance(getActivity()).getAuthors(); // OK
-				//				NSManager.getInstance(getActivity()).getPolls(); // OK
-				//				NSManager.getInstance(getActivity()).getQuestionByID("http://syrianoor.net/get/poll?qid=5"); // OK
-				//				NSManager.getInstance(getActivity()).getArticles(Calendar.getInstance().getTimeInMillis(), 10, 1); // OK
 				return null;
 			}
 

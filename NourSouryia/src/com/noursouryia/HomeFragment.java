@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -167,7 +168,8 @@ public class HomeFragment extends BaseFragment {
 						((NSActivity) getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
 					}
 				}catch(Exception e){
-					e.printStackTrace();
+					Log.e(TAG, "Error while init Data !");
+//					e.printStackTrace();
 				}
 
 				return mArticles;

@@ -1,7 +1,10 @@
 package com.noursouryia.externals;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,6 +76,7 @@ public class NSManager {
 	public static final String MP4_LINK	 		= "mp4_link";
 	public static final String MP3_LINK	 		= "mp3_link";
 	public static final String PDF_LINK	 		= "pdf_link";
+	public static final String RESULT	 		= "result";
 	
 	public static final String PREF_ONLINE_MODE	= "pref_online_mode";
 	
@@ -441,6 +445,27 @@ public class NSManager {
 			}
 
 		return articles;
+	}
+	
+	public int addComment(Comment comment, int articleNID) {
+		// Building Parameters
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("nid", String.valueOf(articleNID)));
+		params.add(new BasicNameValuePair("name", comment.getName()));
+		params.add(new BasicNameValuePair("country", comment.getCountry()));
+		params.add(new BasicNameValuePair("email", comment.getEmail()));
+		params.add(new BasicNameValuePair("body", comment.getCountry()));
+
+		JSONObject json = jsonParser.getJSONObjectFromUrl(URL_ADD_COMMENT, params);
+		
+		try{
+			return json.getInt(RESULT);
+		}catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		// return default
+		return DEFAULT_VALUE;
 	}
 	
 //	public long getTimeStamp(Calendar calendar){

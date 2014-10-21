@@ -55,6 +55,7 @@ public class AuthorsFragment extends BaseFragment {
 	private TextView section_toast_text;
 	private LinearLayout loading;
 	private boolean isCanceled = false;
+	private boolean isFirstStart = true;
 	
 	private Handler mHandler = new Handler(){
 		@Override
@@ -140,7 +141,11 @@ public class AuthorsFragment extends BaseFragment {
 		adapter = new AuthorsAdapter(getActivity(), authors);
 		expandableLV.setAdapter(adapter);
 
-		initData();
+		if(isFirstStart)
+		{
+			isFirstStart = false;
+			initData();
+		}
 		
 		sideList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
@@ -257,7 +262,8 @@ public class AuthorsFragment extends BaseFragment {
 					authors.clear();
 					authors.addAll(result);
 					adapter.notifyDataSetChanged();
-				}
+				}else
+					((MainActivity)getActivity()).showConnectionErrorPopup();
 				
 				toggleEmptyMessage();
 			}

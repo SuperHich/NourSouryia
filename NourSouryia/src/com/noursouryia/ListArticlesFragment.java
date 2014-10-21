@@ -224,7 +224,8 @@ public class ListArticlesFragment extends BaseFragment {
 					
 					articles.addAll(result);
 					adapter.notifyDataSetChanged();
-				}
+				}else
+					((MainActivity)getActivity()).showConnectionErrorPopup();
 				
 				toggleEmptyMessage();
 			}

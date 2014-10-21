@@ -11,6 +11,7 @@ import android.util.Log;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Author;
 import com.noursouryia.entity.Category;
+import com.noursouryia.entity.Comment;
 import com.noursouryia.entity.File;
 import com.noursouryia.entity.Poll;
 import com.noursouryia.entity.PollChoice;
@@ -330,7 +331,7 @@ public class NSDatabaseManager extends NSDatabase {
 
 		ArrayList<PollChoice> pollChoices = new ArrayList<PollChoice>();
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_POLL_CHOICES;
+		String selectQuery = "SELECT  * FROM " + TABLE_POLL_CHOICES + " WHERE " + COL_QUESTION_ID + " = " + qid;
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
 		if (cursor.moveToFirst()) {
@@ -540,5 +541,48 @@ public class NSDatabaseManager extends NSDatabase {
 		if(up != 1){
 			db.insert(TABLE_ARTICLES, null, values);
 		}
+	}
+	
+	public void insertOrUpdateComment(Comment comment, int article_nid) {
+		open();
+
+		ContentValues values = new ContentValues();
+		values.put(NSManager.NAME, comment.getName());
+		values.put(NSManager.COUNTRY, comment.getCountry());
+		values.put(NSManager.BODY, comment.getBody());
+		values.put(NSManager.DATE, comment.getDate());
+		values.put(NSManager.NID, article_nid);
+		
+		int up = db.updateWithOnConflict(TABLE_COMMENTS, values, NSManager.NID + " = ?",
+				new String[] {String.valueOf(article_nid)}, SQLiteDatabase.CONFLICT_REPLACE);
+
+		if(up != 1){
+			db.insert(TABLE_COMMENTS, null, values);
+		}
+		
+	}
+	
+	public ArrayList<Comment> getCommentsById(int article_nid){
+
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_COMMENTS + " WHERE " + NSManager.NID + " = " + article_nid;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+				Comment comment = new Comment();
+
+				comment.setName(cursor.getString((cursor.getColumnIndex(NSManager.NAME))));
+				comment.setCountry(cursor.getString(cursor.getColumnIndex(NSManager.COUNTRY)));
+				comment.setBody(cursor.getString(cursor.getColumnIndex(NSManager.BODY)));
+				comment.setDate(cursor.getString(cursor.getColumnIndex(NSManager.DATE)));
+				
+				Log.e(TAG,"comment : " + comment.toString());
+				comments.add(comment);
+			} while (cursor.moveToNext());
+		}
+
+		return comments;
 	}
 }

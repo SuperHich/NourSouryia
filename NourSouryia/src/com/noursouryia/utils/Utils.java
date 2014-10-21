@@ -16,6 +16,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -178,6 +179,11 @@ public class Utils {
 			bm.recycle();
 			bm = null;
 		}
+	}
+	
+	public static void hideKeyboard(Context context, View view) {
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 	
 }

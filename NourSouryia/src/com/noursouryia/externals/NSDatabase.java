@@ -76,7 +76,8 @@ public abstract class NSDatabase {
 			+ NSManager.NAME	+ " TEXT, " 
 			+ NSManager.COUNTRY	+ " TEXT, "
 			+ NSManager.BODY	+ " TEXT, "
-			+ NSManager.DATE	+ " TEXT);";
+			+ NSManager.DATE	+ " TEXT, "
+			+ NSManager.NID 	+ " INTEGER);";
 	
 	private static final String CREATE_TABLE_FILES = "CREATE TABLE " + TABLE_FILES
 			+ " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 

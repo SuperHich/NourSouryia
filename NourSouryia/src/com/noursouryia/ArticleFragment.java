@@ -4,12 +4,10 @@ import java.io.File;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,7 +23,6 @@ import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSFonts;
-import com.noursouryia.utils.TextJustifyUtils;
 
 
 public class ArticleFragment extends BaseFragment {
@@ -34,6 +31,7 @@ public class ArticleFragment extends BaseFragment {
 	private Button btn_share;
 	private ImageView img_article;
 	private Article currentArticle;
+	private boolean isFirstStart = true;
 	
 	public ArticleFragment() {
 		// Empty constructor required for fragment subclasses
@@ -65,7 +63,6 @@ public class ArticleFragment extends BaseFragment {
 		txv_article_content2.setTypeface(NSFonts.getNoorFont());
 		
 		currentArticle = NSManager.getInstance(getActivity()).getCurrentArticle();
-		
 		
 //		txv_article_content1.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener()
 //	    {           
@@ -119,13 +116,19 @@ public class ArticleFragment extends BaseFragment {
 			ImageLoader.getInstance().init(config);
 		}
 
-		initData();
+//		if(isFirstStart){
+//			isFirstStart = false;
+			initData();
+//		}
 		
 		btn_share.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// Share Article
+//				((MainActivity)getActivity()).gotoCommentsFragment(6687);	
+				((MainActivity)getActivity()).gotoCommentsFragment(currentArticle.getNid());
+//				((MainActivity)getActivity()).gotoAddCommentFragment(currentArticle.getNid());
 			}
 		});
 		
@@ -134,9 +137,6 @@ public class ArticleFragment extends BaseFragment {
 	private void initData(){
 		
 		String[] contentParts = splitContent(currentArticle.getBody());
-		
-		Log.w("FULL TEXT", currentArticle.getBody());
-		
 		
 		txv_article_title.setText(currentArticle.getTitle());
 		txv_author_name.setText(currentArticle.getName());
@@ -174,7 +174,6 @@ public class ArticleFragment extends BaseFragment {
 		body = body.replaceAll("\\r\\n|\\r|\\n", "LINE_RETURN");
 		
 		body = Html.fromHtml(body).toString() ;
-		
 		
 		body = body.replaceAll("LINE_RETURN", System.getProperty("line.separator"));
 		
