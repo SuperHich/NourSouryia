@@ -4,27 +4,14 @@
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
 
-    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
-        android:id="@+id/pullToRefreshView"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        android:fillViewport="true" >
+    <ImageView
+        android:id="@+id/img_title"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:src="@drawable/btn_folders" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:id="@+id/img_title"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="right"
-                android:gravity="right"
-                android:src="@drawable/btn_folders" />
-        </LinearLayout>
-    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
-    
     <TextView
         android:id="@+id/txv_emptyList"
         android:layout_width="match_parent"
@@ -62,23 +49,22 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <ExpandableListView
+    <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/img_title"
         android:layout_marginTop="5dp"
         android:cacheColorHint="@null"
         android:divider="@color/blue_dark"
         android:dividerHeight="1px"
-        android:gravity="center" 
-        android:layout_below="@+id/pullToRefreshView"/>
+        android:gravity="center" />
 
     <com.slidinglayer.SlidingLayer
         xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
         android:id="@+id/slidingLayer1"
         android:layout_width="@dimen/layer_width"
-        android:layout_height="match_parent"
-        android:visibility="gone" >
+        android:layout_height="match_parent" >
 
         <include
             android:id="@+id/dragView"

@@ -12,12 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 import com.noursouryia.adapters.FilesAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.File;
@@ -33,8 +32,7 @@ public class FilesFragment extends BaseFragment {
 	private FilesAdapter adapter;
 	private ArrayList<File> files = new ArrayList<File>();
 	private TextView txv_empty, txv_wait;
-	private PullToRefreshScrollView pullToRefreshView;
-	private ExpandableListView expandableLV;
+	private PullToRefreshExpandableListView expandableLV;
 	private LinearLayout loading;
 	private boolean isCanceled = false;
 	private boolean isFirstStart = true;
@@ -70,7 +68,6 @@ public class FilesFragment extends BaseFragment {
 		
 		View rootView = inflater.inflate(R.layout.fragment_expandable, container, false);
 		
-		pullToRefreshView = (PullToRefreshScrollView) rootView.findViewById(R.id.pullToRefreshView);
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 		txv_wait = (TextView) rootView.findViewById(R.id.txv_wait);
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
@@ -78,8 +75,8 @@ public class FilesFragment extends BaseFragment {
 		txv_wait.setTypeface(NSFonts.getNoorFont());
 		txv_empty.setTypeface(NSFonts.getNoorFont());
 		
-		expandableLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
-		expandableLV.setGroupIndicator(null);
+		expandableLV = (PullToRefreshExpandableListView) rootView.findViewById(android.R.id.list);
+		expandableLV.getRefreshableView().setGroupIndicator(null);
 		return rootView;
 	}
 	
@@ -88,7 +85,7 @@ public class FilesFragment extends BaseFragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		adapter = new FilesAdapter(getActivity(), files);
-		expandableLV.setAdapter(adapter);
+		expandableLV.getRefreshableView().setAdapter(adapter);
 
 		if(isFirstStart)
 		{
@@ -96,7 +93,7 @@ public class FilesFragment extends BaseFragment {
 			initData();
 		}
 		
-		expandableLV.setOnChildClickListener(new OnChildClickListener() {
+		expandableLV.getRefreshableView().setOnChildClickListener(new OnChildClickListener() {
 			
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
@@ -109,14 +106,15 @@ public class FilesFragment extends BaseFragment {
 			}
 		});
 		
-		pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
+		expandableLV.setOnRefreshListener(new OnRefreshListener<ExpandableListView>() {
 
 			@Override
-			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+			public void onRefresh(
+					PullToRefreshBase<ExpandableListView> refreshView) {
 				if(!NSManager.getInstance(getActivity()).isOnlineMode())
 				{	
 					((MainActivity)getActivity()).showOnLineModePopup();
-					pullToRefreshView.onRefreshComplete();
+					expandableLV.onRefreshComplete();
 				}
 				else{
 					files.clear();
@@ -140,7 +138,7 @@ public class FilesFragment extends BaseFragment {
 			@Override
 			protected ArrayList<File> doInBackground(Void... params) {
 				try{
-					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !pullToRefreshView.isRefreshing())
+					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !expandableLV.isRefreshing())
 					{
 						return ((NSActivity)getActivity()).NourSouryiaDB.getAllFiles();
 					}
@@ -177,8 +175,8 @@ public class FilesFragment extends BaseFragment {
 				loading.setVisibility(View.GONE);
 				expandableLV.setVisibility(View.VISIBLE);
 				
-				if(pullToRefreshView.isRefreshing())
-					pullToRefreshView.onRefreshComplete();
+				if(expandableLV.isRefreshing())
+					expandableLV.onRefreshComplete();
 				
 				if(result != null){
 					files.clear();

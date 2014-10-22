@@ -1,8 +1,6 @@
 package com.noursouryia.utils;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -20,8 +18,8 @@ import android.widget.RelativeLayout.LayoutParams;
 
 import com.noursouryia.HomeFragment;
 import com.noursouryia.MainActivity;
+import com.noursouryia.MediaFragment;
 import com.noursouryia.R;
-import com.noursouryia.SplashHome;
 import com.slidinglayer.SlidingLayer;
 import com.slidinglayer.SlidingLayer.ISlidingLayerOpenCloseListener;
 
@@ -60,8 +58,14 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		mSlidingLayer.setOffsetWidth(getResources().getDimensionPixelOffset(R.dimen.offset_width));
 
 		LayoutParams rlp = (LayoutParams) mSlidingLayer.getLayoutParams();
-		mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
-		rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		
+		if(this instanceof HomeFragment || this instanceof MediaFragment){
+			mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
+			rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		}else{
+			mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_TOP);
+			rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		}
 		rlp.width = LayoutParams.MATCH_PARENT;
 //		rlp.height = getResources().getDimensionPixelSize(R.dimen.layer_width);
 
@@ -90,10 +94,10 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		btn_articles.setOnTouchListener(this);
 		
 		btn_news.setTag(MainActivity.NEWS_FRAGMENT); 
-		btn_folders.setTag(MainActivity.MEDIA_FRAGMENT);
+		btn_folders.setTag(MainActivity.FILES_FRAGMENT);
 		btn_researches.setTag(MainActivity.RESEARCH_FRAGMENT);
 		btn_writers.setTag(MainActivity.AUTHORS_FRAGMENT);
-		btn_articles.setTag(MainActivity.FILES_FRAGMENT);
+		btn_articles.setTag(MainActivity.MEDIA_FRAGMENT);
 		
 		if(this instanceof HomeFragment){
 			// start with opened sliding layer
