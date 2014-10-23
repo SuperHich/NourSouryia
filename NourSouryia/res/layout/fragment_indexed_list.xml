@@ -96,7 +96,7 @@
             android:id="@+id/dragView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            layout="@layout/bottom_main_layout" />
+            layout="@layout/top_main_layout" />
     </com.slidinglayer.SlidingLayer>
 
 </RelativeLayout>

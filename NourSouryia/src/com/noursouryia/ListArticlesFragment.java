@@ -40,7 +40,6 @@ public class ListArticlesFragment extends BaseFragment {
 	private ArticlesAdapter adapter;
 	private ArrayList<Article> articles = new ArrayList<Article>();
 	private TextView txv_title, txv_empty, txv_wait;
-//	private PullToRefreshScrollView pullToRefreshView;
 	private PullToRefreshListView listView;
 	private LinearLayout loading;
 	private View footer;
@@ -86,17 +85,17 @@ public class ListArticlesFragment extends BaseFragment {
 		
 		View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 		
-//		pullToRefreshView = (PullToRefreshScrollView) rootView.findViewById(R.id.pullToRefreshView);
 		txv_title = (TextView) rootView.findViewById(R.id.txv_title);
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
 		txv_wait = (TextView) rootView.findViewById(R.id.txv_wait);
-		listView = (PullToRefreshListView) rootView.findViewById(android.R.id.list);
+		listView = (PullToRefreshListView) rootView.findViewById(R.id.listView);
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 		
 		//Add footer to items list
 		LayoutInflater vi = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		footer = vi.inflate(R.layout.list_footer, null);
-		listView.getRefreshableView().addFooterView(footer, null, true);
+		footer.setBackgroundResource(R.drawable.drawer_subitem_selector);
+//		listView.getRefreshableView().addFooterView(footer, null, true);
 		
 		txv_wait.setTypeface(NSFonts.getNoorFont());
 		txv_empty.setTypeface(NSFonts.getNoorFont());
@@ -133,7 +132,14 @@ public class ListArticlesFragment extends BaseFragment {
 			public void onLoadMore() {
 				// Do the work to load more items at the end of list
 				// here
-				initData();
+				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				{	
+					((MainActivity)getActivity()).showOnLineModePopup();
+					((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
+				}
+				else{
+					initData();
+				}
 			}
 		});
 		
@@ -161,23 +167,6 @@ public class ListArticlesFragment extends BaseFragment {
 				}
 			}
 		});
-		
-//		pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
-//
-//			@Override
-//			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-//				if(!NSManager.getInstance(getActivity()).isOnlineMode())
-//				{	
-//					((MainActivity)getActivity()).showOnLineModePopup();
-//					pullToRefreshView.onRefreshComplete();
-//				}
-//				else{
-//					articles.clear();
-//					pageNb = 0;
-//					initData();
-//				}
-//			}
-//		});
 		
 	}
 
@@ -236,6 +225,9 @@ public class ListArticlesFragment extends BaseFragment {
 				
 				if(result != null){
 					
+					if(pageNb == 1)
+						listView.getRefreshableView().addFooterView(footer);
+					else 
 					if(pageNb == 2)
 						listView.getRefreshableView().removeFooterView(footer);
 					

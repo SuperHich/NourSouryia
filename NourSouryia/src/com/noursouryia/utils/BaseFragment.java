@@ -17,9 +17,11 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.noursouryia.HomeFragment;
+import com.noursouryia.ListArticlesFragment;
 import com.noursouryia.MainActivity;
 import com.noursouryia.MediaFragment;
 import com.noursouryia.R;
+import com.noursouryia.entity.Type;
 import com.slidinglayer.SlidingLayer;
 import com.slidinglayer.SlidingLayer.ISlidingLayerOpenCloseListener;
 
@@ -95,9 +97,9 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		
 		btn_news.setTag(MainActivity.NEWS_FRAGMENT); 
 		btn_folders.setTag(MainActivity.FILES_FRAGMENT);
-		btn_researches.setTag(MainActivity.RESEARCH_FRAGMENT);
+		btn_researches.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
 		btn_writers.setTag(MainActivity.AUTHORS_FRAGMENT);
-		btn_articles.setTag(MainActivity.MEDIA_FRAGMENT);
+		btn_articles.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
 		
 		if(this instanceof HomeFragment){
 			// start with opened sliding layer
@@ -151,7 +153,22 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		}
 		case MotionEvent.ACTION_UP: {
 			String fragTAG = (String) v.getTag();
-			((MainActivity) getActivity()).onTypeItemClicked(fragTAG);
+			Bundle args = null;
+			Type type = null;
+			if(v == btn_researches)
+				type = ((MainActivity) getActivity()).NourSouryiaDB.getTypeByName("research");
+			else if(v == btn_articles)
+				type = ((MainActivity) getActivity()).NourSouryiaDB.getTypeByName("article");
+
+			if(type != null){
+				args = new Bundle();
+				args.putString(ListArticlesFragment.ARG_ARTICLE_LINK, type.getLink());
+				args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, type.getNameEn());
+				args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, type.getNameAr());
+			}
+				
+				
+			((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
 
 		}
 		case MotionEvent.ACTION_CANCEL: {

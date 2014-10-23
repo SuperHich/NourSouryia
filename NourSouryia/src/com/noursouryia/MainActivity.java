@@ -131,7 +131,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	    
 	    
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos");
+		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos", "revnews", "research", "article");
 		adapter = new MenuCustomAdapter(this, mTypes);
 
 		mDrawerList.setAdapter(adapter);
@@ -290,8 +290,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		selectItem(position);
 	}
 	
-	public void onTypeItemClicked(String fragmentTAG){
-		gotoFragmentByTag(fragmentTAG, null);
+	public void onTypeItemClicked(String fragmentTAG, Bundle args){
+		gotoFragmentByTag(fragmentTAG, args);
 	}
 	
 	private Fragment getFragmentByTag(String fragTAG){
@@ -409,7 +409,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 			fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(fragmentTAG);
 
-			if(fragment1 == null){
+			if(fragment1 == null && arguments != null){
 				fragment1 = getFragmentByTag(fragmentTAG);
 				
 				if(fragment1 != null){
@@ -498,24 +498,30 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			
 		}
 		
-		
+		private boolean isOnLineModePopup = false;
 		protected void showOnLineModePopup(){
-			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-	        builder.setMessage(R.string.request_online_mode)
-	               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-	                   public void onClick(DialogInterface dialog, int id) {
-	                	   mManager.setOnLineMode(true);
-	                   }
-	               })
-	               .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	                   public void onClick(DialogInterface dialog, int id) {
-	                	   return;
-	                   }
-	               })
-	               ;
-	        // Create the AlertDialog object and return it
-	        builder.create();
-	        builder.show();
+			if(!isOnLineModePopup)
+			{
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				builder.setMessage(R.string.request_online_mode)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						mManager.setOnLineMode(true);
+						isOnLineModePopup = false;
+					}
+				})
+				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						isOnLineModePopup = false;
+						return;
+					}
+				})
+				;
+				// Create the AlertDialog object and return it
+						builder.create();
+				builder.show();
+				isOnLineModePopup = true;
+			}
 		}
 		
 		protected void showConnectionErrorPopup(){

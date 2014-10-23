@@ -4,29 +4,17 @@
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
 
-<!--     <com.handmark.pulltorefresh.library.PullToRefreshScrollView -->
-<!--         android:id="@+id/pullToRefreshView" -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="70dp" -->
-<!--         android:layout_alignParentTop="true" -->
-<!--         android:fillViewport="true" > -->
-
-<!--         <LinearLayout -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="wrap_content" > -->
-
-            <TextView
-                android:id="@+id/txv_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:maxLines="1"
-                android:paddingTop="10dp"
-                android:paddingRight="20dp"
-                android:textColor="#fff"
-                android:textSize="24sp" />
-<!--         </LinearLayout> -->
-<!--     </com.handmark.pulltorefresh.library.PullToRefreshScrollView> -->
+    <TextView
+        android:id="@+id/txv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="right"
+        android:maxLines="1"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:textColor="#fff"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/txv_emptyList"
@@ -66,7 +54,7 @@
     </LinearLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/android:list"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/txv_title"
@@ -80,13 +68,13 @@
         xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
         android:id="@+id/slidingLayer1"
         android:layout_width="@dimen/layer_width"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
         <include
             android:id="@+id/dragView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            layout="@layout/bottom_main_layout" />
+            layout="@layout/top_main_layout" />
     </com.slidinglayer.SlidingLayer>
 
 </RelativeLayout>
