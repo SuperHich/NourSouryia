@@ -65,12 +65,21 @@
                     android:layout_centerVertical="true"
                     android:background="@drawable/btn_menu" />
             </RelativeLayout>
+            
+            <View 
+                android:id="@+id/headerSeparator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFF"
+                android:layout_below="@id/top"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:id="@+id/content_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/top" >
+                android:layout_below="@id/top" 
+                android:layout_marginTop="1dp">
             </RelativeLayout>
         </RelativeLayout>
 
@@ -115,7 +124,7 @@
     </android.support.v4.widget.DrawerLayout>
 
     <Button
-        android:id="@+id/opener_bottom"
+        android:id="@+id/btn_opener_top"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginTop="50dp"

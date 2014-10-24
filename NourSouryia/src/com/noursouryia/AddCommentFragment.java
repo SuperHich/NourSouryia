@@ -83,7 +83,7 @@ public class AddCommentFragment extends Fragment {
 
 				if(!isDataReady())
 				{
-					((MainActivity) getActivity()).showInfoPopup(getString(R.string.fill_empty_data));
+					((MainActivity) getActivity()).showInfoPopup(getString(R.string.please_fill));
 				}else{
 					addComment();
 				}

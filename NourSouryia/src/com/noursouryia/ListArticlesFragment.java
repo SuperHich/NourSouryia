@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -41,6 +42,8 @@ public class ListArticlesFragment extends BaseFragment {
 	private ArrayList<Article> articles = new ArrayList<Article>();
 	private TextView txv_title, txv_empty, txv_wait;
 	private PullToRefreshListView listView;
+	private TextView txv_showMore;
+	private ProgressBar progressBar;
 	private LinearLayout loading;
 	private View footer;
 	private boolean isCanceled = false;
@@ -94,6 +97,8 @@ public class ListArticlesFragment extends BaseFragment {
 		//Add footer to items list
 		LayoutInflater vi = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		footer = vi.inflate(R.layout.list_footer, null);
+		txv_showMore = (TextView) footer.findViewById(R.id.txv_showMore);
+		progressBar = (ProgressBar) footer.findViewById(R.id.progressBar);
 		footer.setBackgroundResource(R.drawable.drawer_subitem_selector);
 //		listView.getRefreshableView().addFooterView(footer, null, true);
 		
@@ -147,6 +152,8 @@ public class ListArticlesFragment extends BaseFragment {
 			
 			@Override
 			public void onClick(View v) {
+				txv_showMore.setVisibility(View.GONE);
+				progressBar.setVisibility(View.VISIBLE);
 				initData();
 			}
 		});
@@ -161,6 +168,8 @@ public class ListArticlesFragment extends BaseFragment {
 					listView.onRefreshComplete();
 				}
 				else{
+					txv_showMore.setVisibility(View.VISIBLE);
+					progressBar.setVisibility(View.GONE);
 					articles.clear();
 					pageNb = 0;
 					initData();
@@ -193,6 +202,9 @@ public class ListArticlesFragment extends BaseFragment {
 							return ((NSActivity)getActivity()).NourSouryiaDB.getArticlesByStringID(NSManager.TYPE, category);
 					}
 					else if(Utils.isOnline(getActivity())){
+						if(pageNb == 0)
+							articles.clear();
+						
 						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticlesByUrl(link+"&page="+pageNb++);
 						
 						if(list.size() > 0)
@@ -226,7 +238,7 @@ public class ListArticlesFragment extends BaseFragment {
 				if(result != null){
 					
 					if(pageNb == 1)
-						listView.getRefreshableView().addFooterView(footer);
+						listView.getRefreshableView().addFooterView(footer, null, true);
 					else 
 					if(pageNb == 2)
 						listView.getRefreshableView().removeFooterView(footer);

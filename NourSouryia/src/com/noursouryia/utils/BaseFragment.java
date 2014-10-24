@@ -1,12 +1,10 @@
 package com.noursouryia.utils;
 
 
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,16 +14,19 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.noursouryia.AuthorsFragment;
+import com.noursouryia.FilesFragment;
 import com.noursouryia.HomeFragment;
 import com.noursouryia.ListArticlesFragment;
 import com.noursouryia.MainActivity;
 import com.noursouryia.MediaFragment;
 import com.noursouryia.R;
 import com.noursouryia.entity.Type;
+import com.noursouryia.externals.NSManager;
 import com.slidinglayer.SlidingLayer;
 import com.slidinglayer.SlidingLayer.ISlidingLayerOpenCloseListener;
 
-public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseListener, OnTouchListener{
+public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseListener, OnTouchListener, IMenuOpener{
 
 	public final String TAG = getClass().getSimpleName();
 
@@ -33,7 +34,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	private Button opener_bottom, btn_news, btn_folders, btn_researches, btn_writers, btn_articles;
 	private int height_halfScreen ;
 	private SlidingLayer mSlidingLayer;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,6 +44,8 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		
+		NSManager.getInstance(getActivity()).setMenuOpener(this);
 
 		btn_news 		= (Button) view.findViewById(R.id.btn_news); 
 		btn_folders 	= (Button) view.findViewById(R.id.btn_folders);
@@ -61,12 +64,21 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 
 		LayoutParams rlp = (LayoutParams) mSlidingLayer.getLayoutParams();
 		
+		((MainActivity) getActivity()).hideImageTitle();
+		((MainActivity) getActivity()).isImgTitle = false;
+		
 		if(this instanceof HomeFragment || this instanceof MediaFragment){
 			mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
 			rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+			((MainActivity) getActivity()).isTopOpener = false;
 		}else{
 			mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_TOP);
 			rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			((MainActivity) getActivity()).showOpenerTop();
+			((MainActivity) getActivity()).isTopOpener = true;
+			
+			if(this instanceof FilesFragment || this instanceof AuthorsFragment)
+				((MainActivity) getActivity()).isImgTitle = true;
 		}
 		rlp.width = LayoutParams.MATCH_PARENT;
 //		rlp.height = getResources().getDimensionPixelSize(R.dimen.layer_width);
@@ -105,6 +117,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			// start with opened sliding layer
 			mSlidingLayer.openLayer(true);
 		}
+		
 	}
 
 	public void buttonClicked(View v) {
@@ -112,8 +125,18 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		case R.id.opener_bottom:
 			if (!mSlidingLayer.isOpened()) {
 				mSlidingLayer.openLayer(true);
+				if(((MainActivity) getActivity()).isTopOpener)
+					((MainActivity) getActivity()).hideOpenerTop();
+				if(((MainActivity) getActivity()).isImgTitle)
+					((MainActivity) getActivity()).hideImageTitle();
+
 			}else{
 				mSlidingLayer.closeLayer(true);
+				if(((MainActivity) getActivity()).isTopOpener)
+					((MainActivity) getActivity()).showOpenerTop();
+				if(((MainActivity) getActivity()).isImgTitle)
+					((MainActivity) getActivity()).showImageTitle();
+				
 			}
 			break;
 		}
@@ -123,7 +146,10 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		
 		int visibility = status ? View.VISIBLE : View.GONE;
 		int resBtn = status ? R.drawable.ctrl_open_bottom : R.drawable.ctrl_close_bottom; 
-
+		
+		if(((MainActivity) getActivity()).isTopOpener)
+			resBtn = status ? R.drawable.ctrl_close_bottom : R.drawable.ctrl_open_bottom;
+			
 		btn_news.setVisibility(visibility);
 		btn_folders.setVisibility(visibility);
 		btn_researches.setVisibility(visibility);
@@ -132,14 +158,6 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		
 		opener_bottom.setBackgroundResource(resBtn);
 		
-	}
-
-	public boolean onBackPressed(){
-		return false;
-	}
-
-	public void onActivityResult(int requestCode, int resultCode, Intent data){
-
 	}
 	
 	@Override
@@ -167,7 +185,6 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 				args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, type.getNameAr());
 			}
 				
-				
 			((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
 
 		}
@@ -184,13 +201,41 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	@Override
 	public void onSlidingLayerOpened() {
 		hideShowViews(true);
-		Log.v(TAG, "onSlidingLayerOpened : " + mSlidingLayer.isOpened());
+		if(((MainActivity) getActivity()).isTopOpener)
+			((MainActivity) getActivity()).hideOpenerTop();
+		if(((MainActivity) getActivity()).isImgTitle)
+			((MainActivity) getActivity()).hideImageTitle();
+		
 	}
 
 	@Override
 	public void onSlidingLayerClosed() {
 		hideShowViews(false);
-		Log.v(TAG, "onSlidingLayerClosed : " + mSlidingLayer.isOpened());
+		if(((MainActivity) getActivity()).isTopOpener)
+			((MainActivity) getActivity()).showOpenerTop();
+		if(((MainActivity) getActivity()).isImgTitle)
+			((MainActivity) getActivity()).showImageTitle();
+		
+	}
+
+	@Override
+	public void openMenu() {
+		mSlidingLayer.openLayer(true);
+		if(((MainActivity) getActivity()).isTopOpener)
+			((MainActivity) getActivity()).hideOpenerTop();
+		if(((MainActivity) getActivity()).isImgTitle)
+			((MainActivity) getActivity()).hideImageTitle();
+		
+	}
+
+	@Override
+	public void closeMenu() {
+		mSlidingLayer.closeLayer(true);
+		if(((MainActivity) getActivity()).isTopOpener)
+			((MainActivity) getActivity()).showOpenerTop();
+		if(((MainActivity) getActivity()).isImgTitle)
+			((MainActivity) getActivity()).showImageTitle();
+		
 	}
 	
 }

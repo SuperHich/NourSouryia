@@ -93,6 +93,7 @@ public class AuthorsFragment extends BaseFragment {
 		super.onDetach();
 
 		isCanceled = true;
+		((MainActivity)getActivity()).hideImageTitle();
 	}
 
 
@@ -120,7 +121,7 @@ public class AuthorsFragment extends BaseFragment {
 		txv_wait.setTypeface(NSFonts.getNoorFont());
 		txv_empty.setTypeface(NSFonts.getNoorFont());
 
-		expandableLV = (PullToRefreshExpandableListView) rootView.findViewById(android.R.id.list);
+		expandableLV = (PullToRefreshExpandableListView) rootView.findViewById(R.id.listView);
 		expandableLV.getRefreshableView().setGroupIndicator(null);
 		expandableLV.getRefreshableView().setDivider(null);
 
@@ -131,6 +132,9 @@ public class AuthorsFragment extends BaseFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		((MainActivity)getActivity()).showImageTitle();
+		((MainActivity)getActivity()).setImageTitle(R.drawable.btn_writers);
+		
 		// side list
 		AlphabetAdapter alphabaticalListAdapter = new AlphabetAdapter(getActivity(), R.layout.alphabet_item, alphabaticalList);
 		sideList.setAdapter(alphabaticalListAdapter);

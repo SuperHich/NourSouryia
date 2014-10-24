@@ -4,14 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
 
-    <ImageView
-        android:id="@+id/img_title"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="right"
-        android:gravity="right"
-        android:src="@drawable/btn_folders" />
-
     <TextView
         android:id="@+id/txv_emptyList"
         android:layout_width="match_parent"
@@ -50,11 +42,10 @@
     </LinearLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
-        android:id="@+id/android:list"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/img_title"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="50dp"
         android:cacheColorHint="@null"
         android:divider="@color/blue_dark"
         android:dividerHeight="1px"

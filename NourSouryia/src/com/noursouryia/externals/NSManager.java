@@ -24,6 +24,7 @@ import com.noursouryia.entity.Poll;
 import com.noursouryia.entity.PollChoice;
 import com.noursouryia.entity.Question;
 import com.noursouryia.entity.Type;
+import com.noursouryia.utils.IMenuOpener;
 
 /**
  * @author H.L - admin
@@ -89,6 +90,8 @@ public class NSManager {
 	private Context mContext;
 	
 	private Article currentArticle;
+	
+	private IMenuOpener menuOpener;
 	
 	public NSManager(Context context) {
 		
@@ -493,6 +496,14 @@ public class NSManager {
 
 	public void setCurrentArticle(Article currentArticle) {
 		this.currentArticle = currentArticle;
+	}
+
+	public IMenuOpener getMenuOpener() {
+		return menuOpener;
+	}
+
+	public void setMenuOpener(IMenuOpener menuOpener) {
+		this.menuOpener = menuOpener;
 	}
 
 }

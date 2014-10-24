@@ -50,9 +50,8 @@ public class FilesFragment extends BaseFragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		
+
 		isCanceled = true;
-		
 	}
 	
 
@@ -75,7 +74,7 @@ public class FilesFragment extends BaseFragment {
 		txv_wait.setTypeface(NSFonts.getNoorFont());
 		txv_empty.setTypeface(NSFonts.getNoorFont());
 		
-		expandableLV = (PullToRefreshExpandableListView) rootView.findViewById(android.R.id.list);
+		expandableLV = (PullToRefreshExpandableListView) rootView.findViewById(R.id.listView);
 		expandableLV.getRefreshableView().setGroupIndicator(null);
 		return rootView;
 	}
@@ -83,6 +82,9 @@ public class FilesFragment extends BaseFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		
+		((MainActivity)getActivity()).showImageTitle();
+		((MainActivity)getActivity()).setImageTitle(R.drawable.btn_folders);
 		
 		adapter = new FilesAdapter(getActivity(), files);
 		expandableLV.getRefreshableView().setAdapter(adapter);
