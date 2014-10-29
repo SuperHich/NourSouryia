@@ -81,6 +81,14 @@
                 android:layout_below="@id/top" 
                 android:layout_marginTop="1dp">
             </RelativeLayout>
+            
+            <RelativeLayout
+                android:id="@+id/media_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/top" 
+                android:layout_marginTop="1dp">
+            </RelativeLayout>
         </RelativeLayout>
 
         <LinearLayout
@@ -141,5 +149,5 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/btn_folders"
         android:visibility="gone" />
-
+    
 </RelativeLayout>

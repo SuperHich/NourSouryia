@@ -40,6 +40,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 
+	public static final String HOME_FRAGMENT 			= "home_fragment";
 	public static final String NEWS_FRAGMENT 			= "news_fragment";
 	public static final String RESEARCH_FRAGMENT 		= "research_fragment";
 	public static final String FILES_FRAGMENT 			= "files_fragment";
@@ -49,6 +50,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String LIST_ARTICLE_FRAGMENT 	= "list_article_fragment";
 	public static final String COMMENTS_FRAGMENT 		= "comments_fragment";
 	public static final String ADD_COMMENT_FRAGMENT 	= "add_comment_fragment";
+	public static final String SEARCH_FRAGMENT 			= "search_fragment";
 
 	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
 
@@ -207,7 +209,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		btn_menu_outside.setOnTouchListener(this);
 		btn_menu_inside.setOnTouchListener(this);
-
+		
 	}
 
 	@Override
@@ -304,6 +306,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new CommentsFragment();
 		else if(fragTAG.equals(ADD_COMMENT_FRAGMENT))
 			return new AddCommentFragment();
+		else if(fragTAG.equals(SEARCH_FRAGMENT))
+			return new SearchArticlesFragment();
 
 		return null;
 	}
@@ -356,6 +360,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				break;
 			case R.id.btn_rss :
 				// RSS
+				gotoSearchArticlesFragment("سوريا");
 				break;
 			case R.id.btn_opener_top :
 				if(mManager.getMenuOpener() != null)
@@ -425,6 +430,13 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	}
 
+	public void gotoSearchArticlesFragment(String keyword){
+
+		Bundle args = new Bundle();
+		args.putString(SearchArticlesFragment.ARG_ARTICLE_KEYWORD, keyword);
+		gotoFragmentByTag(SEARCH_FRAGMENT, args);
+
+	}
 
 	public void gotoListArticlesFragment(String link, String categoryName, String title){
 
@@ -453,6 +465,45 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		currentFragment = LIST_ARTICLE_FRAGMENT;
 
 	}
+	
+//	public void gotoMediaFragment(){
+//
+//		FragmentManager fragmentManager = getSupportFragmentManager();
+//		FragmentTransaction transaction = fragmentManager.beginTransaction();
+//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
+//
+//		fragment1 = getFragmentByTag(MEDIA_FRAGMENT);
+//
+//		if(fragment1 != null){
+//			transaction.replace(R.id.media_frame, fragment1, MEDIA_FRAGMENT);
+//			transaction.addToBackStack(MEDIA_FRAGMENT);
+//		}
+//
+//		transaction.commit();
+//
+//		currentFragment = MEDIA_FRAGMENT;
+//
+//	}
+//	
+//	public void gotoHomeFragment(){
+//
+//		FragmentManager fragmentManager = getSupportFragmentManager();
+//		FragmentTransaction transaction = fragmentManager.beginTransaction();
+//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
+//
+//		fragment1 = getFragmentByTag(HOME_FRAGMENT);
+//
+//		if(fragment1 != null){
+//			transaction.replace(R.id.content_frame, fragment1, HOME_FRAGMENT);
+//			transaction.addToBackStack(HOME_FRAGMENT);
+//		}
+//
+//		transaction.commit();
+//
+//		currentFragment = HOME_FRAGMENT;
+//
+//	}
+
 
 	@Override
 	public void onBackPressed() {

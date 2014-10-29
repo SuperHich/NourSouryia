@@ -23,6 +23,7 @@ import com.noursouryia.entity.File;
 import com.noursouryia.entity.Poll;
 import com.noursouryia.entity.PollChoice;
 import com.noursouryia.entity.Question;
+import com.noursouryia.entity.Share;
 import com.noursouryia.entity.Type;
 import com.noursouryia.utils.IMenuOpener;
 
@@ -449,6 +450,73 @@ public class NSManager {
 
 		return articles;
 	}
+
+	public ArrayList<Article> searchArticlesByKeyword(String keyword, int total_items) {
+
+		ArrayList<Article> articles = new ArrayList<Article>();
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("title_search", keyword));
+		if(total_items != DEFAULT_VALUE)
+			params.add(new BasicNameValuePair("total_items", String.valueOf(total_items)));
+		
+		JSONArray array = jsonParser.getJSONArrayFromUrl(URL_SEARCH, params);
+		if (array != null) 
+			for (int i = 0; i < array.length(); i++) {
+				try {
+					JSONObject jObj = array.getJSONObject(i);
+					Article article = new Article();
+					article.setNid(jObj.getInt(NID));
+					article.setTitle(jObj.getString(TITLE));
+					article.setBody(jObj.getString(BODY));
+					article.setType(jObj.getString(TYPE));
+					if(jObj.has(TYPE_A))
+						article.setTypeAr(jObj.getString(TYPE_A));
+					article.setVisits(jObj.getInt(VISITS));
+					article.setCreated(jObj.getString(CREATED));
+					if(jObj.has(NAME) && !jObj.getString(NAME).equals("null"))
+						article.setName(jObj.getString(NAME));
+					if(jObj.has(TID) && !jObj.getString(TID).equals("null"))
+						article.setTid(jObj.getInt(TID));
+					if(jObj.has(YOUTUBE_LINK))
+						article.setYoutubeLink(jObj.getString(YOUTUBE_LINK));
+					if(jObj.has(MP4_LINK))
+						article.setMp4Link(jObj.getString(MP4_LINK));
+					if(jObj.has(MP3_LINK))
+						article.setMp3Link(jObj.getString(MP3_LINK));
+					if(jObj.has(PDF_LINK))
+						article.setPdfLink(jObj.getString(PDF_LINK));
+					
+					try{
+						if(jObj.has(FILE_PATH)){
+							JSONObject jPaths = jObj.getJSONObject(FILE_PATH);
+							int j = 0;
+							while(jPaths.has(""+j)){
+								String path = jPaths.getString(""+j);
+								article.getFilePath().add(path);
+
+//								Log.i(TAG, j + " " + path);
+								j++;
+							}
+						}
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+					
+//					Log.i(TAG, article.toString());
+					Log.e(TAG, article.getNid() + " : " + article.getTitle() + article.getType());
+					articles.add(article);
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		return articles;
+	}
+
 	
 	public int addComment(Comment comment, int articleNID) {
 		// Building Parameters
@@ -460,6 +528,44 @@ public class NSManager {
 		params.add(new BasicNameValuePair("body", comment.getCountry()));
 
 		JSONObject json = jsonParser.getJSONObjectFromUrl(URL_ADD_COMMENT, params);
+		
+		try{
+			return json.getInt(RESULT);
+		}catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		// return default
+		return DEFAULT_VALUE;
+	}
+	
+	public int addVote(int chid, int questionID) {
+		// Building Parameters
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair(QID, String.valueOf(questionID)));
+		params.add(new BasicNameValuePair(CHID, String.valueOf(chid)));
+
+		JSONObject json = jsonParser.getJSONObjectFromUrl(URL_ADD_VOTE, params);
+		
+		try{
+			return json.getInt(RESULT);
+		}catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		// return default
+		return DEFAULT_VALUE;
+	}
+	
+	public int addShare(Share share) {
+		// Building Parameters
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("title", share.getTitle()));
+		params.add(new BasicNameValuePair("writer", share.getWriter()));
+		params.add(new BasicNameValuePair("email", share.getEmail()));
+		params.add(new BasicNameValuePair("msg", share.getMessage()));
+
+		JSONObject json = jsonParser.getJSONObjectFromUrl(URL_ADD_SHARES, params);
 		
 		try{
 			return json.getInt(RESULT);

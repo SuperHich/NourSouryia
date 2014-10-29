@@ -253,26 +253,18 @@ public class SlidingLayer extends FrameLayout {
 
     public void openLayer(boolean smoothAnim) {
         openLayer(smoothAnim, false);
-        if(mOpenCloseListener != null)
-        	mOpenCloseListener.onSlidingLayerOpened();
     }
 
     private void openLayer(boolean smoothAnim, boolean forceOpen) {
         switchLayer(true, smoothAnim, forceOpen, 0, 0);
-        if(mOpenCloseListener != null)
-        	mOpenCloseListener.onSlidingLayerOpened();
     }
 
     public void closeLayer(boolean smoothAnim) {
         closeLayer(smoothAnim, false);
-        if(mOpenCloseListener != null)
-        	mOpenCloseListener.onSlidingLayerClosed();
     }
 
     private void closeLayer(boolean smoothAnim, boolean forceClose) {
         switchLayer(false, smoothAnim, forceClose, 0, 0);
-        if(mOpenCloseListener != null)
-        	mOpenCloseListener.onSlidingLayerClosed();
     }
 
     private void switchLayer(boolean open, boolean smoothAnim, boolean forceSwitch) {
@@ -296,6 +288,13 @@ public class SlidingLayer extends FrameLayout {
         }
 
         mIsOpen = open;
+        
+        if(mOpenCloseListener != null){
+        	if(mIsOpen)
+        		mOpenCloseListener.onSlidingLayerOpened();
+        	else
+        		mOpenCloseListener.onSlidingLayerClosed();
+        }
 
         // Get translation values
         float tx = mLastX - getWidth() / 2;
@@ -694,11 +693,6 @@ public class SlidingLayer extends FrameLayout {
                 boolean nextStateOpened = determineNextStateOpened(mIsOpen, scrollX, scrollY, initialVelocityX,
                         initialVelocityY, totalDeltaX, totalDeltaY);
                 switchLayer(nextStateOpened, true, true, initialVelocityX, initialVelocityY);
-                
-                if(nextStateOpened)
-                	mOpenCloseListener.onSlidingLayerOpened();
-                else
-                	mOpenCloseListener.onSlidingLayerClosed();
                 
                 mActivePointerId = INVALID_POINTER;
                 endDrag();

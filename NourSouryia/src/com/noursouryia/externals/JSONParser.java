@@ -157,7 +157,59 @@ public class JSONParser {
 
     }
     
-    public JSONObject getJSONObjectFromUrl(String url, List<NameValuePair> params) {
+    public JSONArray getJSONArrayFromUrl(String url, List<NameValuePair> params) {
+    	
+    	int statusCode = NSManager.DEFAULT_VALUE;
+        // Making HTTP request
+        try {
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+ 
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            HttpEntity httpEntity = httpResponse.getEntity();
+            statusCode = httpResponse.getStatusLine().getStatusCode();
+            is = httpEntity.getContent();
+ 
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+ 
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    is, "iso-8859-1"), 8);
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            is.close();
+            json = sb.toString();
+            Log.e("JSON", json);
+        } catch (Exception e) {
+            Log.e("Buffer Error", "Error converting result " + e.toString());
+        }
+        
+        if(statusCode == HttpStatus.SC_OK)
+        {
+        	// try parse the string to an Integer value
+        	try {
+        		jArray = new JSONArray(json);            
+        	} catch (JSONException e) {
+        		Log.e("JSON Parser", "Error parsing data " + e.toString());
+        	}
+        }
+ 
+        // return status code / response
+        return jArray;
+ 
+    }
+    
+public JSONObject getJSONObjectFromUrl(String url, List<NameValuePair> params) {
     	
     	int statusCode = NSManager.DEFAULT_VALUE;
         // Making HTTP request
