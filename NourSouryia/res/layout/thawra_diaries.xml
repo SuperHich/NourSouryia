@@ -5,12 +5,15 @@
     android:background="@color/drawer_bg" >
 
     <LinearLayout
+        android:id="@+id/all_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@android:color/transparent"
         android:weightSum="3" >
 
         <LinearLayout
+            android:id="@+id/month_calendar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.2"
@@ -19,12 +22,15 @@
             android:weightSum="3" >
 
             <include
+                android:id="@+id/calendar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.85"
+                android:paddingTop="15dp"
                 layout="@layout/calendar" />
 
             <RelativeLayout
+                android:id="@+id/month_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.05"
@@ -117,7 +123,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.9" >
 
                 <ImageView
@@ -189,6 +195,7 @@
             android:id="@+id/dragView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/color_yellow"
             layout="@layout/top_main_layout" />
     </com.slidinglayer.SlidingLayer>
 

@@ -106,6 +106,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		
 		
 		mSlidingLayer.setLayoutParams(rlp);
+		
 
 		opener_bottom.setOnClickListener(new OnClickListener() {
 

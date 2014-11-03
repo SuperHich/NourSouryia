@@ -13,8 +13,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,9 @@ public class FragmentThawraDiaries extends BaseFragment{
 	public Handler handler;
 	public ArrayList<String> items; // container to store some random calendar items
 
+	private LinearLayout all_layout ;
+	private RelativeLayout calendar_layout ;
+	
 	private TextView monthText, yearText, txv_first , txv_title, txv_second;
 	private ImageView nextMonth, previousMonth, img_first  ;
 	private GridView gridview ;
@@ -38,7 +44,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.thawra_diaries, container, false);
-
+		
 		monthText = (TextView) rootView.findViewById(R.id.month_text);
 		yearText = (TextView) rootView.findViewById(R.id.year_text);
 		
@@ -46,6 +52,13 @@ public class FragmentThawraDiaries extends BaseFragment{
 		img_first = (ImageView) rootView.findViewById(R.id.img_first);
 		txv_title = (TextView) rootView.findViewById(R.id.txv_title);
 		txv_second = (TextView) rootView.findViewById(R.id.txv_second);
+		
+		
+		all_layout = (LinearLayout) rootView.findViewById(R.id.all_layout);
+//		all_layout.bringToFront();
+		all_layout.bringChildToFront(calendar_layout);
+		all_layout.bringChildToFront(previousMonth);
+		all_layout.bringChildToFront(nextMonth);
 		
 		nextMonth = (ImageView) rootView.findViewById(R.id.next_month);
 		previousMonth = (ImageView) rootView.findViewById(R.id.previous_month);
@@ -124,6 +137,27 @@ public class FragmentThawraDiaries extends BaseFragment{
 		
 		
 		return rootView;
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		
+		
+		mSlidingLayer.setCloseOnTapEnabled(false);
+		mSlidingLayer.setOpenOnTapEnabled(false);
+		
+//		Button btn_opener_top		= (Button) getActivity().findViewById(R.id.btn_opener_top);
+//		
+//		btn_opener_top.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				mSlidingLayer.bringToFront();
+//				all_layout.setVisibility(View.GONE);
+//			}
+//		});
+		
+		
 	}
 
 	public void refreshCalendar()
