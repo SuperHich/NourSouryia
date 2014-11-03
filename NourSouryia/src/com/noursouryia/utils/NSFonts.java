@@ -13,10 +13,12 @@ public class NSFonts {
 	
 	private static Typeface noorFont;
 	private static Typeface arabic;
+	private static Typeface latin;
 	
 	public void Init(Context context){
 		arabic  				= Typeface.createFromAsset(context.getAssets(), "fonts/Arabic.TTF");
 		noorFont  				= Typeface.createFromAsset(context.getAssets(), "fonts/GE_Dinar_One_Medium.otf");
+		setLatin(Typeface.createFromAsset(context.getAssets(), "fonts/DroidKufi-Regular.ttf"));
 	}
 
 	
@@ -32,5 +34,15 @@ public class NSFonts {
 
 	public void setNoorFont(Typeface noorFont) {
 		NSFonts.noorFont = noorFont;
+	}
+
+
+	public static Typeface getLatin() {
+		return latin;
+	}
+
+
+	public static void setLatin(Typeface latin) {
+		NSFonts.latin = latin;
 	}
 }

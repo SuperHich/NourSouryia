@@ -51,6 +51,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String COMMENTS_FRAGMENT 		= "comments_fragment";
 	public static final String ADD_COMMENT_FRAGMENT 	= "add_comment_fragment";
 	public static final String SEARCH_FRAGMENT 			= "search_fragment";
+	public static final String THAWRA_DIARIES 			= "thawra_diaries";
 
 	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
 
@@ -106,13 +107,13 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		btn_opener_top		= (Button) findViewById(R.id.btn_opener_top);
 		img_title			= (ImageView) findViewById(R.id.img_title);
 		headerSeparator		= (View) findViewById(R.id.headerSeparator);
-		
+
 		btn_share.setOnTouchListener(this); 
 		btn_lamp.setOnTouchListener(this);
 		btn_settings.setOnTouchListener(this); 
 		btn_rss.setOnTouchListener(this);
 		btn_opener_top.setOnTouchListener(this);
-		
+
 		mDrawerList.setGroupIndicator(null);
 		mDrawerList.setOnGroupExpandListener(new OnGroupExpandListener() {
 
@@ -209,7 +210,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		btn_menu_outside.setOnTouchListener(this);
 		btn_menu_inside.setOnTouchListener(this);
-		
+
 	}
 
 	@Override
@@ -290,8 +291,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	}
 
 	private Fragment getFragmentByTag(String fragTAG){
-		//		if(fragTAG.equals(NEWS_FRAGMENT))
-		//			return new FilesFragment();
+		if(fragTAG.equals(NEWS_FRAGMENT))
+			return new NewsFragment();
 		if(fragTAG.equals(FILES_FRAGMENT))
 			return new FilesFragment();
 		else if(fragTAG.equals(AUTHORS_FRAGMENT))
@@ -308,6 +309,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new AddCommentFragment();
 		else if(fragTAG.equals(SEARCH_FRAGMENT))
 			return new SearchArticlesFragment();
+		else if(fragTAG.equals(THAWRA_DIARIES))
+			return new FragmentThawraDiaries();
 
 		return null;
 	}
@@ -465,44 +468,44 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		currentFragment = LIST_ARTICLE_FRAGMENT;
 
 	}
-	
-//	public void gotoMediaFragment(){
-//
-//		FragmentManager fragmentManager = getSupportFragmentManager();
-//		FragmentTransaction transaction = fragmentManager.beginTransaction();
-//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
-//
-//		fragment1 = getFragmentByTag(MEDIA_FRAGMENT);
-//
-//		if(fragment1 != null){
-//			transaction.replace(R.id.media_frame, fragment1, MEDIA_FRAGMENT);
-//			transaction.addToBackStack(MEDIA_FRAGMENT);
-//		}
-//
-//		transaction.commit();
-//
-//		currentFragment = MEDIA_FRAGMENT;
-//
-//	}
-//	
-//	public void gotoHomeFragment(){
-//
-//		FragmentManager fragmentManager = getSupportFragmentManager();
-//		FragmentTransaction transaction = fragmentManager.beginTransaction();
-//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
-//
-//		fragment1 = getFragmentByTag(HOME_FRAGMENT);
-//
-//		if(fragment1 != null){
-//			transaction.replace(R.id.content_frame, fragment1, HOME_FRAGMENT);
-//			transaction.addToBackStack(HOME_FRAGMENT);
-//		}
-//
-//		transaction.commit();
-//
-//		currentFragment = HOME_FRAGMENT;
-//
-//	}
+
+	//	public void gotoMediaFragment(){
+	//
+	//		FragmentManager fragmentManager = getSupportFragmentManager();
+	//		FragmentTransaction transaction = fragmentManager.beginTransaction();
+	//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
+	//
+	//		fragment1 = getFragmentByTag(MEDIA_FRAGMENT);
+	//
+	//		if(fragment1 != null){
+	//			transaction.replace(R.id.media_frame, fragment1, MEDIA_FRAGMENT);
+	//			transaction.addToBackStack(MEDIA_FRAGMENT);
+	//		}
+	//
+	//		transaction.commit();
+	//
+	//		currentFragment = MEDIA_FRAGMENT;
+	//
+	//	}
+	//	
+	//	public void gotoHomeFragment(){
+	//
+	//		FragmentManager fragmentManager = getSupportFragmentManager();
+	//		FragmentTransaction transaction = fragmentManager.beginTransaction();
+	//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
+	//
+	//		fragment1 = getFragmentByTag(HOME_FRAGMENT);
+	//
+	//		if(fragment1 != null){
+	//			transaction.replace(R.id.content_frame, fragment1, HOME_FRAGMENT);
+	//			transaction.addToBackStack(HOME_FRAGMENT);
+	//		}
+	//
+	//		transaction.commit();
+	//
+	//		currentFragment = HOME_FRAGMENT;
+	//
+	//	}
 
 
 	@Override
@@ -512,30 +515,30 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		hideOpenerTop();
 		hideImageTitle();
 	}
-	
-	
+
+
 	public void showOpenerTop(){
 		btn_opener_top.setVisibility(View.VISIBLE);
 		headerSeparator.setVisibility(View.VISIBLE);
 	}
-	
+
 	public void hideOpenerTop(){
 		btn_opener_top.setVisibility(View.GONE);
 		headerSeparator.setVisibility(View.GONE);
 	}
-	
+
 	public void showImageTitle(){
 		img_title.setVisibility(View.VISIBLE);
 	}
-	
+
 	public void hideImageTitle(){
 		img_title.setVisibility(View.GONE);
 	}
-	
+
 	protected void setImageTitle(int imgResource){
 		img_title.setImageResource(imgResource);
 	}
-	
+
 	private boolean isOnLineModePopup = false;
 	protected void showOnLineModePopup(){
 		if(!isOnLineModePopup)
@@ -572,7 +575,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			}
 		});
 		// Create the AlertDialog object and return it
-				builder.create();
+		builder.create();
 		builder.show();
 	}
 

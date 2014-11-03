@@ -365,6 +365,22 @@ public class HomeFragment extends BaseFragment {
 			isFirstStart = false;
 		}
 		
+		
+		if (mSlidingLayer.isOpened()){
+			
+			home_layout.setVisibility(View.VISIBLE);
+			media_layout.setVisibility(View.GONE);
+			
+		} else {
+			
+			home_layout.setVisibility(View.GONE);
+			media_layout.setVisibility(View.VISIBLE);
+			
+			
+		}
+		
+		
+		
 	}
 
 	private void initData(){

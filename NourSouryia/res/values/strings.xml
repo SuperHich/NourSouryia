@@ -11,16 +11,16 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
+  limitations under the License.
+-->
 
 <resources>
+
     <string name="app_name">نور سوريا</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
-    
     <string name="mosque_name">إسم الجامع :</string>
     <string name="janaez_number">عدد الجنائز :</string>
     <string name="please_wait">الرجاء الانتظار...</string>
@@ -30,7 +30,6 @@
     <string name="prayer">صلاة :</string>
     <string name="name">الاسم :</string>
     <string name="gender">الجنس :</string>
-    
     <string name="added_to_fav">تمت إضافة الحديث إلى المفضلة</string>
     <string name="removed_from_fav">تم حذف الحديث من المفضلة</string>
     <string name="to_search">ابحث على</string>
@@ -57,7 +56,6 @@
     <string name="update">تحديث</string>
     <string name="modifications">تعديل التعليق</string>
     <string name="select_place">الرجاء إختيار مدينة</string>
-    
     <string name="online_on">تم تفعيل التواصل مع الأنترنت</string>
     <string name="online_off">تم إيقاف التواصل مع الأنترنت</string>
     <string name="request_online_mode">يجب تفعيل الوضع المتواصل مع الأنترنت</string>
@@ -69,5 +67,6 @@
     <string name="fill_empty_data">الرجاء ملء الفراغات</string>
     <string name="comment_added">تمت إضافة التعليق بنجاح</string>
     <string name="comment_not_added">لم يتم إضافة التعليق</string>
-    
+    <string name="lorem_ipsum">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</string>
+
 </resources>

@@ -17,10 +17,12 @@ import android.widget.RelativeLayout.LayoutParams;
 
 import com.noursouryia.AuthorsFragment;
 import com.noursouryia.FilesFragment;
+import com.noursouryia.FragmentThawraDiaries;
 import com.noursouryia.HomeFragment;
 import com.noursouryia.ListArticlesFragment;
 import com.noursouryia.MainActivity;
 import com.noursouryia.MediaFragment;
+import com.noursouryia.NewsFragment;
 import com.noursouryia.R;
 import com.noursouryia.SearchArticlesFragment;
 import com.noursouryia.entity.Type;
@@ -80,6 +82,8 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			
 			if(this instanceof FilesFragment
 					|| this instanceof AuthorsFragment 
+					|| this instanceof NewsFragment
+					|| this instanceof FragmentThawraDiaries
 					|| this instanceof ListArticlesFragment
 					|| this instanceof SearchArticlesFragment){
 				((MainActivity) getActivity()).showOpenerTop();
@@ -127,6 +131,9 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 //			// start with opened sliding layer
 //			mSlidingLayer.openLayer(true);
 //		}
+		
+		
+		
 		
 	}
 

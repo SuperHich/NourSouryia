@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/drawer_bg" >
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/btn_news" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/img"
+        android:layout_marginTop="60dp" >
+
+        <LinearLayout
+            android:id="@+id/first"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:id="@+id/jawla_sahafa"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/jawla_sahafa" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:id="@+id/thawra_diaries"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentLeft="true"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/thawra_diaries" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/first"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:id="@+id/comment_news"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/comment_news" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:id="@+id/takarir_news"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentLeft="true"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/takarir_news" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- <RelativeLayout -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginRight="150dp" -->
+    <!-- android:layout_marginLeft="150dp" -->
+    <!-- android:layout_centerInParent="true" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/jawla_sahafa" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:scaleType="fitCenter" -->
+    <!-- android:src="@drawable/jawla_sahafa" /> -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/thawra_diaries" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_toRightOf="@id/jawla_sahafa" -->
+    <!-- android:scaleType="fitCenter" -->
+    <!-- android:src="@drawable/thawra_diaries" /> -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/comment_news" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_below="@id/jawla_sahafa" -->
+    <!-- android:scaleType="fitCenter" -->
+    <!-- android:src="@drawable/comment_news" /> -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/takarir_news" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_below="@id/jawla_sahafa" -->
+    <!-- android:layout_toRightOf="@id/comment_news" -->
+    <!-- android:scaleType="fitCenter" -->
+    <!-- android:src="@drawable/takarir_news" /> -->
+    <!-- </RelativeLayout> -->
+
+     <com.slidinglayer.SlidingLayer
+        xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
+        android:id="@+id/slidingLayer1"
+        android:layout_width="@dimen/layer_width"
+        android:layout_height="match_parent" >
+
+        <include
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/top_main_layout" />
+    </com.slidinglayer.SlidingLayer>
+
+</RelativeLayout>

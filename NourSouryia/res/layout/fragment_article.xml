@@ -70,10 +70,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/img_article"
                     android:gravity="right"
-                    android:paddingRight="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
                     android:textDirection="anyRtl"
                     android:padding="5dp"
                     android:textColor="@color/blue_dark"
@@ -87,7 +87,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/layout_header"
                 android:gravity="right"
-                android:padding="10dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:paddingBottom="20dp"
                 android:textColor="#000"
                 android:textSize="14sp" />
         </RelativeLayout>
