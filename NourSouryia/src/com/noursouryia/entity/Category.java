@@ -10,6 +10,7 @@ public class Category {
 	private int tid;
 	private String name;
 	private String link;
+	private String parent;
 	
 	public int getTid() {
 		return tid;
@@ -30,6 +31,12 @@ public class Category {
 		this.link = link;
 	}
 	
+	public String getParent() {
+		return parent;
+	}
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

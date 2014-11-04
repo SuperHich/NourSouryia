@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.noursouryia.entity.Category;
 import com.noursouryia.utils.BaseFragment;
 
 public class NewsFragment extends BaseFragment  {
@@ -25,7 +26,6 @@ public class NewsFragment extends BaseFragment  {
 		takarir = (ImageView) rootView.findViewById(R.id.takarir_news);
 		news_comment = (ImageView) rootView.findViewById(R.id.comment_news);
 
-		news_comment.setTag(MainActivity.COMMENTS_FRAGMENT);
 		diaries.setTag(MainActivity.THAWRA_DIARIES);
 		
 		
@@ -33,9 +33,28 @@ public class NewsFragment extends BaseFragment  {
 			@Override
 			public void onClick(View v) {
 
-				String fragTAG = (String) v.getTag();
-				Bundle args = null;
-				((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
+				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(12);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.comment_news);
+				
+			}
+		});
+		
+		jawla.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(13);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.jawla_sahafa);
+				
+			}
+		});
+		
+		takarir.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(14);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.takarir_news);
 				
 			}
 		});

@@ -432,7 +432,7 @@ public class HomeFragment extends BaseFragment {
 	
 	private void initMediaData(){
 
-		new AsyncTask<Void, Void, ArrayList<Type>>() {
+		new AsyncTask<Void, Void, Boolean>() {
 
 //			private ProgressDialog loading;
 
@@ -445,34 +445,39 @@ public class HomeFragment extends BaseFragment {
 			}
 
 			@Override
-			protected ArrayList<Type> doInBackground(Void... params) {
-				type_photo = ((NSActivity)getActivity()).NourSouryiaDB.getTypeByName("photos");
-				type_sound = ((NSActivity)getActivity()).NourSouryiaDB.getTypeByName("sounds");
-				type_video = ((NSActivity)getActivity()).NourSouryiaDB.getTypeByName("videos");
+			protected Boolean doInBackground(Void... params) {
+				try{
+					type_photo = ((NSActivity)getActivity()).NourSouryiaDB.getTypeByName("photos");
+					type_sound = ((NSActivity)getActivity()).NourSouryiaDB.getTypeByName("sounds");
+					type_video = ((NSActivity)getActivity()).NourSouryiaDB.getTypeByName("videos");
 
 
-				photo_categories  = type_photo.getCategories() ;
-				sound_categories  = type_sound.getCategories() ;
-				video_categories  = type_video.getCategories() ;
-
-				return null;
+					photo_categories  = type_photo.getCategories() ;
+					sound_categories  = type_sound.getCategories() ;
+					video_categories  = type_video.getCategories() ;
+					
+					return true;
+					
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				return false;
 			}
 
 			@Override
-			protected void onPostExecute(ArrayList<Type> result) {
+			protected void onPostExecute(Boolean result) {
 //				loading.dismiss();
 
-				//	if(result != null){
+				if(result){
 
-				photosGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, photo_categories);
-				soundsGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, sound_categories);					
-				videosGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, video_categories);	
+					photosGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, photo_categories);
+					soundsGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, sound_categories);					
+					videosGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, video_categories);	
 
-				gridView.setAdapter(photosGridAdapter);
-				SELECTED_FOLDER = PHOTOS_FOLDER_SELECTED ;
-				folderPhotosClick();
-				//		}
-				//				toggleEmptyMessage();
+					gridView.setAdapter(photosGridAdapter);
+					SELECTED_FOLDER = PHOTOS_FOLDER_SELECTED ;
+					folderPhotosClick();
+				}
 			}
 		}.execute();
 

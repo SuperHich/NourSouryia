@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -23,7 +24,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView.InternalListView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView.OnLoadMoreListener;
-import com.noursouryia.adapters.ArticlesAdapter;
+import com.noursouryia.adapters.NewsAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
@@ -32,15 +33,16 @@ import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
 
 
-public class ListArticlesFragment extends BaseFragment {
+public class ListNewsFragment extends BaseFragment {
 	
 	public static final String ARG_ARTICLE_LINK 	= "article_link";
 	public static final String ARG_ARTICLE_CATEGORY = "article_category";
 	public static final String ARG_ARTICLE_TITLE 	= "article_title";
 	
-	private ArticlesAdapter adapter;
+	private NewsAdapter adapter;
 	private ArrayList<Article> articles = new ArrayList<Article>();
-	private TextView txv_title, txv_empty, txv_wait;
+	private ImageView img_title;
+	private TextView txv_empty, txv_wait;
 	private PullToRefreshListView listView;
 	private TextView txv_showMore;
 	private ProgressBar progressBar;
@@ -50,9 +52,10 @@ public class ListArticlesFragment extends BaseFragment {
 	private boolean isFirstStart = true;
 	private int pageNb = 0;
 	
-	private String link, category, title;
+	private String link, category; 
+	private int imageId;
 	
-	public ListArticlesFragment() {
+	public ListNewsFragment() {
 		// Empty constructor required for fragment subclasses
 	}
 
@@ -78,7 +81,7 @@ public class ListArticlesFragment extends BaseFragment {
 		if(getArguments() != null){
 			link 		= getArguments().getString(ARG_ARTICLE_LINK);
 			category 	= getArguments().getString(ARG_ARTICLE_CATEGORY);
-			title 		= getArguments().getString(ARG_ARTICLE_TITLE);
+			imageId 	= getArguments().getInt(ARG_ARTICLE_TITLE);
 		}
 	}
 	
@@ -86,9 +89,9 @@ public class ListArticlesFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_list_news, container, false);
 		
-		txv_title = (TextView) rootView.findViewById(R.id.txv_title);
+		img_title = (ImageView) rootView.findViewById(R.id.img_title);
 		txv_empty = (TextView) rootView.findViewById(R.id.txv_emptyList);
 		txv_wait = (TextView) rootView.findViewById(R.id.txv_wait);
 		listView = (PullToRefreshListView) rootView.findViewById(R.id.listView);
@@ -100,12 +103,11 @@ public class ListArticlesFragment extends BaseFragment {
 		txv_showMore = (TextView) footer.findViewById(R.id.txv_showMore);
 		progressBar = (ProgressBar) footer.findViewById(R.id.progressBar);
 		footer.setBackgroundResource(R.drawable.drawer_subitem_selector);
-//		listView.getRefreshableView().addFooterView(footer, null, true);
 		
 		txv_wait.setTypeface(NSFonts.getNoorFont());
 		txv_empty.setTypeface(NSFonts.getNoorFont());
-		txv_title.setTypeface(NSFonts.getNoorFont());
-		txv_title.setText(title);
+		
+		img_title.setImageResource(imageId);
 		
 		return rootView;
 	}
@@ -114,7 +116,7 @@ public class ListArticlesFragment extends BaseFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		
-		adapter = new ArticlesAdapter(getActivity(), articles);
+		adapter = new NewsAdapter(getActivity(), articles);
 		listView.setAdapter(adapter);
 
 		if(isFirstStart)
@@ -193,7 +195,7 @@ public class ListArticlesFragment extends BaseFragment {
 				{
 					loading.setVisibility(View.VISIBLE);
 					listView.setVisibility(View.GONE);
-					txv_title.setVisibility(View.GONE);
+					img_title.setVisibility(View.GONE);
 				}
 			}
 			
@@ -232,7 +234,7 @@ public class ListArticlesFragment extends BaseFragment {
 				
 				loading.setVisibility(View.GONE);
 				listView.setVisibility(View.VISIBLE);
-				txv_title.setVisibility(View.VISIBLE);
+				img_title.setVisibility(View.VISIBLE);
 
 				((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
 				

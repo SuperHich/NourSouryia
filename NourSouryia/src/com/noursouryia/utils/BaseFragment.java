@@ -20,6 +20,7 @@ import com.noursouryia.FilesFragment;
 import com.noursouryia.FragmentThawraDiaries;
 import com.noursouryia.HomeFragment;
 import com.noursouryia.ListArticlesFragment;
+import com.noursouryia.ListNewsFragment;
 import com.noursouryia.MainActivity;
 import com.noursouryia.MediaFragment;
 import com.noursouryia.NewsFragment;
@@ -85,6 +86,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 					|| this instanceof NewsFragment
 					|| this instanceof FragmentThawraDiaries
 					|| this instanceof ListArticlesFragment
+					|| this instanceof ListNewsFragment
 					|| this instanceof SearchArticlesFragment){
 				((MainActivity) getActivity()).showOpenerTop();
 				((MainActivity) getActivity()).isTopOpener = true;

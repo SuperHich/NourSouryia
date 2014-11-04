@@ -52,7 +52,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String ADD_COMMENT_FRAGMENT 	= "add_comment_fragment";
 	public static final String SEARCH_FRAGMENT 			= "search_fragment";
 	public static final String THAWRA_DIARIES 			= "thawra_diaries";
-
+	public static final String LIST_NEWS_FRAGMENT 		= "list_news_fragment";
+	
 	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
 
 	private DrawerLayout mDrawerLayout;
@@ -311,6 +312,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new SearchArticlesFragment();
 		else if(fragTAG.equals(THAWRA_DIARIES))
 			return new FragmentThawraDiaries();
+		else if(fragTAG.equals(LIST_NEWS_FRAGMENT))
+			return new ListNewsFragment();
 
 		return null;
 	}
@@ -466,6 +469,33 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		transaction.commit();
 
 		currentFragment = LIST_ARTICLE_FRAGMENT;
+
+	}
+	
+	public void gotoListNewsFragment(String link, String categoryName, int imageId){
+
+		Bundle args = new Bundle();
+		args.putString(ListNewsFragment.ARG_ARTICLE_LINK, link);
+		args.putString(ListNewsFragment.ARG_ARTICLE_CATEGORY, categoryName);
+		args.putInt(ListNewsFragment.ARG_ARTICLE_TITLE, imageId);
+
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+
+		fragment1 = getFragmentByTag(LIST_NEWS_FRAGMENT);
+
+		if(args != null)
+			fragment1.setArguments(args);
+
+		if(fragment1 != null){
+			transaction.replace(R.id.content_frame, fragment1, LIST_NEWS_FRAGMENT);
+			transaction.addToBackStack(LIST_NEWS_FRAGMENT);
+		}
+
+		transaction.commit();
+
+		currentFragment = LIST_NEWS_FRAGMENT;
 
 	}
 

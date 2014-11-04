@@ -3,6 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
+    
+        <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <com.noursouryia.utils.GifMovieView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            custom:gif="@drawable/loading_square" >
+        </com.noursouryia.utils.GifMovieView>
+
+        <TextView
+            android:id="@+id/txv_wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/please_wait"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/all_layout"
