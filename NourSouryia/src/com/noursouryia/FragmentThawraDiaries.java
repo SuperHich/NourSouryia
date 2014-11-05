@@ -1,5 +1,6 @@
 package com.noursouryia;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -15,7 +16,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.handmark.pulltorefresh.library.PullToRefreshListView.InternalListView;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
@@ -34,6 +39,10 @@ import com.noursouryia.utils.Utils;
 
 public class FragmentThawraDiaries extends BaseFragment{
 
+	public static final String ARG_ARTICLE_LINK 	= "article_link";
+	public static final String ARG_ARTICLE_CATEGORY = "article_category";
+	public static final String ARG_ARTICLE_TITLE 	= "article_title";
+	
 	public Calendar month;
 	public CalendarAdapter adapter;
 	public Handler handler;
@@ -43,8 +52,38 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private RelativeLayout calendar_layout ;
 
 	private TextView monthText, yearText, txv_first , txv_title, txv_second;
-	private ImageView nextMonth, previousMonth, img_first  ;
+	private ImageView nextMonth, previousMonth, img_first;
 	private GridView gridview ;
+	
+	private ArrayList<Article> articles = new ArrayList<Article>();
+	private Article currentArticle;
+	private LinearLayout loading;
+	private boolean isFirstStart = true;
+	private boolean isCanceled = false;
+	private int pageNb = 0;
+	
+	private String chosenDate;
+	
+	private String link, category; 
+	
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		
+		isCanceled = true;
+		
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		if(getArguments() != null){
+			link 		= getArguments().getString(ARG_ARTICLE_LINK);
+			category 	= getArguments().getString(ARG_ARTICLE_CATEGORY);
+//			imageId 	= getArguments().getInt(ARG_ARTICLE_TITLE);
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +98,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 		img_first = (ImageView) rootView.findViewById(R.id.img_first);
 		txv_title = (TextView) rootView.findViewById(R.id.txv_title);
 		txv_second = (TextView) rootView.findViewById(R.id.txv_second);
+		
+		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 
 
 		all_layout = (LinearLayout) rootView.findViewById(R.id.all_layout);
@@ -133,14 +174,19 @@ public class FragmentThawraDiaries extends BaseFragment{
 						day = "0"+day;
 					}
 					// return chosen date as string format 
-					String chosenDate =  android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day;
+					chosenDate =  android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day;
 
+					pickCurrentArticleByDate(chosenDate);
+					
 					Toast.makeText(getActivity(), chosenDate, Toast.LENGTH_SHORT).show();
 
 				}
 
 			}
 		});
+		
+		if(chosenDate == null)
+			chosenDate =  android.text.format.DateFormat.format("yyyy-MM-dd", month).toString();
 
 
 		return rootView;
@@ -150,6 +196,31 @@ public class FragmentThawraDiaries extends BaseFragment{
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		if(!ImageLoader.getInstance().isInited())
+		{
+			File cacheDir = StorageUtils.getCacheDirectory(getActivity());
+
+			DisplayImageOptions options = new DisplayImageOptions.Builder()
+			.showImageOnLoading(R.drawable.btn_folder_photos) // resource or drawable
+			.showImageForEmptyUri(R.drawable.btn_folder_photos) // resource or drawable
+			.showImageOnFail(R.drawable.btn_folder_photos) // resource or drawable
+			.cacheInMemory(true)
+			.cacheOnDisk(true) 
+			.build();
+
+			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getActivity())
+			.denyCacheImageMultipleSizesInMemory()
+			.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+			.memoryCacheSize(2 * 1024 * 1024)
+			.diskCache(new UnlimitedDiscCache(cacheDir)) // default
+			.diskCacheSize(50 * 1024 * 1024)
+			.diskCacheFileCount(100)
+			.writeDebugLogs()
+			.defaultDisplayImageOptions(options)
+			.build();
+
+			ImageLoader.getInstance().init(config);
+		}
 
 		mSlidingLayer.setCloseOnTapEnabled(false);
 		mSlidingLayer.setOpenOnTapEnabled(false);
@@ -164,6 +235,11 @@ public class FragmentThawraDiaries extends BaseFragment{
 		//			}
 		//		});
 
+		if(isFirstStart)
+		{
+			isFirstStart = false;
+			initData();
+		}
 
 	}
 
@@ -198,74 +274,82 @@ public class FragmentThawraDiaries extends BaseFragment{
 	};
 
 
-//	private void initData(){
-//
-//		new AsyncTask<Void, Void, ArrayList<Article>>() {
-//
-//			@Override
-//			protected void onPreExecute() {
-//				loading.setVisibility(View.VISIBLE);
-//				all_layout.setVisibility(View.GONE);
-//			}
-//
-//			@Override
-//			protected ArrayList<Article> doInBackground(Void... params) {
-//				try{
-//					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !listView.isRefreshing())
-//					{
-//						return ((NSActivity)getActivity()).NourSouryiaDB.getArticlesByStringID(NSManager.TYPE, category);
-//					}
-//					else if(Utils.isOnline(getActivity())){
-//						if(pageNb == 0)
-//							articles.clear();
-//
-//						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticlesByUrl(link+"&page="+pageNb++);
-//
-//						if(list.size() > 0)
-//							for(Article a : list){
-//								((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
-//							}
-//
-//						return list;
-//					}
-//				}catch(Exception e){
-//					Log.e(TAG, "Error while initData !");
-//				}
-//				return null;
-//			}
-//
-//			@Override
-//			protected void onPostExecute(ArrayList<Article> result) {
-//
-//				if(isCanceled)
-//					return;
-//
-//				loading.setVisibility(View.GONE);
-//				listView.setVisibility(View.VISIBLE);
-//				img_title.setVisibility(View.VISIBLE);
-//
-//				((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
-//
-//				if(listView.isRefreshing())
-//					listView.onRefreshComplete();
-//
-//				if(result != null){
-//
-//					if(pageNb == 1)
-//						listView.getRefreshableView().addFooterView(footer, null, true);
-//					else 
-//						if(pageNb == 2)
-//							listView.getRefreshableView().removeFooterView(footer);
-//
-//					articles.addAll(result);
+	private void initData(){
+
+		new AsyncTask<Void, Void, ArrayList<Article>>() {
+
+			@Override
+			protected void onPreExecute() {
+				loading.setVisibility(View.VISIBLE);
+				all_layout.setVisibility(View.GONE);
+			}
+
+			@Override
+			protected ArrayList<Article> doInBackground(Void... params) {
+				try{
+					if(!NSManager.getInstance(getActivity()).isOnlineMode())
+					{
+						return ((NSActivity)getActivity()).NourSouryiaDB.getArticlesByStringID(NSManager.TYPE, category);
+					}
+					else if(Utils.isOnline(getActivity())){
+						if(pageNb == 0)
+							articles.clear();
+
+						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticlesByUrl(link+"&page="+pageNb++);
+
+						if(list.size() > 0)
+							for(Article a : list){
+								((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
+							}
+
+						return list;
+					}
+				}catch(Exception e){
+					Log.e(TAG, "Error while initData !");
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(ArrayList<Article> result) {
+
+				if(isCanceled)
+					return;
+
+				loading.setVisibility(View.GONE);
+				all_layout.setVisibility(View.VISIBLE);
+
+				if(result != null){
+					articles.addAll(result);
 //					adapter.notifyDataSetChanged();
-//				}else
-//					((MainActivity)getActivity()).showConnectionErrorPopup();
-//
+					pickCurrentArticleByDate(chosenDate);
+				}else
+					((MainActivity)getActivity()).showConnectionErrorPopup();
+
 //				toggleEmptyMessage();
-//			}
-//		}.execute();
-//
-//	}
+			}
+		}.execute();
+
+	}
+	
+	private void pickCurrentArticleByDate(String date){
+		for(Article article : articles){
+			if(article.getCreated().equals(date))
+			{
+				Log.i(TAG, "article.getCreated() " + article.getCreated() + " ... date " + date);
+				currentArticle = article;
+				break;
+			}
+		}
+		
+		String[] contentParts = ArticleFragment.splitContent(currentArticle.getBody());
+		
+		txv_title.setText(currentArticle.getTitle());
+		txv_first.setText(ArticleFragment.formatText(contentParts[0]));
+		txv_second.setText(ArticleFragment.formatText(contentParts[1]));
+		
+		if(currentArticle.getFilePath().size() > 0)
+			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_first);
+	}
 
 }

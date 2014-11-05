@@ -63,9 +63,14 @@ public class NewsFragment extends BaseFragment  {
 			@Override
 			public void onClick(View v) {
 
+				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(15);
+				
+				Bundle args = new Bundle();
+				args.putString(ListNewsFragment.ARG_ARTICLE_LINK, cat.getLink());
+				args.putString(ListNewsFragment.ARG_ARTICLE_CATEGORY, cat.getParent());
+				
 				String fragTAG = (String) v.getTag();
-				Bundle args = null;
-				((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
+				((MainActivity) getActivity()).gotoFragmentByTag(fragTAG, args);
 				
 			}
 		});

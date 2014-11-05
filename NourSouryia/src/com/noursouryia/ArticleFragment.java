@@ -148,7 +148,7 @@ public class ArticleFragment extends BaseFragment {
 
 	}
 	
-	private String[] splitContent(String body){
+	public static String[] splitContent(String body){
 		String[] parts = null;
 		int indexOfPart1 = body.indexOf("&nbsp;");
 	
@@ -168,7 +168,7 @@ public class ArticleFragment extends BaseFragment {
 	}
 	
 	
-	private String formatText (String body){
+	public static String formatText (String body){
 		
 		
 		body = body.replaceAll("\\r\\n|\\r|\\n", "LINE_RETURN");
