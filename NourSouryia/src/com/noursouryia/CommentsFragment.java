@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -31,6 +33,7 @@ public class CommentsFragment extends BaseFragment {
 	private CommentsAdapter adapter;
 	private ArrayList<Comment> comments = new ArrayList<Comment>();
 	private TextView txv_title, txv_empty, txv_wait;
+	private Button btn_add_comment;
 	private PullToRefreshScrollView pullToRefreshView;
 	private ListView listView;
 	private LinearLayout loading;
@@ -79,6 +82,8 @@ public class CommentsFragment extends BaseFragment {
 		txv_wait = (TextView) rootView.findViewById(R.id.txv_wait);
 		listView = (ListView) rootView.findViewById(android.R.id.list);
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
+		
+		btn_add_comment = (Button) rootView.findViewById(R.id.btn_add_comment);
 
 		txv_wait.setTypeface(NSFonts.getNoorFont());
 		txv_empty.setTypeface(NSFonts.getNoorFont());
@@ -116,6 +121,14 @@ public class CommentsFragment extends BaseFragment {
 			}
 		});
 
+		btn_add_comment.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// Add comment
+				((MainActivity)getActivity()).gotoAddCommentFragment(articleNID);
+			}
+		});
 	}
 
 	private void initData(){

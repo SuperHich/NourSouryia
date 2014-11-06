@@ -38,6 +38,7 @@ public class ListNewsFragment extends BaseFragment {
 	public static final String ARG_ARTICLE_LINK 	= "article_link";
 	public static final String ARG_ARTICLE_CATEGORY = "article_category";
 	public static final String ARG_ARTICLE_TITLE 	= "article_title";
+	public static final String ARG_ARTICLE_WITH_COMMENTS 	= "article_with_comments";
 	
 	private NewsAdapter adapter;
 	private ArrayList<Article> articles = new ArrayList<Article>();
@@ -54,6 +55,7 @@ public class ListNewsFragment extends BaseFragment {
 	
 	private String link, category; 
 	private int imageId;
+	private boolean withComments = false;
 	
 	public ListNewsFragment() {
 		// Empty constructor required for fragment subclasses
@@ -82,6 +84,7 @@ public class ListNewsFragment extends BaseFragment {
 			link 		= getArguments().getString(ARG_ARTICLE_LINK);
 			category 	= getArguments().getString(ARG_ARTICLE_CATEGORY);
 			imageId 	= getArguments().getInt(ARG_ARTICLE_TITLE);
+			withComments 	= getArguments().getBoolean(ARG_ARTICLE_WITH_COMMENTS);
 		}
 	}
 	
@@ -131,7 +134,7 @@ public class ListNewsFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Article selectedArticle = articles.get(arg2);
-				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle);
+				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle, withComments);
 			}
 		});
 		

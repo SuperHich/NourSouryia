@@ -34,7 +34,7 @@ public class NewsFragment extends BaseFragment  {
 			public void onClick(View v) {
 
 				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(12);
-				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.comment_news);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.comment_news, true);
 				
 			}
 		});
@@ -44,7 +44,7 @@ public class NewsFragment extends BaseFragment  {
 			public void onClick(View v) {
 
 				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(13);
-				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.jawla_sahafa);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.jawla_sahafa, false);
 				
 			}
 		});
@@ -54,7 +54,7 @@ public class NewsFragment extends BaseFragment  {
 			public void onClick(View v) {
 
 				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(14);
-				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.takarir_news);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.takarir_news, false);
 				
 			}
 		});

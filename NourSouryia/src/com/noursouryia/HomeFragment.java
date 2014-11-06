@@ -399,7 +399,8 @@ public class HomeFragment extends BaseFragment {
 			protected ArrayList<Article> doInBackground(Void... params) {
 				
 				try{
-					mArticles = NSManager.getInstance(getActivity()).getArticles(NSManager.DEFAULT_TIMESTAMP, 
+					mArticles = NSManager.getInstance(getActivity()).getArticles(null, 
+							NSManager.DEFAULT_TIMESTAMP, 
 							NSManager.DEFAULT_VALUE, 
 							NSManager.DEFAULT_VALUE);
 

@@ -27,11 +27,13 @@ import com.noursouryia.utils.NSFonts;
 
 public class ArticleFragment extends BaseFragment {
 
+	public static final String ARG_WITH_COMMENTS = "with_comments";
 	private TextView txv_article_title, txv_author_name, txv_article_content1, txv_article_content2;
-	private Button btn_share;
+	private Button btn_share, btn_comments;
 	private ImageView img_article;
 	private Article currentArticle;
 	private boolean isFirstStart = true;
+	private boolean withComments = true;
 	
 	public ArticleFragment() {
 		// Empty constructor required for fragment subclasses
@@ -41,6 +43,9 @@ public class ArticleFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		if(getArguments() != null){
+			withComments 		= getArguments().getBoolean(ARG_WITH_COMMENTS);
+		}
 	}
 	
 	@Override
@@ -55,6 +60,7 @@ public class ArticleFragment extends BaseFragment {
 		txv_article_content2 = (TextView) rootView.findViewById(R.id.txv_article_content2);
 		
 		btn_share = (Button) rootView.findViewById(R.id.btn_share);
+		btn_comments = (Button) rootView.findViewById(R.id.btn_comments);
 		img_article = (ImageView) rootView.findViewById(R.id.img_article);
 		
 		txv_article_title.setTypeface(NSFonts.getNoorFont());
@@ -63,6 +69,9 @@ public class ArticleFragment extends BaseFragment {
 		txv_article_content2.setTypeface(NSFonts.getNoorFont());
 		
 		currentArticle = NSManager.getInstance(getActivity()).getCurrentArticle();
+		
+		if(withComments)
+			btn_comments.setVisibility(View.VISIBLE);
 		
 //		txv_article_content1.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener()
 //	    {           
@@ -126,9 +135,17 @@ public class ArticleFragment extends BaseFragment {
 			@Override
 			public void onClick(View arg0) {
 				// Share Article
-//				((MainActivity)getActivity()).gotoCommentsFragment(6687);	
+			}
+		});
+		
+		btn_comments.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// go to comments
+				//				((MainActivity)getActivity()).gotoCommentsFragment(6687);	
 				((MainActivity)getActivity()).gotoCommentsFragment(currentArticle.getNid());
-//				((MainActivity)getActivity()).gotoAddCommentFragment(currentArticle.getNid());
+				//				((MainActivity)getActivity()).gotoAddCommentFragment(currentArticle.getNid());
 			}
 		});
 		

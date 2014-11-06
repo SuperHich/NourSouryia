@@ -1,6 +1,8 @@
 package com.noursouryia.externals;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -168,7 +170,11 @@ public class NSManager {
 	public ArrayList<Comment> getCommentsByID(int nid) {
 
 		ArrayList<Comment> comments = new ArrayList<Comment>();
-		JSONArray array = jsonParser.getJSONFromUrl(URL_COMMENTS + "nid=" + nid);
+		String url = URL_COMMENTS + "nid=" + nid;
+		
+		Log.i(TAG, "url= " + url);
+		
+		JSONArray array = jsonParser.getJSONFromUrl(url);
 		if (array != null) 
 			for (int i = 0; i < array.length(); i++) {
 				try {
@@ -317,11 +323,15 @@ public class NSManager {
 	}
 	
 	
-	public ArrayList<Article> getArticles(long timeStamp, int numPager, int page) {
+	public ArrayList<Article> getArticles(String url, long timeStamp, int numPager, int page) {
 
 		ArrayList<Article> articles = new ArrayList<Article>();
 		
-		String url = URL_MATERIALS;
+		if(url == null)
+			url = URL_MATERIALS;
+		else
+			url += "&";
+		
 		if(timeStamp != DEFAULT_TIMESTAMP)
 			url += "timestamp=" + timeStamp + "&";
 		if(numPager != DEFAULT_VALUE)
@@ -577,16 +587,16 @@ public class NSManager {
 		return DEFAULT_VALUE;
 	}
 	
-//	public long getTimeStamp(Calendar calendar){
-//		
-//		if(calendar == null)
-//			calendar = Calendar.getInstance();
-//		
-//		Timestamp ts = new Timestamp(calendar.getTimeInMillis());
-//		
-//		return ts.getTime();
-////		return calendar.getTimeInMillis();
-//	}
+	public static long getTimeStamp(Calendar calendar){
+		
+		if(calendar == null)
+			calendar = Calendar.getInstance();
+		
+		Timestamp ts = new Timestamp(calendar.getTimeInMillis());
+		
+		return ts.getTime();
+//		return calendar.getTimeInMillis();
+	}
 	
 	public IFragmentNotifier getFragmentNotifier() {
 		return fragmentNotifier;

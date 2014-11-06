@@ -173,6 +173,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 					if(day.length()==1) {
 						day = "0"+day;
 					}
+					
+					month.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
 					// return chosen date as string format 
 					chosenDate =  android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day;
 
@@ -292,10 +294,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 						return ((NSActivity)getActivity()).NourSouryiaDB.getArticlesByStringID(NSManager.TYPE, category);
 					}
 					else if(Utils.isOnline(getActivity())){
-						if(pageNb == 0)
-							articles.clear();
 
-						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticlesByUrl(link+"&page="+pageNb++);
+						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticles(link, NSManager.getTimeStamp(month), NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
 
 						if(list.size() > 0)
 							for(Article a : list){
@@ -333,23 +333,26 @@ public class FragmentThawraDiaries extends BaseFragment{
 	}
 	
 	private void pickCurrentArticleByDate(String date){
-		for(Article article : articles){
-			if(article.getCreated().equals(date))
-			{
-				Log.i(TAG, "article.getCreated() " + article.getCreated() + " ... date " + date);
-				currentArticle = article;
-				break;
-			}
+//		for(Article article : articles){
+//			if(article.getCreated().equals(date))
+//			{
+//				Log.i(TAG, "article.getCreated() " + article.getCreated() + " ... date " + date);
+//				currentArticle = article;
+//				break;
+//			}
+//		}
+		
+		if(articles.size() > 0){
+			currentArticle = articles.get(0);
+			String[] contentParts = ArticleFragment.splitContent(currentArticle.getBody());
+
+			txv_title.setText(currentArticle.getTitle());
+			txv_first.setText(ArticleFragment.formatText(contentParts[0]));
+			txv_second.setText(ArticleFragment.formatText(contentParts[1]));
+
+			if(currentArticle.getFilePath().size() > 0)
+				ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_first);
 		}
-		
-		String[] contentParts = ArticleFragment.splitContent(currentArticle.getBody());
-		
-		txv_title.setText(currentArticle.getTitle());
-		txv_first.setText(ArticleFragment.formatText(contentParts[0]));
-		txv_second.setText(ArticleFragment.formatText(contentParts[1]));
-		
-		if(currentArticle.getFilePath().size() > 0)
-			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_first);
 	}
 
 }

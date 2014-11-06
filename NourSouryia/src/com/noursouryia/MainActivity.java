@@ -413,6 +413,16 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		currentFragment = fragmentTAG;
 	}
 
+	
+	public void gotoArticleFragment(Article article, boolean withComments){
+
+		NSManager.getInstance(this).setCurrentArticle(article);
+		Bundle args = new Bundle();
+		args.putBoolean(ArticleFragment.ARG_WITH_COMMENTS, withComments);
+		gotoFragmentByTag(ARTICLE_FRAGMENT, args);
+
+	}
+	
 	public void gotoArticleFragment(Article article){
 
 		NSManager.getInstance(this).setCurrentArticle(article);
@@ -472,12 +482,13 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	}
 	
-	public void gotoListNewsFragment(String link, String categoryName, int imageId){
+	public void gotoListNewsFragment(String link, String categoryName, int imageId, boolean withComments){
 
 		Bundle args = new Bundle();
 		args.putString(ListNewsFragment.ARG_ARTICLE_LINK, link);
 		args.putString(ListNewsFragment.ARG_ARTICLE_CATEGORY, categoryName);
 		args.putInt(ListNewsFragment.ARG_ARTICLE_TITLE, imageId);
+		args.putBoolean(ListNewsFragment.ARG_ARTICLE_WITH_COMMENTS, withComments);
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
