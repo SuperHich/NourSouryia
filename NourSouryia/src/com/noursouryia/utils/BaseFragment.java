@@ -39,7 +39,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	private Button opener_bottom, btn_news, btn_folders, btn_researches, btn_writers, btn_articles;
 	private int height_halfScreen ;
 	protected SlidingLayer mSlidingLayer;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,95 +49,98 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		
-		NSManager.getInstance(getActivity()).setMenuOpener(this);
 
-		btn_news 		= (Button) view.findViewById(R.id.btn_news); 
-		btn_folders 	= (Button) view.findViewById(R.id.btn_folders);
-		btn_researches 	= (Button) view.findViewById(R.id.btn_researches); 
-		btn_writers 	= (Button) view.findViewById(R.id.btn_writers);
-		btn_articles 	= (Button) view.findViewById(R.id.btn_articles);
-		
-		opener_bottom 	= (Button) view.findViewById(R.id.opener_bottom);
-		
 		mSlidingLayer = (SlidingLayer) view.findViewById(R.id.slidingLayer1);
-		
-		mSlidingLayer.setOpenCloseListener(this);
-		mSlidingLayer.setShadowWidth(0);
-		mSlidingLayer.setShadowDrawable(null);
-		mSlidingLayer.setOffsetWidth(getResources().getDimensionPixelOffset(R.dimen.offset_width));
 
-		LayoutParams rlp = (LayoutParams) mSlidingLayer.getLayoutParams();
-		
-		((MainActivity) getActivity()).hideImageTitle();
-		((MainActivity) getActivity()).isImgTitle = false;
-		
-		if(this instanceof HomeFragment || this instanceof MediaFragment){
-			mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
-			rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-			((MainActivity) getActivity()).isTopOpener = false;
-		}else{
-			mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_TOP);
-			rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			((MainActivity) getActivity()).isTopOpener = false;
-			
-			if(this instanceof FilesFragment
-					|| this instanceof AuthorsFragment 
-					|| this instanceof NewsFragment
-					|| this instanceof FragmentThawraDiaries
-					|| this instanceof ListArticlesFragment
-					|| this instanceof ListNewsFragment
-					|| this instanceof SearchArticlesFragment){
-				((MainActivity) getActivity()).showOpenerTop();
-				((MainActivity) getActivity()).isTopOpener = true;
-			}else
-				((MainActivity) getActivity()).hideOpenerTop();
-				
-			if(this instanceof FilesFragment || this instanceof AuthorsFragment)
-				((MainActivity) getActivity()).isImgTitle = true;
-		}
-		rlp.width = LayoutParams.MATCH_PARENT;
-//		rlp.height = getResources().getDimensionPixelSize(R.dimen.layer_width);
+		if(mSlidingLayer != null){
 
-		
-		DisplayMetrics displaymetrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		height_halfScreen = (displaymetrics.heightPixels)/2;
-		
-		rlp.height = height_halfScreen;
-		
-		
-		mSlidingLayer.setLayoutParams(rlp);
-		
+			NSManager.getInstance(getActivity()).setMenuOpener(this);
 
-		opener_bottom.setOnClickListener(new OnClickListener() {
+			btn_news 		= (Button) view.findViewById(R.id.btn_news); 
+			btn_folders 	= (Button) view.findViewById(R.id.btn_folders);
+			btn_researches 	= (Button) view.findViewById(R.id.btn_researches); 
+			btn_writers 	= (Button) view.findViewById(R.id.btn_writers);
+			btn_articles 	= (Button) view.findViewById(R.id.btn_articles);
 
-			@Override
-			public void onClick(View v) {
-				buttonClicked(v);
+			opener_bottom 	= (Button) view.findViewById(R.id.opener_bottom);
+
+			mSlidingLayer.setOpenCloseListener(this);
+			mSlidingLayer.setShadowWidth(0);
+			mSlidingLayer.setShadowDrawable(null);
+			mSlidingLayer.setOffsetWidth(getResources().getDimensionPixelOffset(R.dimen.offset_width));
+
+			LayoutParams rlp = (LayoutParams) mSlidingLayer.getLayoutParams();
+
+			((MainActivity) getActivity()).hideImageTitle();
+			((MainActivity) getActivity()).isImgTitle = false;
+
+			if(this instanceof HomeFragment || this instanceof MediaFragment){
+				mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
+				rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+				((MainActivity) getActivity()).isTopOpener = false;
+			}else{
+				mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_TOP);
+				rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+				((MainActivity) getActivity()).isTopOpener = false;
+
+				if(this instanceof FilesFragment
+						|| this instanceof AuthorsFragment 
+						|| this instanceof NewsFragment
+						|| this instanceof FragmentThawraDiaries
+						|| this instanceof ListArticlesFragment
+						|| this instanceof ListNewsFragment
+						|| this instanceof SearchArticlesFragment){
+					((MainActivity) getActivity()).showOpenerTop();
+					((MainActivity) getActivity()).isTopOpener = true;
+				}else
+					((MainActivity) getActivity()).hideOpenerTop();
+
+				if(this instanceof FilesFragment || this instanceof AuthorsFragment)
+					((MainActivity) getActivity()).isImgTitle = true;
 			}
-		});
-		
-		btn_news.setOnTouchListener(this); 
-		btn_folders.setOnTouchListener(this);
-		btn_researches.setOnTouchListener(this);
-		btn_writers.setOnTouchListener(this);
-		btn_articles.setOnTouchListener(this);
-		
-		btn_news.setTag(MainActivity.NEWS_FRAGMENT); 
-		btn_folders.setTag(MainActivity.FILES_FRAGMENT);
-		btn_researches.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
-		btn_writers.setTag(MainActivity.AUTHORS_FRAGMENT);
-		btn_articles.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
-		
-//		if(this instanceof HomeFragment){
-//			// start with opened sliding layer
-//			mSlidingLayer.openLayer(true);
-//		}
-		
-		
-		
-		
+			rlp.width = LayoutParams.MATCH_PARENT;
+			//		rlp.height = getResources().getDimensionPixelSize(R.dimen.layer_width);
+
+
+			DisplayMetrics displaymetrics = new DisplayMetrics();
+			getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+			height_halfScreen = (displaymetrics.heightPixels)/2;
+
+			rlp.height = height_halfScreen;
+
+
+			mSlidingLayer.setLayoutParams(rlp);
+
+
+			opener_bottom.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					buttonClicked(v);
+				}
+			});
+
+
+			btn_news.setOnTouchListener(this); 
+			btn_folders.setOnTouchListener(this);
+			btn_researches.setOnTouchListener(this);
+			btn_writers.setOnTouchListener(this);
+			btn_articles.setOnTouchListener(this);
+
+			btn_news.setTag(MainActivity.NEWS_FRAGMENT); 
+			btn_folders.setTag(MainActivity.FILES_FRAGMENT);
+			btn_researches.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
+			btn_writers.setTag(MainActivity.AUTHORS_FRAGMENT);
+			btn_articles.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
+
+			//		if(this instanceof HomeFragment){
+			//			// start with opened sliding layer
+			//			mSlidingLayer.openLayer(true);
+			//		}
+
+		}
+
+
 	}
 
 	public void buttonClicked(View v) {
@@ -158,30 +161,30 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 					((MainActivity) getActivity()).showOpenerTop();
 				if(((MainActivity) getActivity()).isImgTitle)
 					((MainActivity) getActivity()).showImageTitle();
-				
+
 			}
 			break;
 		}
 	}
-	
+
 	private void hideShowViews(boolean status){
-		
+
 		int visibility = status ? View.VISIBLE : View.GONE;
 		int resBtn = status ? R.drawable.ctrl_open_bottom : R.drawable.ctrl_close_bottom; 
-		
+
 		if(((MainActivity) getActivity()).isTopOpener)
 			resBtn = status ? R.drawable.ctrl_close_bottom : R.drawable.ctrl_open_bottom;
-			
+
 		btn_news.setVisibility(visibility);
 		btn_folders.setVisibility(visibility);
 		btn_researches.setVisibility(visibility);
 		btn_writers.setVisibility(visibility);
 		btn_articles.setVisibility(visibility);
-		
+
 		opener_bottom.setBackgroundResource(resBtn);
-		
+
 	}
-	
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
@@ -206,7 +209,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 				args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, type.getNameEn());
 				args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, type.getNameAr());
 			}
-				
+
 			((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
 
 		}
@@ -227,7 +230,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			((MainActivity) getActivity()).hideOpenerTop();
 		if(((MainActivity) getActivity()).isImgTitle)
 			((MainActivity) getActivity()).hideImageTitle();
-		
+
 	}
 
 	@Override
@@ -237,7 +240,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			((MainActivity) getActivity()).showOpenerTop();
 		if(((MainActivity) getActivity()).isImgTitle)
 			((MainActivity) getActivity()).showImageTitle();
-		
+
 	}
 
 	@Override
@@ -248,7 +251,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			((MainActivity) getActivity()).hideOpenerTop();
 		if(((MainActivity) getActivity()).isImgTitle)
 			((MainActivity) getActivity()).hideImageTitle();
-		
+
 	}
 
 	@Override
@@ -259,7 +262,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			((MainActivity) getActivity()).showOpenerTop();
 		if(((MainActivity) getActivity()).isImgTitle)
 			((MainActivity) getActivity()).showImageTitle();
-		
+
 	}
-	
+
 }

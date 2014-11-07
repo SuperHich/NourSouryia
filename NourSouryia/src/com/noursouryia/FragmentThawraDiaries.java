@@ -9,6 +9,7 @@ import java.util.Random;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,9 @@ import com.noursouryia.utils.CalendarAdapter;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
+import com.noursouryia.viewpager.ArticlePagerAdapter;
+import com.noursouryia.viewpager.CirclePageIndicator;
+import com.noursouryia.viewpager.PageIndicator;
 
 public class FragmentThawraDiaries extends BaseFragment{
 
@@ -66,6 +70,10 @@ public class FragmentThawraDiaries extends BaseFragment{
 	
 	private String link, category; 
 	
+	private ArticlePagerAdapter mAdapter;
+	private ViewPager mPager;
+	private PageIndicator mIndicator;
+	
 	@Override
 	public void onDetach() {
 		super.onDetach();
@@ -89,8 +97,16 @@ public class FragmentThawraDiaries extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.thawra_diaries, container, false);
+		View rootView = inflater.inflate(R.layout.thawra_diaries2, container, false);
 
+		mPager = (ViewPager) rootView.findViewById(R.id.view_pager);
+		mIndicator = (CirclePageIndicator) rootView.findViewById(R.id.indicator);
+		
+		mAdapter = new ArticlePagerAdapter(getFragmentManager(), articles);
+		mPager.setAdapter(mAdapter);
+		mPager.setSaveEnabled(false);
+		mIndicator.setViewPager(mPager);
+		
 		monthText = (TextView) rootView.findViewById(R.id.month_text);
 		yearText = (TextView) rootView.findViewById(R.id.year_text);
 
@@ -100,7 +116,6 @@ public class FragmentThawraDiaries extends BaseFragment{
 		txv_second = (TextView) rootView.findViewById(R.id.txv_second);
 		
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
-
 
 		all_layout = (LinearLayout) rootView.findViewById(R.id.all_layout);
 		//		all_layout.bringToFront();
@@ -116,9 +131,9 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 		monthText.setTypeface(NSFonts.getNoorFont());
 		yearText.setTypeface(NSFonts.getLatin());
-		txv_first.setTypeface(NSFonts.getNoorFont());
-		txv_title.setTypeface(NSFonts.getNoorFont());
-		txv_second.setTypeface(NSFonts.getNoorFont());
+//		txv_first.setTypeface(NSFonts.getNoorFont());
+//		txv_title.setTypeface(NSFonts.getNoorFont());
+//		txv_second.setTypeface(NSFonts.getNoorFont());
 
 		month = Calendar.getInstance();
 
@@ -178,7 +193,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 					// return chosen date as string format 
 					chosenDate =  android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day;
 
-					pickCurrentArticleByDate(chosenDate);
+//					pickCurrentArticleByDate(chosenDate);
+					initData();
 					
 					Toast.makeText(getActivity(), chosenDate, Toast.LENGTH_SHORT).show();
 
@@ -320,9 +336,10 @@ public class FragmentThawraDiaries extends BaseFragment{
 				all_layout.setVisibility(View.VISIBLE);
 
 				if(result != null){
+					articles.clear();
 					articles.addAll(result);
-//					adapter.notifyDataSetChanged();
-					pickCurrentArticleByDate(chosenDate);
+					mAdapter.notifyDataSetChanged();
+//					pickCurrentArticleByDate(chosenDate);
 				}else
 					((MainActivity)getActivity()).showConnectionErrorPopup();
 
