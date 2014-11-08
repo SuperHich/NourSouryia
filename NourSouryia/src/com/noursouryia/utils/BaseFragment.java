@@ -78,6 +78,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 				mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
 				rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 				((MainActivity) getActivity()).isTopOpener = false;
+				((MainActivity) getActivity()).hideOpenerTop();
 			}else{
 				mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_TOP);
 				rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);

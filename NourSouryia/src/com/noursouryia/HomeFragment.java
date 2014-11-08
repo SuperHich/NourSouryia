@@ -574,7 +574,6 @@ public class HomeFragment extends BaseFragment {
 		 if(!isFirstStart){
 			 switchView2(media_layout, home_layout);
 			 Log.i(TAG, ">>> onSlidingLayer Opened");
-			 isHome = true;
 		 }
 		 
 	 }
@@ -586,7 +585,6 @@ public class HomeFragment extends BaseFragment {
 		 if(!isFirstStart){
 			 switchView2(home_layout, media_layout);
 			 Log.i(TAG, ">>> onSlidingLayer Closed");
-			 isHome = false;
 		 }
 	 }
 	 
