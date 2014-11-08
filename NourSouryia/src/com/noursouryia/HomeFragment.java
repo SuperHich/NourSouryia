@@ -84,6 +84,7 @@ public class HomeFragment extends BaseFragment {
 	private ArrayList<Article> mArticles = new ArrayList<Article>();
 	
 	private boolean isFirstStart = true;
+	private boolean isHome = true;
 	
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -125,7 +126,6 @@ public class HomeFragment extends BaseFragment {
 	//	loading_feeds.addView(new GIFView(getActivity(), 1000,1000));
 		
 		news_feed.setTypeface(NSFonts.getNoorFont());
-		
 		
 		
 		if(!ImageLoader.getInstance().isInited())
@@ -364,20 +364,22 @@ public class HomeFragment extends BaseFragment {
 			mSlidingLayer.openLayer(true);
 			isFirstStart = false;
 		}
-		
-		
-		if (mSlidingLayer.isOpened()){
-			
-			home_layout.setVisibility(View.VISIBLE);
-			media_layout.setVisibility(View.GONE);
-			
-		} else {
-			
-			home_layout.setVisibility(View.GONE);
-			media_layout.setVisibility(View.VISIBLE);
-			
-			
-		}
+//		else{
+//
+//			if (isHome){
+//
+//				switchView2(media_layout, home_layout);
+////				home_layout.setVisibility(View.VISIBLE);
+////				media_layout.setVisibility(View.GONE);
+//
+//			} else {
+//
+//				switchView2(home_layout, media_layout);
+////				home_layout.setVisibility(View.GONE);
+////				media_layout.setVisibility(View.VISIBLE);
+//
+//			}
+//		}
 		
 		
 		
@@ -572,6 +574,7 @@ public class HomeFragment extends BaseFragment {
 		 if(!isFirstStart){
 			 switchView2(media_layout, home_layout);
 			 Log.i(TAG, ">>> onSlidingLayer Opened");
+			 isHome = true;
 		 }
 		 
 	 }
@@ -583,6 +586,7 @@ public class HomeFragment extends BaseFragment {
 		 if(!isFirstStart){
 			 switchView2(home_layout, media_layout);
 			 Log.i(TAG, ">>> onSlidingLayer Closed");
+			 isHome = false;
 		 }
 	 }
 	 

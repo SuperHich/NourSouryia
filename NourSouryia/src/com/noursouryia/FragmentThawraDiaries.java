@@ -1,6 +1,5 @@
 package com.noursouryia;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -24,12 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
@@ -74,6 +68,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private ViewPager mPager;
 	private PageIndicator mIndicator;
 	
+	private RelativeLayout pager_layout;
+	
 	@Override
 	public void onDetach() {
 		super.onDetach();
@@ -101,6 +97,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 		mPager = (ViewPager) rootView.findViewById(R.id.view_pager);
 		mIndicator = (CirclePageIndicator) rootView.findViewById(R.id.indicator);
+		pager_layout = (RelativeLayout) rootView.findViewById(R.id.pager_layout);
 		
 		mAdapter = new ArticlePagerAdapter(getFragmentManager(), articles);
 		mPager.setAdapter(mAdapter);
@@ -190,14 +187,19 @@ public class FragmentThawraDiaries extends BaseFragment{
 					}
 					
 					month.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
-					// return chosen date as string format 
-					chosenDate =  android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day;
-
-//					pickCurrentArticleByDate(chosenDate);
-					initData();
 					
-					Toast.makeText(getActivity(), chosenDate, Toast.LENGTH_SHORT).show();
+					Calendar today = Calendar.getInstance();
+					
+					if(month.compareTo(today) < 1){
 
+						// return chosen date as string format 
+						chosenDate =  android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day;
+
+						initData();
+
+						Toast.makeText(getActivity(), chosenDate, Toast.LENGTH_SHORT).show();
+					}else
+						Toast.makeText(getActivity(), R.string.no_diaries, Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -213,32 +215,6 @@ public class FragmentThawraDiaries extends BaseFragment{
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-		if(!ImageLoader.getInstance().isInited())
-		{
-			File cacheDir = StorageUtils.getCacheDirectory(getActivity());
-
-			DisplayImageOptions options = new DisplayImageOptions.Builder()
-			.showImageOnLoading(R.drawable.btn_folder_photos) // resource or drawable
-			.showImageForEmptyUri(R.drawable.btn_folder_photos) // resource or drawable
-			.showImageOnFail(R.drawable.btn_folder_photos) // resource or drawable
-			.cacheInMemory(true)
-			.cacheOnDisk(true) 
-			.build();
-
-			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getActivity())
-			.denyCacheImageMultipleSizesInMemory()
-			.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-			.memoryCacheSize(2 * 1024 * 1024)
-			.diskCache(new UnlimitedDiscCache(cacheDir)) // default
-			.diskCacheSize(50 * 1024 * 1024)
-			.diskCacheFileCount(100)
-			.writeDebugLogs()
-			.defaultDisplayImageOptions(options)
-			.build();
-
-			ImageLoader.getInstance().init(config);
-		}
 
 		mSlidingLayer.setCloseOnTapEnabled(false);
 		mSlidingLayer.setOpenOnTapEnabled(false);
@@ -299,7 +275,10 @@ public class FragmentThawraDiaries extends BaseFragment{
 			@Override
 			protected void onPreExecute() {
 				loading.setVisibility(View.VISIBLE);
-				all_layout.setVisibility(View.GONE);
+//				all_layout.setVisibility(View.GONE);
+				pager_layout.setVisibility(View.GONE);
+				
+				setEnabled(false);
 			}
 
 			@Override
@@ -333,12 +312,15 @@ public class FragmentThawraDiaries extends BaseFragment{
 					return;
 
 				loading.setVisibility(View.GONE);
-				all_layout.setVisibility(View.VISIBLE);
+//				all_layout.setVisibility(View.VISIBLE);
+				pager_layout.setVisibility(View.VISIBLE);
+				setEnabled(true);
 
 				if(result != null){
 					articles.clear();
 					articles.addAll(result);
 					mAdapter.notifyDataSetChanged();
+					mIndicator.setCurrentItem(articles.size()-1);
 //					pickCurrentArticleByDate(chosenDate);
 				}else
 					((MainActivity)getActivity()).showConnectionErrorPopup();
@@ -370,6 +352,12 @@ public class FragmentThawraDiaries extends BaseFragment{
 			if(currentArticle.getFilePath().size() > 0)
 				ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_first);
 		}
+	}
+	
+	private void setEnabled(boolean enabled){
+		nextMonth.setEnabled(enabled);
+		previousMonth.setEnabled(enabled);
+		gridview.setEnabled(enabled);
 	}
 
 }

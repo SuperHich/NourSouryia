@@ -34,7 +34,7 @@ public class ArticlePagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) { 
-		return new ArticleNewsFragment(articles.get(position));
+		return new ArticleNewsFragment(articles.get(articles.size() - position - 1));
 	}
 
 	@Override

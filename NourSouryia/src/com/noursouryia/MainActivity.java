@@ -401,7 +401,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				if(arguments != null)
 					fragment1.setArguments(arguments);
 
-				transaction.replace(R.id.content_frame, fragment1, fragmentTAG);
+				transaction.replace(R.id.content_frame_second, fragment1, fragmentTAG);
 				transaction.addToBackStack(fragmentTAG);
 			}
 		}else{
@@ -472,7 +472,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			fragment1.setArguments(args);
 
 		if(fragment1 != null){
-			transaction.replace(R.id.content_frame, fragment1, LIST_ARTICLE_FRAGMENT);
+			transaction.replace(R.id.content_frame_second, fragment1, LIST_ARTICLE_FRAGMENT);
 			transaction.addToBackStack(LIST_ARTICLE_FRAGMENT);
 		}
 
@@ -500,7 +500,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			fragment1.setArguments(args);
 
 		if(fragment1 != null){
-			transaction.replace(R.id.content_frame, fragment1, LIST_NEWS_FRAGMENT);
+			transaction.replace(R.id.content_frame_second, fragment1, LIST_NEWS_FRAGMENT);
 			transaction.addToBackStack(LIST_NEWS_FRAGMENT);
 		}
 

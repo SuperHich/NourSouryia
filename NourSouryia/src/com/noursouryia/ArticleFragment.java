@@ -33,7 +33,7 @@ public class ArticleFragment extends BaseFragment {
 	private ImageView img_article;
 	private Article currentArticle;
 	private boolean isFirstStart = true;
-	private boolean withComments = true;
+	private boolean withComments = false;
 	
 	public ArticleFragment() {
 		// Empty constructor required for fragment subclasses

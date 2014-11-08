@@ -104,7 +104,8 @@ public class CommentsFragment extends BaseFragment {
 		{
 			isFirstStart = false;
 			initData();
-		}
+		}else
+			toggleEmptyMessage();
 
 		pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
 

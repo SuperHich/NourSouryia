@@ -35,7 +35,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:maxLines="1"
-        android:text="@string/empty_list"
+        android:text="@string/no_comments"
         android:textColor="#fff"
         android:textSize="20sp"
         android:visibility="gone" />
@@ -45,7 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:visibility="gone">
 
         <com.noursouryia.utils.GifMovieView
             android:layout_width="wrap_content"

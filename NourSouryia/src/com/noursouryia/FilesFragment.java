@@ -93,7 +93,8 @@ public class FilesFragment extends BaseFragment {
 		{
 			isFirstStart = false;
 			initData();
-		}
+		}else
+			toggleEmptyMessage();
 		
 		expandableLV.getRefreshableView().setOnChildClickListener(new OnChildClickListener() {
 			

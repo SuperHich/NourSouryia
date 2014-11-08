@@ -126,6 +126,11 @@ public class ListNewsFragment extends BaseFragment {
 		{
 			isFirstStart = false;
 			initData();
+		}else{
+			toggleEmptyMessage();
+			
+			if(pageNb == 1)
+				listView.getRefreshableView().addFooterView(footer, null, true);
 		}
 		
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -133,7 +138,7 @@ public class ListNewsFragment extends BaseFragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Article selectedArticle = articles.get(arg2);
+				Article selectedArticle = articles.get(arg2-1);
 				((MainActivity)getActivity()).gotoArticleFragment(selectedArticle, withComments);
 			}
 		});

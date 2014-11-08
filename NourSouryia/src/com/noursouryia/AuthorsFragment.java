@@ -146,7 +146,8 @@ public class AuthorsFragment extends BaseFragment {
 		{
 			isFirstStart = false;
 			initData();
-		}
+		}else
+			toggleEmptyMessage();
 
 		sideList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
