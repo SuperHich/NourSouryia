@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res/com.noursouryia"
+    android:id="@+id/rootlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
@@ -35,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
+        android:clipChildren="false"
         android:orientation="vertical"
         android:weightSum="3" >
 
@@ -44,6 +46,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.7"
             android:background="@color/calendar_bg"
+            android:clipChildren="false"
             android:orientation="horizontal"
             android:weightSum="3" >
 

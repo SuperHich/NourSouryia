@@ -46,7 +46,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 	public ArrayList<String> items; // container to store some random calendar items
 
 	private LinearLayout all_layout ,month_calendar_layout;
-	private RelativeLayout calendar_layout ;
+	private RelativeLayout calendar_layout ,rootlayout;
 
 	private TextView monthText, yearText, txv_title;
 	private ImageView nextMonth, previousMonth;
@@ -106,6 +106,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 
+		rootlayout  =  (RelativeLayout) rootView.findViewById(R.id.rootlayout);
 		all_layout = (LinearLayout) rootView.findViewById(R.id.all_layout);
 		month_calendar_layout =  (LinearLayout) rootView.findViewById(R.id.month_calendar_layout);
 		calendar_layout  =  (RelativeLayout) rootView.findViewById(R.id.calendar_layout);
@@ -116,7 +117,11 @@ public class FragmentThawraDiaries extends BaseFragment{
 		nextMonth.bringToFront();
 		previousMonth.bringToFront();
 		
-//		calendar_layout.bringToFront();
+		rootlayout.bringChildToFront(all_layout);
+		all_layout.bringChildToFront(calendar_layout);
+		all_layout.bringChildToFront(previousMonth);
+		
+		
 //		previousMonth.bringToFront();
 //		mSlidingLayer.invalidate();
 //		all_layout.invalidate();
