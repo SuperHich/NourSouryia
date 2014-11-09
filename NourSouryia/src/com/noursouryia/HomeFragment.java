@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,10 +18,12 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -28,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -46,6 +50,7 @@ import com.noursouryia.utils.Airy;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
+import com.noursouryia.utils.Utils;
 
 
 public class HomeFragment extends BaseFragment {
@@ -80,11 +85,12 @@ public class HomeFragment extends BaseFragment {
 	private Article currentArticle;
 	private View loading_feeds ;
 	private RelativeLayout home_layout, media_layout;
+	private ImageView btn_search;
+	private EditText edt_search;
 	
 	private ArrayList<Article> mArticles = new ArrayList<Article>();
 	
 	private boolean isFirstStart = true;
-	private boolean isHome = true;
 	
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -93,13 +99,11 @@ public class HomeFragment extends BaseFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		
 	}
 	
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		
 	}
 	
 
@@ -121,6 +125,9 @@ public class HomeFragment extends BaseFragment {
 		news_feed = (TextView) rootView.findViewById(R.id.news_feed);
 		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);
 		paginate_right = (Button) rootView.findViewById(R.id.paginate_right_news);
+		
+		btn_search = (ImageView) rootView.findViewById(R.id.btn_search);
+		edt_search = (EditText) rootView.findViewById(R.id.edt_search);
 		
 		loading_feeds = (View) rootView.findViewById(R.id.loading_feeds);
 	//	loading_feeds.addView(new GIFView(getActivity(), 1000,1000));
@@ -233,8 +240,6 @@ public class HomeFragment extends BaseFragment {
 		/********************************************************************************************************************/			
 
 
-
-
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -286,6 +291,31 @@ public class HomeFragment extends BaseFragment {
 			}
 		});
 		
+		btn_search.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String keyword = edt_search.getText().toString();
+				if(!keyword.equals("")){
+					((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
+					Utils.hideKeyboard(getActivity(), edt_search);
+				}
+			}
+		});
+		
+		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
+		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		        if (actionId == EditorInfo.IME_ACTION_DONE) {
+		        	String keyword = edt_search.getText().toString();
+					if(!keyword.equals("")){
+						((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
+						Utils.hideKeyboard(getActivity(), edt_search);
+					}
+		            return true;
+		        }
+		        return false;
+		    }
+		});
 		
 		return rootView;
 	}
@@ -573,7 +603,6 @@ public class HomeFragment extends BaseFragment {
 		 
 		 if(!isFirstStart){
 			 switchView2(media_layout, home_layout);
-			 Log.i(TAG, ">>> onSlidingLayer Opened");
 		 }
 		 
 	 }
@@ -584,7 +613,6 @@ public class HomeFragment extends BaseFragment {
 		 
 		 if(!isFirstStart){
 			 switchView2(home_layout, media_layout);
-			 Log.i(TAG, ">>> onSlidingLayer Closed");
 		 }
 	 }
 	 

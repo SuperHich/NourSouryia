@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -559,11 +560,13 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 
 	public void showOpenerTop(){
+		Log.v(TAG, ">>> showOpenerTop");
 		btn_opener_top.setVisibility(View.VISIBLE);
 		headerSeparator.setVisibility(View.VISIBLE);
 	}
 
 	public void hideOpenerTop(){
+		Log.v(TAG, ">>> hideOpenerTop");
 		btn_opener_top.setVisibility(View.GONE);
 		headerSeparator.setVisibility(View.GONE);
 	}

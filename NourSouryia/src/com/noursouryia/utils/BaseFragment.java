@@ -22,7 +22,6 @@ import com.noursouryia.HomeFragment;
 import com.noursouryia.ListArticlesFragment;
 import com.noursouryia.ListNewsFragment;
 import com.noursouryia.MainActivity;
-import com.noursouryia.MediaFragment;
 import com.noursouryia.NewsFragment;
 import com.noursouryia.R;
 import com.noursouryia.SearchArticlesFragment;
@@ -74,7 +73,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			((MainActivity) getActivity()).hideImageTitle();
 			((MainActivity) getActivity()).isImgTitle = false;
 
-			if(this instanceof HomeFragment || this instanceof MediaFragment){
+			if(this instanceof HomeFragment){
 				mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
 				rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 				((MainActivity) getActivity()).isTopOpener = false;
@@ -227,26 +226,27 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	@Override
 	public void onSlidingLayerOpened() {
 		hideShowViews(true);
-		if(((MainActivity) getActivity()).isTopOpener)
-			((MainActivity) getActivity()).hideOpenerTop();
-		if(((MainActivity) getActivity()).isImgTitle)
-			((MainActivity) getActivity()).hideImageTitle();
-
+		if(!(this instanceof HomeFragment)){
+			if(((MainActivity) getActivity()).isTopOpener)
+				((MainActivity) getActivity()).hideOpenerTop();
+			if(((MainActivity) getActivity()).isImgTitle)
+				((MainActivity) getActivity()).hideImageTitle();
+		}
 	}
 
 	@Override
 	public void onSlidingLayerClosed() {
 		hideShowViews(false);
-		if(((MainActivity) getActivity()).isTopOpener)
-			((MainActivity) getActivity()).showOpenerTop();
-		if(((MainActivity) getActivity()).isImgTitle)
-			((MainActivity) getActivity()).showImageTitle();
-
+		if(!(this instanceof HomeFragment)){
+			if(((MainActivity) getActivity()).isTopOpener)
+				((MainActivity) getActivity()).showOpenerTop();
+			if(((MainActivity) getActivity()).isImgTitle)
+				((MainActivity) getActivity()).showImageTitle();
+		}
 	}
 
 	@Override
 	public void openMenu() {
-		Log.i(TAG, ">>> openMenu ");
 		mSlidingLayer.openLayer(true);
 		if(((MainActivity) getActivity()).isTopOpener)
 			((MainActivity) getActivity()).hideOpenerTop();

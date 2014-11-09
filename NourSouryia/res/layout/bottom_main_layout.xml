@@ -79,11 +79,14 @@
             android:src="@drawable/btn_research" />
 
         <EditText
+            android:id="@+id/edt_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="3dp"
             android:layout_toLeftOf="@id/btn_search"
-            android:background="#fff" />
+            android:background="#fff"
+            android:inputType="text"
+            android:imeOptions="actionDone" />
     </RelativeLayout>
 
 </RelativeLayout>
