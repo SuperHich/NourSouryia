@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -61,7 +62,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private ExpandableListView mDrawerList;
 	private LinearLayout mDrawerLinear ;
 
-	private Button btn_menu_outside, btn_menu_inside, btn_share, btn_lamp, btn_settings, btn_rss, btn_opener_top;
+	private Button btn_menu_outside, btn_menu_inside, btn_share, btn_lamp,  btn_opener_top;
 	private ImageView img_title;
 	private View headerSeparator;
 
@@ -103,8 +104,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		btn_menu_inside 	= (Button) findViewById(R.id.btn_menu_inside);
 		btn_share 			= (Button) findViewById(R.id.btn_share); 
 		btn_lamp 			= (Button) findViewById(R.id.btn_lamp); 
-		btn_settings 		= (Button) findViewById(R.id.btn_settings); 
-		btn_rss 			= (Button) findViewById(R.id.btn_rss);
+//		btn_settings 		= (Button) findViewById(R.id.btn_settings); 
+//		btn_rss 			= (Button) findViewById(R.id.btn_rss);
 
 		btn_opener_top		= (Button) findViewById(R.id.btn_opener_top);
 		img_title			= (ImageView) findViewById(R.id.img_title);
@@ -112,8 +113,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		btn_share.setOnTouchListener(this); 
 		btn_lamp.setOnTouchListener(this);
-		btn_settings.setOnTouchListener(this); 
-		btn_rss.setOnTouchListener(this);
+//		btn_settings.setOnTouchListener(this); 
+//		btn_rss.setOnTouchListener(this);
 		btn_opener_top.setOnTouchListener(this);
 
 		mDrawerList.setGroupIndicator(null);
@@ -351,24 +352,28 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					mDrawerLayout.closeDrawer(Gravity.RIGHT);		
 				break;
 			case R.id.btn_lamp :
-				if(mManager.isOnlineMode())
-					mManager.setOnLineMode(false);
-				else
-					mManager.setOnLineMode(true);
-
-				Toast.makeText(MainActivity.this, mManager.isOnlineMode() ? getString(R.string.online_on) : getString(R.string.online_off), Toast.LENGTH_LONG).show();
+//				if(mManager.isOnlineMode())
+//					mManager.setOnLineMode(false);
+//				else
+//					mManager.setOnLineMode(true);
+//
+//				Toast.makeText(MainActivity.this, mManager.isOnlineMode() ? getString(R.string.online_on) : getString(R.string.online_off), Toast.LENGTH_LONG).show();
+				
+				startActivity(new Intent(MainActivity.this, AboutNS.class));
+				
+				
 				break;
 
 			case R.id.btn_share :
 				// Share App
 				break;
-			case R.id.btn_settings :
-				// Go to settings
-				break;
-			case R.id.btn_rss :
-				// RSS
-				gotoSearchArticlesFragment("سوريا");
-				break;
+//			case R.id.btn_settings :
+//				// Go to settings
+//				break;
+//			case R.id.btn_rss :
+//				// RSS
+//				gotoSearchArticlesFragment("سوريا");
+//				break;
 			case R.id.btn_opener_top :
 				if(mManager.getMenuOpener() != null)
 					mManager.getMenuOpener().openMenu();

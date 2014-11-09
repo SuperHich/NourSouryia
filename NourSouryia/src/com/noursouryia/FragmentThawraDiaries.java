@@ -46,7 +46,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 	public Handler handler;
 	public ArrayList<String> items; // container to store some random calendar items
 
-	private LinearLayout all_layout ;
+	private LinearLayout all_layout ,month_calendar_layout;
 	private RelativeLayout calendar_layout ;
 
 	private TextView monthText, yearText, txv_first , txv_title, txv_second;
@@ -115,22 +115,23 @@ public class FragmentThawraDiaries extends BaseFragment{
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 
 		all_layout = (LinearLayout) rootView.findViewById(R.id.all_layout);
-		//		all_layout.bringToFront();
-		all_layout.bringChildToFront(calendar_layout);
-		all_layout.bringChildToFront(previousMonth);
-		all_layout.bringChildToFront(nextMonth);
+		month_calendar_layout =  (LinearLayout) rootView.findViewById(R.id.month_calendar_layout);
+		calendar_layout  =  (RelativeLayout) rootView.findViewById(R.id.calendar_layout);
 
 		nextMonth = (ImageView) rootView.findViewById(R.id.next_month);
 		previousMonth = (ImageView) rootView.findViewById(R.id.previous_month);
 
 		nextMonth.bringToFront();
 		previousMonth.bringToFront();
+		
+//		calendar_layout.bringToFront();
+//		previousMonth.bringToFront();
+//		mSlidingLayer.invalidate();
+//		all_layout.invalidate();
+//		month_calendar_layout.invalidate();
 
 		monthText.setTypeface(NSFonts.getNoorFont());
 		yearText.setTypeface(NSFonts.getLatin());
-//		txv_first.setTypeface(NSFonts.getNoorFont());
-//		txv_title.setTypeface(NSFonts.getNoorFont());
-//		txv_second.setTypeface(NSFonts.getNoorFont());
 
 		month = Calendar.getInstance();
 

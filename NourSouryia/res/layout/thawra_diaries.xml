@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/drawer_bg" >
-    
-        <LinearLayout
+
+    <LinearLayout
         android:id="@+id/loading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,8 +34,9 @@
         android:id="@+id/all_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@android:color/transparent"
+        android:clipChildren="false"
+        android:orientation="vertical"
         android:weightSum="3" >
 
         <LinearLayout
@@ -44,6 +45,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.2"
             android:background="@color/calendar_bg"
+            android:clipChildren="false"
             android:orientation="horizontal"
             android:weightSum="3" >
 
@@ -52,8 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.85"
-                android:paddingTop="15dp"
-                layout="@layout/calendar" />
+                layout="@layout/calendar"
+                android:paddingTop="15dp" />
 
             <RelativeLayout
                 android:id="@+id/month_layout"
@@ -124,18 +126,25 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.95"
-            android:background="@color/calendar_bg"
-            android:orientation="vertical"
-            android:weightSum="2" >
+            android:background="@color/calendar_bg" >
+
+            <ImageView
+                android:id="@+id/img_first"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp" />
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.1"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/img_first"
+                android:layout_marginBottom="10dp"
                 android:padding="15dp" >
 
                 <TextView
@@ -146,19 +155,7 @@
                     android:textColor="@color/news_text"
                     android:textSize="12sp" />
             </ScrollView>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.9" >
-
-                <ImageView
-                    android:id="@+id/img_first"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,9 +166,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp" 
-                android:background="@color/drawer_bg">
-                
+                android:layout_height="30dp"
+                android:background="@color/drawer_bg" >
+
                 <ImageView
                     android:id="@+id/puce"
                     android:layout_width="wrap_content"
@@ -179,20 +176,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:src="@drawable/blue_puce"/>
-                
+                    android:src="@drawable/blue_puce" />
+
                 <TextView
                     android:id="@+id/txv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/puce"
-                    android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/puce"
                     android:text="Lorem Ipsum"
                     android:textColor="#fff"
                     android:textSize="15sp" />
             </RelativeLayout>
-            
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -206,8 +203,6 @@
                     android:textColor="@color/news_text"
                     android:textSize="12sp" />
             </ScrollView>
-            
-            
         </LinearLayout>
     </LinearLayout>
 
@@ -221,8 +216,8 @@
             android:id="@+id/dragView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_yellow"
-            layout="@layout/top_main_layout" />
+            layout="@layout/top_main_layout"
+            android:background="@color/color_yellow" />
     </com.slidinglayer.SlidingLayer>
 
 </RelativeLayout>
