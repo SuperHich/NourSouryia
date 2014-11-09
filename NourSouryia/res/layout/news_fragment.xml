@@ -33,13 +33,12 @@
                 android:layout_height="100dp"
                 android:layout_weight="1" >
 
-                <ImageView
+                <Button
                     android:id="@+id/jawla_sahafa"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_alignParentRight="true"
-                    android:scaleType="fitEnd"
-                    android:src="@drawable/jawla_sahafa" />
+                    android:background="@drawable/jawla_sahafa" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -47,13 +46,12 @@
                 android:layout_height="100dp"
                 android:layout_weight="1" >
 
-                <ImageView
+                <Button
                     android:id="@+id/thawra_diaries"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_alignParentLeft="true"
-                    android:scaleType="fitEnd"
-                    android:src="@drawable/thawra_diaries" />
+                    android:background="@drawable/thawra_diaries" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -71,13 +69,12 @@
                 android:layout_height="100dp"
                 android:layout_weight="1" >
 
-                <ImageView
+                <Button
                     android:id="@+id/comment_news"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_alignParentRight="true"
-                    android:scaleType="fitStart"
-                    android:src="@drawable/comment_news" />
+                    android:background="@drawable/comment_news" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -85,13 +82,12 @@
                 android:layout_height="100dp"
                 android:layout_weight="1" >
 
-                <ImageView
+                <Button
                     android:id="@+id/takarir_news"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_alignParentLeft="true"
-                    android:scaleType="fitStart"
-                    android:src="@drawable/takarir_news" />
+                    android:background="@drawable/takarir_news" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
