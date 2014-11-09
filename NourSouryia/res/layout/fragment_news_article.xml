@@ -5,18 +5,25 @@
     android:background="@color/calendar_bg"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.95"
-        android:background="@color/calendar_bg"
-        android:orientation="vertical"
-        android:weightSum="2" >
+        android:background="@color/calendar_bg" >
+
+        <ImageView
+            android:id="@+id/img_article"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp" />
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/img_article"
+            android:layout_marginBottom="10dp"
             android:padding="15dp" >
 
             <TextView
@@ -27,19 +34,7 @@
                 android:textColor="@color/news_text"
                 android:textSize="12sp" />
         </ScrollView>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9" >
-
-            <ImageView
-                android:id="@+id/img_article"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-        </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,4 +83,5 @@
                 android:textSize="12sp" />
         </ScrollView>
     </LinearLayout>
+
 </LinearLayout>
