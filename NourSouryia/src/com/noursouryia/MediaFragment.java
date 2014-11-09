@@ -234,11 +234,14 @@ public class MediaFragment extends BaseFragment {
 
 				case VIDEOS_FOLDER_SELECTED:
 
-					//					switchView(gridView, one_media);
-					//					item_text.setText(video_categories.get(position).getName());
+					Log.e("VIDEO GRID CLICK", "OK");
+					
+					switchView(gridView, one_media);
+					item_text.setText(video_categories.get(position).getName());
 
-					one_media.setVisibility(View.GONE);
-					gridView.setVisibility(View.VISIBLE);
+					
+					
+
 
 					break;
 				default:

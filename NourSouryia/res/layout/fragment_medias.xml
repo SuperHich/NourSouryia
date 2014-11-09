@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,35 +31,36 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/bg_btn_folder_photos" />
 
-            <LinearLayout 
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal"
-                android:weightSum="3">
-            <ImageButton
-                android:id="@+id/btn_folder_photos"
-                android:layout_width="0dip"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:scaleType="fitCenter"
-                android:src="@drawable/btn_folder_photos" />
+                android:weightSum="3" >
 
-            <ImageButton
-                android:id="@+id/btn_folder_sound"
-                android:layout_width="0dip"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:scaleType="fitCenter"
-                android:src="@drawable/btn_folder_sound" />
+                <ImageButton
+                    android:id="@+id/btn_folder_photos"
+                    android:layout_width="0dip"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_folder_photos" />
 
-            <ImageButton
-                android:id="@+id/btn_folder_video"
-                android:layout_width="0dip"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:scaleType="fitCenter"
-                android:src="@drawable/btn_folder_video" />
+                <ImageButton
+                    android:id="@+id/btn_folder_sound"
+                    android:layout_width="0dip"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_folder_sound" />
+
+                <ImageButton
+                    android:id="@+id/btn_folder_video"
+                    android:layout_width="0dip"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_folder_video" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -108,7 +109,19 @@
                     android:textStyle="bold" />
             </RelativeLayout>
 
+            <ListView
+                android:id="@+id/list_videos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:divider="#fff"
+          		android:dividerHeight="1dp"
+          		android:padding="5dp"
+                android:visibility="gone" >
+            </ListView>
+
             <RelativeLayout
+                android:id="@+id/slider_photos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp" >

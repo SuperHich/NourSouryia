@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -29,6 +30,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -42,6 +44,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.noursouryia.adapters.CustomGridViewAdapter;
 import com.noursouryia.adapters.GalleryAdapter;
+import com.noursouryia.adapters.VideosListAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Category;
 import com.noursouryia.entity.Type;
@@ -54,7 +57,7 @@ import com.noursouryia.utils.Utils;
 
 
 public class HomeFragment extends BaseFragment {
-	
+
 	private ImageButton btn_folder_sound, btn_folder_photos, btn_folder_video, item_image ;
 	private TextView item_text ;
 	private ImageView btn_folders_container , slide_shower, logo_sourya;
@@ -63,12 +66,16 @@ public class HomeFragment extends BaseFragment {
 	private Type type_photo, type_video, type_sound ;
 	private GridView gridView ;
 	private LinearLayout one_media ;
+	private RelativeLayout slider_photos ;
+	private ListView list_videos;
 	private ArrayList<Category> photo_categories = new ArrayList<Category>();
 	private ArrayList<Category> sound_categories = new ArrayList<Category>();
 	private ArrayList<Category> video_categories = new ArrayList<Category>();
 
 	private ArrayList<String> all_photo_URLS = new ArrayList<String>();
+	private ArrayList<Article> all_video_titles = new ArrayList<Article>();
 	private CustomGridViewAdapter photosGridAdapter, soundsGridAdapter, videosGridAdapter;
+	private VideosListAdapter videoListAdpater ;
 
 	private final static int PHOTOS_FOLDER_SELECTED = 1;
 	private final static int SOUNDS_FOLDER_SELECTED = 2;
@@ -87,11 +94,11 @@ public class HomeFragment extends BaseFragment {
 	private RelativeLayout home_layout, media_layout;
 	private ImageView btn_search;
 	private EditText edt_search;
-	
+
 	private ArrayList<Article> mArticles = new ArrayList<Article>();
-	
+
 	private boolean isFirstStart = true;
-	
+
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
 	}
@@ -100,41 +107,43 @@ public class HomeFragment extends BaseFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 	}
-	
+
 	@Override
 	public void onDetach() {
 		super.onDetach();
 	}
-	
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_home, container, false);
-		
+
 		home_layout = (RelativeLayout) rootView.findViewById(R.id.home_layout);
 		media_layout = (RelativeLayout) rootView.findViewById(R.id.media_layout);
-		
+		slider_photos = (RelativeLayout) rootView.findViewById(R.id.slider_photos);
+
 		news_feed = (TextView) rootView.findViewById(R.id.news_feed);
 		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);
 		paginate_right = (Button) rootView.findViewById(R.id.paginate_right_news);
-		
+
 		btn_search = (ImageView) rootView.findViewById(R.id.btn_search);
 		edt_search = (EditText) rootView.findViewById(R.id.edt_search);
-		
+		list_videos = (ListView) rootView.findViewById(R.id.list_videos);
+
 		loading_feeds = (View) rootView.findViewById(R.id.loading_feeds);
-	//	loading_feeds.addView(new GIFView(getActivity(), 1000,1000));
-		
+		//	loading_feeds.addView(new GIFView(getActivity(), 1000,1000));
+
 		news_feed.setTypeface(NSFonts.getNoorFont());
-		
-		
+
+
 		if(!ImageLoader.getInstance().isInited())
 		{
 			File cacheDir = StorageUtils.getCacheDirectory(getActivity());
@@ -232,6 +241,7 @@ public class HomeFragment extends BaseFragment {
 				folderVideosClick();
 				gridView.setAdapter(videosGridAdapter);
 
+
 				one_media.setVisibility(View.GONE);
 				gridView.setVisibility(View.VISIBLE);
 			}
@@ -255,6 +265,9 @@ public class HomeFragment extends BaseFragment {
 					item_text.setText(photo_categories.get(position).getName());
 					String link = photo_categories.get(position).getLink();
 
+					slider_photos.setVisibility(View.VISIBLE);
+					gallery.setVisibility(View.VISIBLE);
+					list_videos.setVisibility(View.GONE);
 					getPhotosSlider(link);
 
 					//					String url_image = all_photo_URLS.get(2);
@@ -277,11 +290,29 @@ public class HomeFragment extends BaseFragment {
 
 				case VIDEOS_FOLDER_SELECTED:
 
-					//					switchView(gridView, one_media);
-					//					item_text.setText(video_categories.get(position).getName());
+					switchView(gridView, one_media);
+					item_text.setText(video_categories.get(position).getName());
 
-					one_media.setVisibility(View.GONE);
-					gridView.setVisibility(View.VISIBLE);
+					slider_photos.setVisibility(View.GONE);
+					gallery.setVisibility(View.GONE);
+					list_videos.setVisibility(View.VISIBLE);
+
+
+					initListVideos(video_categories.get(position));
+
+					list_videos.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1,
+								int arg2, long arg3) {
+
+							Intent i = new Intent(getActivity(), PreviewVideo.class);
+							i.putExtra("link", all_video_titles.get(arg2).getYoutubeLink());
+							startActivity(i);
+							
+						}
+					});
+					
 
 					break;
 				default:
@@ -290,9 +321,9 @@ public class HomeFragment extends BaseFragment {
 
 			}
 		});
-		
+
 		btn_search.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String keyword = edt_search.getText().toString();
@@ -302,87 +333,87 @@ public class HomeFragment extends BaseFragment {
 				}
 			}
 		});
-		
+
 		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
-		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		        if (actionId == EditorInfo.IME_ACTION_DONE) {
-		        	String keyword = edt_search.getText().toString();
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					String keyword = edt_search.getText().toString();
 					if(!keyword.equals("")){
 						((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
 						Utils.hideKeyboard(getActivity(), edt_search);
 					}
-		            return true;
-		        }
-		        return false;
-		    }
+					return true;
+				}
+				return false;
+			}
 		});
-		
+
 		return rootView;
 	}
-	
+
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		
+
 		mManager = new NSManager(getActivity());
-		
+
 		initData();
 		initMediaData();
-		
+
 		Airy mAiry = new Airy(getActivity()) {
-		    @Override
-		    public void onGesture(View pView, int pGestureId) {
-		        if (pView == news_feed) {
-		            switch (pGestureId) {
-		                case Airy.INVALID_GESTURE:
-		                    break;
-		                case Airy.TAP:
-		                	
-		                	if(currentArticle != null)
-		    					((MainActivity) getActivity()).gotoArticleFragment(currentArticle);
-		                	
-		                    break;
-		                case Airy.SWIPE_UP:
-		                    break;
-		                case Airy.SWIPE_DOWN:
-		                    break;
-		                case Airy.SWIPE_LEFT:
-		                	previousFeed();
-		                    break;
-		                case Airy.SWIPE_RIGHT:
-		                	nextFeed();
-		                    break;
-		                case Airy.TWO_FINGER_TAP:
-		                    break;
-		                case Airy.TWO_FINGER_SWIPE_UP:
-		                    break;
-		                case Airy.TWO_FINGER_SWIPE_DOWN:
-		                    break;
-		                case Airy.TWO_FINGER_SWIPE_LEFT:
-		                    break;
-		                case Airy.TWO_FINGER_SWIPE_RIGHT:
-		                    break;
-		                case Airy.TWO_FINGER_PINCH_IN:
-		                    break;
-		                case Airy.TWO_FINGER_PINCH_OUT:
-		                    break;
-		            }
-		        }
-		    }
+			@Override
+			public void onGesture(View pView, int pGestureId) {
+				if (pView == news_feed) {
+					switch (pGestureId) {
+					case Airy.INVALID_GESTURE:
+						break;
+					case Airy.TAP:
+
+						if(currentArticle != null)
+							((MainActivity) getActivity()).gotoArticleFragment(currentArticle);
+
+						break;
+					case Airy.SWIPE_UP:
+						break;
+					case Airy.SWIPE_DOWN:
+						break;
+					case Airy.SWIPE_LEFT:
+						previousFeed();
+						break;
+					case Airy.SWIPE_RIGHT:
+						nextFeed();
+						break;
+					case Airy.TWO_FINGER_TAP:
+						break;
+					case Airy.TWO_FINGER_SWIPE_UP:
+						break;
+					case Airy.TWO_FINGER_SWIPE_DOWN:
+						break;
+					case Airy.TWO_FINGER_SWIPE_LEFT:
+						break;
+					case Airy.TWO_FINGER_SWIPE_RIGHT:
+						break;
+					case Airy.TWO_FINGER_PINCH_IN:
+						break;
+					case Airy.TWO_FINGER_PINCH_OUT:
+						break;
+					}
+				}
+			}
 		};
 
 		news_feed.setOnTouchListener(mAiry);
-		
+
 		paginate_left.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				nextFeed();
 			}
 		});
-		
+
 		paginate_right.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				previousFeed();
@@ -394,29 +425,29 @@ public class HomeFragment extends BaseFragment {
 			mSlidingLayer.openLayer(true);
 			isFirstStart = false;
 		}
-//		else{
-//
-//			if (isHome){
-//
-//				switchView2(media_layout, home_layout);
-////				home_layout.setVisibility(View.VISIBLE);
-////				media_layout.setVisibility(View.GONE);
-//
-//			} else {
-//
-//				switchView2(home_layout, media_layout);
-////				home_layout.setVisibility(View.GONE);
-////				media_layout.setVisibility(View.VISIBLE);
-//
-//			}
-//		}
-		
-		
-		
+		//		else{
+		//
+		//			if (isHome){
+		//
+		//				switchView2(media_layout, home_layout);
+		////				home_layout.setVisibility(View.VISIBLE);
+		////				media_layout.setVisibility(View.GONE);
+		//
+		//			} else {
+		//
+		//				switchView2(home_layout, media_layout);
+		////				home_layout.setVisibility(View.GONE);
+		////				media_layout.setVisibility(View.VISIBLE);
+		//
+		//			}
+		//		}
+
+
+
 	}
 
 	private void initData(){
-		
+
 		new AsyncTask<Void, Void, ArrayList<Article>>() {
 
 			@Override
@@ -426,10 +457,10 @@ public class HomeFragment extends BaseFragment {
 				paginate_right.setEnabled(false);
 				loading_feeds.setVisibility(View.VISIBLE);
 			}
-			
+
 			@Override
 			protected ArrayList<Article> doInBackground(Void... params) {
-				
+
 				try{
 					mArticles = NSManager.getInstance(getActivity()).getArticles(null, 
 							NSManager.DEFAULT_TIMESTAMP, 
@@ -441,12 +472,12 @@ public class HomeFragment extends BaseFragment {
 					}
 				}catch(Exception e){
 					Log.e(TAG, "Error while init Data !");
-//					e.printStackTrace();
+					//					e.printStackTrace();
 				}
 
 				return mArticles;
 			}
-			
+
 			@Override
 			protected void onPostExecute(ArrayList<Article> result) {
 
@@ -454,7 +485,7 @@ public class HomeFragment extends BaseFragment {
 				paginate_left.setEnabled(true);
 				paginate_right.setEnabled(true);
 				loading_feeds.setVisibility(View.GONE);
-				
+
 				if(result.size() > 0){
 					showFeed();
 				}
@@ -462,19 +493,19 @@ public class HomeFragment extends BaseFragment {
 		}.execute();
 
 	}
-	
+
 	private void initMediaData(){
 
 		new AsyncTask<Void, Void, Boolean>() {
 
-//			private ProgressDialog loading;
+			//			private ProgressDialog loading;
 
 			@Override
 			protected void onPreExecute() {
-//				loading = new ProgressDialog(getActivity());
-//				loading.setCancelable(false);
-//				loading.setMessage(getString(R.string.please_wait));
-//				loading.show();
+				//				loading = new ProgressDialog(getActivity());
+				//				loading.setCancelable(false);
+				//				loading.setMessage(getString(R.string.please_wait));
+				//				loading.show();
 			}
 
 			@Override
@@ -488,9 +519,9 @@ public class HomeFragment extends BaseFragment {
 					photo_categories  = type_photo.getCategories() ;
 					sound_categories  = type_sound.getCategories() ;
 					video_categories  = type_video.getCategories() ;
-					
+
 					return true;
-					
+
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -499,7 +530,7 @@ public class HomeFragment extends BaseFragment {
 
 			@Override
 			protected void onPostExecute(Boolean result) {
-//				loading.dismiss();
+				//				loading.dismiss();
 
 				if(result){
 
@@ -515,7 +546,59 @@ public class HomeFragment extends BaseFragment {
 		}.execute();
 
 	}
-	
+
+	private void initListVideos(final Category category){
+
+		new AsyncTask<Void, Void, ArrayList<Article>>() {
+
+			ProgressDialog loading ;
+
+			@Override
+			protected void onPreExecute() {
+				loading = new ProgressDialog(getActivity());
+				loading.setCancelable(false);
+				loading.setMessage(getString(R.string.please_wait));
+				loading.show();
+			}
+
+
+			@Override
+			protected ArrayList<Article> doInBackground(Void... params) {
+
+				ArrayList<Article> articles = mManager.getArticlesByUrl(category.getLink());
+				all_video_titles.clear();
+
+				if(articles.size() > 0 ){
+
+					for (int i = 0; i < articles.size(); i++) {
+
+						all_video_titles.add(articles.get(i));
+					}
+				}
+
+
+				return all_video_titles;
+			}
+
+
+			@Override
+			protected void onPostExecute(ArrayList<Article> result) {
+				loading.dismiss();
+
+				if(result.size() > 0){
+
+					videoListAdpater = new VideosListAdapter(getActivity(),  all_video_titles);
+
+					list_videos.setAdapter(videoListAdpater);
+					videoListAdpater.notifyDataSetChanged();
+				}
+			}
+		}.execute();
+
+	}
+
+
+
 	public void folderPhotosClick(){
 
 		btn_folder_photos.setImageResource(R.drawable.btn_folder_photos_clicked);
@@ -546,12 +629,12 @@ public class HomeFragment extends BaseFragment {
 
 	}
 
-	
+
 	private void showFeed(){
 		if(currentFeedPosition < mArticles.size()){
 			currentArticle = mArticles.get(currentFeedPosition);
 			news_feed.setText(currentArticle.getTitle());
-			
+
 			if(currentFeedPosition == 0)
 			{
 				paginate_left.setBackgroundResource(R.drawable.paginate_left_selector);
@@ -569,318 +652,318 @@ public class HomeFragment extends BaseFragment {
 			}
 		}
 	}
-	
+
 	private void nextFeed(){
-		
+
 		if(currentFeedPosition + 1 < mArticles.size()){
 			currentFeedPosition += 1;
 			showFeed();
 		}
-		
+
 	}
-	
+
 	private void previousFeed(){
-		
+
 		if(currentFeedPosition - 1 >= 0 ){
 			currentFeedPosition -= 1;
 			showFeed();
 		}
-		
+
 	}
-	
-	
-	 public  int getDPI(int size){
-     	DisplayMetrics metrics;
-     	metrics = new DisplayMetrics();         
-     	(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-     	
-     	return (size * metrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT;        
-     }
-	 
-	 @Override
-	 public void onSlidingLayerOpened() {
-		 super.onSlidingLayerOpened();
-		 
-		 if(!isFirstStart){
-			 switchView2(media_layout, home_layout);
-		 }
-		 
-	 }
 
-	 @Override
-	 public void onSlidingLayerClosed() {
-		 super.onSlidingLayerClosed();
-		 
-		 if(!isFirstStart){
-			 switchView2(home_layout, media_layout);
-		 }
-	 }
-	 
-	 
-	 private void getPhotosSlider(final String link){
 
-			new AsyncTask<Void, Void, ArrayList<String>>() {
+	public  int getDPI(int size){
+		DisplayMetrics metrics;
+		metrics = new DisplayMetrics();         
+		(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-				private ProgressDialog loading;
+		return (size * metrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT;        
+	}
 
-				@Override
-				protected void onPreExecute() {
-					loading = new ProgressDialog(getActivity());
-					loading.setCancelable(false);
-					loading.setMessage(getString(R.string.please_wait));
-					loading.show();
-				}
+	@Override
+	public void onSlidingLayerOpened() {
+		super.onSlidingLayerOpened();
 
-				@Override
-				protected ArrayList<String> doInBackground(Void... params) {
+		if(!isFirstStart){
+			switchView2(media_layout, home_layout);
+		}
 
-					ArrayList<Article> articles = mManager.getArticlesByUrl(link);
-					all_photo_URLS.clear();
+	}
 
-					if(articles.size() > 0 ){
+	@Override
+	public void onSlidingLayerClosed() {
+		super.onSlidingLayerClosed();
 
-						for (int i = 0; i < articles.size(); i++) {
+		if(!isFirstStart){
+			switchView2(home_layout, media_layout);
+		}
+	}
 
-							ArrayList<String> images_urls = articles.get(i).getFilePath();
 
-							for (int j = 0; j < images_urls.size(); j++) {
+	private void getPhotosSlider(final String link){
 
-								all_photo_URLS.add(images_urls.get(j));
-								Log.w("Image URLS article "+i+" numero "+j, images_urls.get(j));
-							}
+		new AsyncTask<Void, Void, ArrayList<String>>() {
+
+			private ProgressDialog loading;
+
+			@Override
+			protected void onPreExecute() {
+				loading = new ProgressDialog(getActivity());
+				loading.setCancelable(false);
+				loading.setMessage(getString(R.string.please_wait));
+				loading.show();
+			}
+
+			@Override
+			protected ArrayList<String> doInBackground(Void... params) {
+
+				ArrayList<Article> articles = mManager.getArticlesByUrl(link);
+				all_photo_URLS.clear();
+
+				if(articles.size() > 0 ){
+
+					for (int i = 0; i < articles.size(); i++) {
+
+						ArrayList<String> images_urls = articles.get(i).getFilePath();
+
+						for (int j = 0; j < images_urls.size(); j++) {
+
+							all_photo_URLS.add(images_urls.get(j));
+							Log.w("Image URLS article "+i+" numero "+j, images_urls.get(j));
 						}
 					}
-
-
-					return all_photo_URLS;
 				}
 
-				@Override
-				protected void onPostExecute(ArrayList<String> result) {
 
-					loading.dismiss();
+				return all_photo_URLS;
+			}
 
-					if (result.size() > 0){
+			@Override
+			protected void onPostExecute(ArrayList<String> result) {
 
-						switchView(gridView, one_media);
+				loading.dismiss();
 
+				if (result.size() > 0){
 
-						String url_image = result.get(0);
-						ImageLoader.getInstance().displayImage(url_image, slide_shower);
-
-						gallery.setAdapter(new GalleryAdapter(getActivity(), result ));
+					switchView(gridView, one_media);
 
 
-						gallery.setOnItemClickListener(new OnItemClickListener() {
-							@Override
-							public void onItemClick(AdapterView<?> parent,
-									View view, int position, long id) {
+					String url_image = result.get(0);
+					ImageLoader.getInstance().displayImage(url_image, slide_shower);
 
-								Log.e("SIZE ALL PHOTOS", all_photo_URLS.size()+"");
+					gallery.setAdapter(new GalleryAdapter(getActivity(), result ));
 
-								String url_image = all_photo_URLS.get(position);
-								ImageLoader.getInstance().displayImage(url_image, slide_shower);
 
-							}
-						});
+					gallery.setOnItemClickListener(new OnItemClickListener() {
+						@Override
+						public void onItemClick(AdapterView<?> parent,
+								View view, int position, long id) {
 
-						gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+							Log.e("SIZE ALL PHOTOS", all_photo_URLS.size()+"");
 
-							@Override
-							public void onItemSelected(AdapterView<?> parent,
-									View view, int position, long id) {
+							String url_image = all_photo_URLS.get(position);
+							ImageLoader.getInstance().displayImage(url_image, slide_shower);
 
-								if( position == all_photo_URLS.size()-1) {
-									paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selected);
-								} else {
-									paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selector);
-								}
+						}
+					});
 
-								if( position == 0) {
-									paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selected);
-								}
-								else {
-									paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selector);
-								}
+					gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-							}
+						@Override
+						public void onItemSelected(AdapterView<?> parent,
+								View view, int position, long id) {
 
-							@Override
-							public void onNothingSelected(AdapterView<?> parent) {
-								paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selected);
+							if( position == all_photo_URLS.size()-1) {
+								paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selected);
+							} else {
 								paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selector);
 							}
-						});
 
-						paginate_right_slider.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
-
-								sliderGoNext();
-
+							if( position == 0) {
+								paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selected);
+							}
+							else {
+								paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selector);
 							}
 
-							
-						});
+						}
 
-						paginate_left_slider.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
+						@Override
+						public void onNothingSelected(AdapterView<?> parent) {
+							paginate_left_slider.setBackgroundResource(R.drawable.paginate_left_selected);
+							paginate_right_slider.setBackgroundResource(R.drawable.paginate_right_selector);
+						}
+					});
 
-								sliderGoBack();
+					paginate_right_slider.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
 
+							sliderGoNext();
+
+						}
+
+
+					});
+
+					paginate_left_slider.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+
+							sliderGoBack();
+
+						}
+
+
+					});
+
+
+					mAiry = new Airy(getActivity()) {
+						@Override
+						public void onGesture(View pView, int pGestureId) {
+							if (pView == slide_shower) {
+								switch (pGestureId) {
+								case Airy.INVALID_GESTURE:
+									break;
+								case Airy.TAP:
+
+									break;
+								case Airy.SWIPE_UP:
+									break;
+								case Airy.SWIPE_DOWN:
+									break;
+								case Airy.SWIPE_LEFT:
+
+									sliderGoNext();
+
+									break;
+								case Airy.SWIPE_RIGHT:
+
+									sliderGoBack();			
+
+									break;
+								case Airy.TWO_FINGER_TAP:
+									break;
+								case Airy.TWO_FINGER_SWIPE_UP:
+									break;
+								case Airy.TWO_FINGER_SWIPE_DOWN:
+									break;
+								case Airy.TWO_FINGER_SWIPE_LEFT:
+									break;
+								case Airy.TWO_FINGER_SWIPE_RIGHT:
+									break;
+								case Airy.TWO_FINGER_PINCH_IN:
+									break;
+								case Airy.TWO_FINGER_PINCH_OUT:
+									break;
+								}
 							}
+						}
+					};
 
-							
-						});
-						
-						
-						mAiry = new Airy(getActivity()) {
-						    @Override
-						    public void onGesture(View pView, int pGestureId) {
-						        if (pView == slide_shower) {
-						            switch (pGestureId) {
-						                case Airy.INVALID_GESTURE:
-						                    break;
-						                case Airy.TAP:
-						                	
-						                    break;
-						                case Airy.SWIPE_UP:
-						                    break;
-						                case Airy.SWIPE_DOWN:
-						                    break;
-						                case Airy.SWIPE_LEFT:
-						                	
-						                	sliderGoNext();
-						                	
-						                    break;
-						                case Airy.SWIPE_RIGHT:
-						                	
-						                	sliderGoBack();			
-						                	
-						                    break;
-						                case Airy.TWO_FINGER_TAP:
-						                    break;
-						                case Airy.TWO_FINGER_SWIPE_UP:
-						                    break;
-						                case Airy.TWO_FINGER_SWIPE_DOWN:
-						                    break;
-						                case Airy.TWO_FINGER_SWIPE_LEFT:
-						                    break;
-						                case Airy.TWO_FINGER_SWIPE_RIGHT:
-						                    break;
-						                case Airy.TWO_FINGER_PINCH_IN:
-						                    break;
-						                case Airy.TWO_FINGER_PINCH_OUT:
-						                    break;
-						            }
-						        }
-						    }
-						};
+					slide_shower.setOnTouchListener(mAiry);
 
-						slide_shower.setOnTouchListener(mAiry);
-						
-						
 
-					} else {
 
-						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.empty_list), Toast.LENGTH_SHORT).show();
+				} else {
 
-					}
-
+					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.empty_list), Toast.LENGTH_SHORT).show();
 
 				}
-			}.execute();
 
 
-		}
-
-
-		protected void switchView(final View firstLayout, final View secondeLayout) {
-			final Animation in = new AlphaAnimation(0.0f, 1.0f);
-			in.setDuration(400);
-
-			final Animation out = new AlphaAnimation(1.0f, 0.0f);
-			out.setDuration(300);
-
-			AnimationSet as = new AnimationSet(true);
-			as.addAnimation(out);
-			in.setStartOffset(400);
-			as.addAnimation(in);
-
-			out.setAnimationListener(new AnimationListener() {
-
-				@Override
-				public void onAnimationEnd(Animation animation) {
-					firstLayout.setVisibility(View.GONE);
-					secondeLayout.setVisibility(View.VISIBLE);
-					secondeLayout.startAnimation(in);
-				}
-
-				@Override
-				public void onAnimationRepeat(Animation animation) {
-				}
-
-				@Override
-				public void onAnimationStart(Animation animation) {
-				}
-			});
-
-			firstLayout.startAnimation(out);
-		}
-
-		protected void switchView2(final View firstLayout, final View secondeLayout) {
-			final Animation in = new AlphaAnimation(0.0f, 1.0f);
-			in.setDuration(400);
-
-			final Animation out = new AlphaAnimation(1.0f, 0.0f);
-			out.setDuration(200);
-
-			AnimationSet as = new AnimationSet(true);
-			as.addAnimation(out);
-			as.addAnimation(in);
-
-			out.setAnimationListener(new AnimationListener() {
-
-				@Override
-				public void onAnimationEnd(Animation animation) {
-					firstLayout.setVisibility(View.GONE);
-					secondeLayout.setVisibility(View.VISIBLE);
-					secondeLayout.startAnimation(in);
-				}
-
-				@Override
-				public void onAnimationRepeat(Animation animation) {
-				}
-
-				@Override
-				public void onAnimationStart(Animation animation) {
-				}
-			});
-
-			firstLayout.startAnimation(out);
-		}
-		
-		private void sliderGoBack() {
-
-			int gallery_position = gallery.getSelectedItemPosition();
-
-			if(gallery_position > 0 ){
-				gallery.setSelection(gallery_position - 1);
-				String url_image = all_photo_URLS.get(gallery_position - 1);
-				ImageLoader.getInstance().displayImage(url_image, slide_shower);
 			}
-		}
-		
-		private void sliderGoNext() {
+		}.execute();
 
-			int gallery_position = gallery.getSelectedItemPosition();
 
-			if(gallery_position < all_photo_URLS.size()-1){
-				gallery.setSelection(gallery_position + 1);
-				String url_image = all_photo_URLS.get(gallery_position + 1);
-				ImageLoader.getInstance().displayImage(url_image, slide_shower);
+	}
+
+
+	protected void switchView(final View firstLayout, final View secondeLayout) {
+		final Animation in = new AlphaAnimation(0.0f, 1.0f);
+		in.setDuration(400);
+
+		final Animation out = new AlphaAnimation(1.0f, 0.0f);
+		out.setDuration(300);
+
+		AnimationSet as = new AnimationSet(true);
+		as.addAnimation(out);
+		in.setStartOffset(400);
+		as.addAnimation(in);
+
+		out.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				firstLayout.setVisibility(View.GONE);
+				secondeLayout.setVisibility(View.VISIBLE);
+				secondeLayout.startAnimation(in);
 			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+		});
+
+		firstLayout.startAnimation(out);
+	}
+
+	protected void switchView2(final View firstLayout, final View secondeLayout) {
+		final Animation in = new AlphaAnimation(0.0f, 1.0f);
+		in.setDuration(400);
+
+		final Animation out = new AlphaAnimation(1.0f, 0.0f);
+		out.setDuration(200);
+
+		AnimationSet as = new AnimationSet(true);
+		as.addAnimation(out);
+		as.addAnimation(in);
+
+		out.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				firstLayout.setVisibility(View.GONE);
+				secondeLayout.setVisibility(View.VISIBLE);
+				secondeLayout.startAnimation(in);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+		});
+
+		firstLayout.startAnimation(out);
+	}
+
+	private void sliderGoBack() {
+
+		int gallery_position = gallery.getSelectedItemPosition();
+
+		if(gallery_position > 0 ){
+			gallery.setSelection(gallery_position - 1);
+			String url_image = all_photo_URLS.get(gallery_position - 1);
+			ImageLoader.getInstance().displayImage(url_image, slide_shower);
 		}
+	}
+
+	private void sliderGoNext() {
+
+		int gallery_position = gallery.getSelectedItemPosition();
+
+		if(gallery_position < all_photo_URLS.size()-1){
+			gallery.setSelection(gallery_position + 1);
+			String url_image = all_photo_URLS.get(gallery_position + 1);
+			ImageLoader.getInstance().displayImage(url_image, slide_shower);
+		}
+	}
 
 }
