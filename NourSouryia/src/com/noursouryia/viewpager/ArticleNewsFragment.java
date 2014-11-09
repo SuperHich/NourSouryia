@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,7 +18,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.noursouryia.MainActivity;
 import com.noursouryia.R;
 import com.noursouryia.entity.Article;
 import com.noursouryia.utils.BaseFragment;
@@ -137,12 +135,13 @@ public class ArticleNewsFragment extends BaseFragment {
 
 	private void initData(){
 		
-		String[] contentParts = splitContent(currentArticle.getBody());
+//		String[] contentParts = splitContent(currentArticle.getBody());
+//		txv_article_content1.setText(formatText(contentParts[0]));
+//		txv_article_content2.setText(formatText(contentParts[1]));
 		
-		txv_article_title.setText(currentArticle.getTitle());
-//		txv_author_name.setText(currentArticle.getName());
-		txv_article_content1.setText(formatText(contentParts[0]));
-		txv_article_content2.setText(formatText(contentParts[1]));
+		txv_article_title.setText(currentArticle.getName());
+		txv_article_content1.setText(currentArticle.getTitle());
+		txv_article_content2.setText(formatText(currentArticle.getBody()));
 		
 		if(currentArticle.getFilePath().size() > 0)
 			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_article);

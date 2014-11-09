@@ -55,7 +55,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String SEARCH_FRAGMENT 			= "search_fragment";
 	public static final String THAWRA_DIARIES 			= "thawra_diaries";
 	public static final String LIST_NEWS_FRAGMENT 		= "list_news_fragment";
-	
+
 	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
 
 	private DrawerLayout mDrawerLayout;
@@ -104,8 +104,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		btn_menu_inside 	= (Button) findViewById(R.id.btn_menu_inside);
 		btn_share 			= (Button) findViewById(R.id.btn_share); 
 		btn_lamp 			= (Button) findViewById(R.id.btn_lamp); 
-//		btn_settings 		= (Button) findViewById(R.id.btn_settings); 
-//		btn_rss 			= (Button) findViewById(R.id.btn_rss);
+		//		btn_settings 		= (Button) findViewById(R.id.btn_settings); 
+		//		btn_rss 			= (Button) findViewById(R.id.btn_rss);
 
 		btn_opener_top		= (Button) findViewById(R.id.btn_opener_top);
 		img_title			= (ImageView) findViewById(R.id.img_title);
@@ -113,8 +113,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		btn_share.setOnTouchListener(this); 
 		btn_lamp.setOnTouchListener(this);
-//		btn_settings.setOnTouchListener(this); 
-//		btn_rss.setOnTouchListener(this);
+		//		btn_settings.setOnTouchListener(this); 
+		//		btn_rss.setOnTouchListener(this);
 		btn_opener_top.setOnTouchListener(this);
 
 		mDrawerList.setGroupIndicator(null);
@@ -352,28 +352,22 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					mDrawerLayout.closeDrawer(Gravity.RIGHT);		
 				break;
 			case R.id.btn_lamp :
-//				if(mManager.isOnlineMode())
-//					mManager.setOnLineMode(false);
-//				else
-//					mManager.setOnLineMode(true);
-//
-//				Toast.makeText(MainActivity.this, mManager.isOnlineMode() ? getString(R.string.online_on) : getString(R.string.online_off), Toast.LENGTH_LONG).show();
-				
+				//				if(mManager.isOnlineMode())
+				//					mManager.setOnLineMode(false);
+				//				else
+				//					mManager.setOnLineMode(true);
+				//
+				//				Toast.makeText(MainActivity.this, mManager.isOnlineMode() ? getString(R.string.online_on) : getString(R.string.online_off), Toast.LENGTH_LONG).show();
+
 				startActivity(new Intent(MainActivity.this, AboutNS.class));
-				
-				
+
+
 				break;
 
 			case R.id.btn_share :
 				// Share App
+				shareApp();
 				break;
-//			case R.id.btn_settings :
-//				// Go to settings
-//				break;
-//			case R.id.btn_rss :
-//				// RSS
-//				gotoSearchArticlesFragment("سوريا");
-//				break;
 			case R.id.btn_opener_top :
 				if(mManager.getMenuOpener() != null)
 					mManager.getMenuOpener().openMenu();
@@ -419,7 +413,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		currentFragment = fragmentTAG;
 	}
 
-	
+
 	public void gotoArticleFragment(Article article, boolean withComments){
 
 		NSManager.getInstance(this).setCurrentArticle(article);
@@ -428,7 +422,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		gotoFragmentByTag(ARTICLE_FRAGMENT, args);
 
 	}
-	
+
 	public void gotoArticleFragment(Article article){
 
 		NSManager.getInstance(this).setCurrentArticle(article);
@@ -487,7 +481,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		currentFragment = LIST_ARTICLE_FRAGMENT;
 
 	}
-	
+
 	public void gotoListNewsFragment(String link, String categoryName, int imageId, boolean withComments){
 
 		Bundle args = new Bundle();
@@ -641,4 +635,14 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		builder.show();
 	}
 
+	private void shareApp(){
+
+		String shareBody = "http://syrianoor.net/";
+		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sharingIntent.setType("text/plain");
+		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+		startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
+
+	}
 }

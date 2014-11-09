@@ -141,7 +141,7 @@ public class NSDatabaseManager extends NSDatabase {
 	}
 	
 	public ArrayList<Category> getCategoriesByType(String type_id){
-
+		open();
 		ArrayList<Category> cats = new ArrayList<Category>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_CATEGORIES + " WHERE " + COL_TYPE_ID + " LIKE '" + type_id + "'";
@@ -165,6 +165,7 @@ public class NSDatabaseManager extends NSDatabase {
 
 	public Category getCategoriesByID(int catID){
 
+		open();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_CATEGORIES + " WHERE " + NSManager.TID + " = " + catID;
 		Cursor cursor = db.rawQuery(selectQuery, null);

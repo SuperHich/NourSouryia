@@ -1,11 +1,12 @@
 package com.noursouryia;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import com.noursouryia.entity.Category;
 import com.noursouryia.utils.BaseFragment;
@@ -13,7 +14,7 @@ import com.noursouryia.utils.BaseFragment;
 public class NewsFragment extends BaseFragment  {
 
 
-	private ImageView diaries, jawla, takarir, news_comment ;
+	private Button diaries, jawla, takarir, news_comment ;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -21,62 +22,72 @@ public class NewsFragment extends BaseFragment  {
 
 		View rootView = inflater.inflate(R.layout.news_fragment, container, false);
 
-		diaries = (ImageView) rootView.findViewById(R.id.thawra_diaries);
-		jawla = (ImageView) rootView.findViewById(R.id.jawla_sahafa);
-		takarir = (ImageView) rootView.findViewById(R.id.takarir_news);
-		news_comment = (ImageView) rootView.findViewById(R.id.comment_news);
+		diaries = (Button) rootView.findViewById(R.id.thawra_diaries);
+		jawla = (Button) rootView.findViewById(R.id.jawla_sahafa);
+		takarir = (Button) rootView.findViewById(R.id.takarir_news);
+		news_comment = (Button) rootView.findViewById(R.id.comment_news);
 
-		diaries.setTag(MainActivity.THAWRA_DIARIES);
+		news_comment.setOnTouchListener(this);
+		jawla.setOnTouchListener(this);
+		takarir.setOnTouchListener(this);
+		diaries.setOnTouchListener(this);
 		
-		
-		news_comment.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
+		return rootView;
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN: {
+			Button view = (Button) v;
+			view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+			v.invalidate();
+			break;
+		}
+		case MotionEvent.ACTION_UP: {
 
-				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(12);
-				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.comment_news, true);
+			Button view = (Button) v;
+			view.getBackground().clearColorFilter();
+			view.invalidate();
+
+			switch (v.getId()) {
+			case R.id.comment_news:
+				Category cat1 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(12);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat1.getLink(), cat1.getParent(), R.drawable.comment_news, true);
+				break;
 				
-			}
-		});
-		
-		jawla.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(13);
-				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.jawla_sahafa, false);
+			case R.id.jawla_sahafa:
+				Category cat2 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(13);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat2.getLink(), cat2.getParent(), R.drawable.jawla_sahafa, false);
+				break;
 				
-			}
-		});
-		
-		takarir.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
+			case R.id.takarir_news:
+				Category cat3 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(14);
+				((MainActivity) getActivity()).gotoListNewsFragment(cat3.getLink(), cat3.getParent(), R.drawable.takarir_news, false);
+				break;
 
-				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(14);
-				((MainActivity) getActivity()).gotoListNewsFragment(cat.getLink(), cat.getParent(), R.drawable.takarir_news, false);
-				
-			}
-		});
-
-		diaries.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
+			case R.id.thawra_diaries:
 				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(15);
-				
+
 				Bundle args = new Bundle();
 				args.putString(ListNewsFragment.ARG_ARTICLE_LINK, cat.getLink());
 				args.putString(ListNewsFragment.ARG_ARTICLE_CATEGORY, cat.getParent());
-				
-				String fragTAG = (String) v.getTag();
-				((MainActivity) getActivity()).gotoFragmentByTag(fragTAG, args);
-				
+
+				((MainActivity) getActivity()).gotoFragmentByTag(MainActivity.THAWRA_DIARIES, args);
+				break;
+			default:
+				break;
 			}
-		});
-		
-		
-		return rootView;
+
+		}
+		case MotionEvent.ACTION_CANCEL: {
+			Button view = (Button) v;
+			view.getBackground().clearColorFilter();
+			view.invalidate();
+			break;
+		}
+		}
+		return true;
 	}
 
 }

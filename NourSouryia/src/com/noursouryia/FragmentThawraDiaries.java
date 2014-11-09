@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
@@ -49,16 +48,14 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private LinearLayout all_layout ,month_calendar_layout;
 	private RelativeLayout calendar_layout ;
 
-	private TextView monthText, yearText, txv_first , txv_title, txv_second;
-	private ImageView nextMonth, previousMonth, img_first;
+	private TextView monthText, yearText, txv_title;
+	private ImageView nextMonth, previousMonth;
 	private GridView gridview ;
 	
 	private ArrayList<Article> articles = new ArrayList<Article>();
-	private Article currentArticle;
 	private LinearLayout loading;
 	private boolean isFirstStart = true;
 	private boolean isCanceled = false;
-	private int pageNb = 0;
 	
 	private String chosenDate;
 	
@@ -107,11 +104,6 @@ public class FragmentThawraDiaries extends BaseFragment{
 		monthText = (TextView) rootView.findViewById(R.id.month_text);
 		yearText = (TextView) rootView.findViewById(R.id.year_text);
 
-		txv_first = (TextView) rootView.findViewById(R.id.txv_first);
-		img_first = (ImageView) rootView.findViewById(R.id.img_first);
-		txv_title = (TextView) rootView.findViewById(R.id.txv_title);
-		txv_second = (TextView) rootView.findViewById(R.id.txv_second);
-		
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 
 		all_layout = (LinearLayout) rootView.findViewById(R.id.all_layout);
@@ -330,29 +322,6 @@ public class FragmentThawraDiaries extends BaseFragment{
 			}
 		}.execute();
 
-	}
-	
-	private void pickCurrentArticleByDate(String date){
-//		for(Article article : articles){
-//			if(article.getCreated().equals(date))
-//			{
-//				Log.i(TAG, "article.getCreated() " + article.getCreated() + " ... date " + date);
-//				currentArticle = article;
-//				break;
-//			}
-//		}
-		
-		if(articles.size() > 0){
-			currentArticle = articles.get(0);
-			String[] contentParts = ArticleFragment.splitContent(currentArticle.getBody());
-
-			txv_title.setText(currentArticle.getTitle());
-			txv_first.setText(ArticleFragment.formatText(contentParts[0]));
-			txv_second.setText(ArticleFragment.formatText(contentParts[1]));
-
-			if(currentArticle.getFilePath().size() > 0)
-				ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_first);
-		}
 	}
 	
 	private void setEnabled(boolean enabled){

@@ -2,11 +2,13 @@ package com.noursouryia;
 
 import java.io.File;
 
+import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -130,25 +132,48 @@ public class ArticleFragment extends BaseFragment {
 			initData();
 //		}
 		
-		btn_share.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// Share Article
-			}
-		});
+		btn_share.setOnTouchListener(this);
+		btn_comments.setOnTouchListener(this);
 		
-		btn_comments.setOnClickListener(new OnClickListener() {
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN: {
+			Button view = (Button) v;
+			view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+			v.invalidate();
+			break;
+		}
+		case MotionEvent.ACTION_UP: {
 
-			@Override
-			public void onClick(View arg0) {
-				// go to comments
-				//				((MainActivity)getActivity()).gotoCommentsFragment(6687);	
+			Button view = (Button) v;
+			view.getBackground().clearColorFilter();
+			view.invalidate();
+
+			switch (v.getId()) {
+			case R.id.btn_share:
+				shareArticle();
+				break;
+				
+			case R.id.btn_comments:
 				((MainActivity)getActivity()).gotoCommentsFragment(currentArticle.getNid());
-				//				((MainActivity)getActivity()).gotoAddCommentFragment(currentArticle.getNid());
+				break;
+
+			default:
+				break;
 			}
-		});
-		
+
+		}
+		case MotionEvent.ACTION_CANCEL: {
+			Button view = (Button) v;
+			view.getBackground().clearColorFilter();
+			view.invalidate();
+			break;
+		}
+		}
+		return true;
 	}
 
 	private void initData(){
@@ -198,6 +223,23 @@ public class ArticleFragment extends BaseFragment {
 		return body;
 		
 		
+	}
+	
+	private void shareArticle(){
+
+		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sharingIntent.setType("text/plain");
+		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, currentArticle.getTitle());
+		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, formatText(currentArticle.getBody()));
+		
+//		if(currentArticle.getFilePath().size() > 0){
+//			String imageUri = ImageLoader.getInstance().getLoadingUriForView(img_article);
+//			Log.v(TAG, "imageUri " + imageUri);
+//			sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, imageUri);
+//		}
+		
+		startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
+
 	}
 	
 }

@@ -3,12 +3,13 @@ package com.noursouryia;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -122,15 +123,44 @@ public class CommentsFragment extends BaseFragment {
 			}
 		});
 
-		btn_add_comment.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// Add comment
-				((MainActivity)getActivity()).gotoAddCommentFragment(articleNID);
-			}
-		});
+		btn_add_comment.setOnTouchListener(this);
 	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN: {
+			Button view = (Button) v;
+			view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+			v.invalidate();
+			break;
+		}
+		case MotionEvent.ACTION_UP: {
+
+			Button view = (Button) v;
+			view.getBackground().clearColorFilter();
+			view.invalidate();
+
+			switch (v.getId()) {
+			case R.id.btn_add_comment:
+				((MainActivity)getActivity()).gotoAddCommentFragment(articleNID);
+				break;
+				
+			default:
+				break;
+			}
+
+		}
+		case MotionEvent.ACTION_CANCEL: {
+			Button view = (Button) v;
+			view.getBackground().clearColorFilter();
+			view.invalidate();
+			break;
+		}
+		}
+		return true;
+	}
+
 
 	private void initData(){
 
