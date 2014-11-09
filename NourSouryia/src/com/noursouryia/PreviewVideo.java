@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 public class PreviewVideo extends Activity {
@@ -21,6 +22,15 @@ public class PreviewVideo extends Activity {
 
 		back = (ImageView) findViewById(R.id.back);
 		video_shower = (WebView) findViewById(R.id.video_shower);
+		video_shower.getSettings().setJavaScriptEnabled(true);
+		
+		video_shower.setWebViewClient(new WebViewClient() {
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				view.loadUrl(url);
+				return true;
+			}
+        });
 
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();

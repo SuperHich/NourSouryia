@@ -35,13 +35,10 @@
         </activity>
         <activity
             android:name=".AboutNS"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize">
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".PreviewVideo"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize">
+            android:name=".PreviewVideo">
         </activity>
 
     </application>
