@@ -17,20 +17,24 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp" 
-            android:maxHeight="150dp"/>
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds= "true"
+            android:scaleType="fitCenter"
+            android:maxHeight="120dp" />
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_above="@id/img_article"
             android:layout_marginBottom="10dp"
+            android:gravity="top|right"
             android:padding="15dp" >
 
             <TextView
                 android:id="@+id/txv_article_content1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="top|right"
                 android:text="@string/lorem_ipsum"
                 android:textColor="@color/news_text"
                 android:textSize="12sp" />

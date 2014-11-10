@@ -39,7 +39,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 	public static final String ARG_ARTICLE_LINK 	= "article_link";
 	public static final String ARG_ARTICLE_CATEGORY = "article_category";
 	public static final String ARG_ARTICLE_TITLE 	= "article_title";
-	
+
 	public Calendar month;
 	public CalendarAdapter adapter;
 	public Handler handler;
@@ -51,38 +51,38 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private TextView monthText, yearText, txv_title;
 	private ImageView nextMonth, previousMonth;
 	private GridView gridview ;
-	
+
 	private ArrayList<Article> articles = new ArrayList<Article>();
 	private LinearLayout loading;
 	private boolean isFirstStart = true;
 	private boolean isCanceled = false;
-	
+
 	private String chosenDate;
-	
+
 	private String link, category; 
-	
+
 	private ArticlePagerAdapter mAdapter;
 	private ViewPager mPager;
 	private PageIndicator mIndicator;
-	
+
 	private RelativeLayout pager_layout;
-	
+
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		
+
 		isCanceled = true;
-		
+
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		if(getArguments() != null){
 			link 		= getArguments().getString(ARG_ARTICLE_LINK);
 			category 	= getArguments().getString(ARG_ARTICLE_CATEGORY);
-//			imageId 	= getArguments().getInt(ARG_ARTICLE_TITLE);
+			//			imageId 	= getArguments().getInt(ARG_ARTICLE_TITLE);
 		}
 	}
 
@@ -95,12 +95,12 @@ public class FragmentThawraDiaries extends BaseFragment{
 		mPager = (ViewPager) rootView.findViewById(R.id.view_pager);
 		mIndicator = (CirclePageIndicator) rootView.findViewById(R.id.indicator);
 		pager_layout = (RelativeLayout) rootView.findViewById(R.id.pager_layout);
-		
+
 		mAdapter = new ArticlePagerAdapter(getFragmentManager(), articles);
 		mPager.setAdapter(mAdapter);
 		mPager.setSaveEnabled(false);
 		mIndicator.setViewPager(mPager);
-		
+
 		monthText = (TextView) rootView.findViewById(R.id.month_text);
 		yearText = (TextView) rootView.findViewById(R.id.year_text);
 
@@ -116,16 +116,17 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 		nextMonth.bringToFront();
 		previousMonth.bringToFront();
-		
+
 		rootlayout.bringChildToFront(all_layout);
 		all_layout.bringChildToFront(calendar_layout);
 		all_layout.bringChildToFront(previousMonth);
-		
-		
-//		previousMonth.bringToFront();
-//		mSlidingLayer.invalidate();
-//		all_layout.invalidate();
-//		month_calendar_layout.invalidate();
+
+
+
+		//		previousMonth.bringToFront();
+		//		mSlidingLayer.invalidate();
+		//		all_layout.invalidate();
+		//		month_calendar_layout.invalidate();
 
 		monthText.setTypeface(NSFonts.getNoorFont());
 		yearText.setTypeface(NSFonts.getLatin());
@@ -183,11 +184,11 @@ public class FragmentThawraDiaries extends BaseFragment{
 					if(day.length()==1) {
 						day = "0"+day;
 					}
-					
+
 					month.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
-					
+
 					Calendar today = Calendar.getInstance();
-					
+
 					if(month.compareTo(today) < 1){
 
 						// return chosen date as string format 
@@ -202,7 +203,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 			}
 		});
-		
+
 		if(chosenDate == null)
 			chosenDate =  android.text.format.DateFormat.format("yyyy-MM-dd", month).toString();
 
@@ -273,9 +274,9 @@ public class FragmentThawraDiaries extends BaseFragment{
 			@Override
 			protected void onPreExecute() {
 				loading.setVisibility(View.VISIBLE);
-//				all_layout.setVisibility(View.GONE);
+				//				all_layout.setVisibility(View.GONE);
 				pager_layout.setVisibility(View.GONE);
-				
+
 				setEnabled(false);
 			}
 
@@ -310,7 +311,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 					return;
 
 				loading.setVisibility(View.GONE);
-//				all_layout.setVisibility(View.VISIBLE);
+				//				all_layout.setVisibility(View.VISIBLE);
 				pager_layout.setVisibility(View.VISIBLE);
 				setEnabled(true);
 
@@ -319,20 +320,36 @@ public class FragmentThawraDiaries extends BaseFragment{
 					articles.addAll(result);
 					mAdapter.notifyDataSetChanged();
 					mIndicator.setCurrentItem(articles.size()-1);
-//					pickCurrentArticleByDate(chosenDate);
+					//					pickCurrentArticleByDate(chosenDate);
 				}else
 					((MainActivity)getActivity()).showConnectionErrorPopup();
 
-//				toggleEmptyMessage();
+				//				toggleEmptyMessage();
 			}
 		}.execute();
 
 	}
-	
+
 	private void setEnabled(boolean enabled){
 		nextMonth.setEnabled(enabled);
 		previousMonth.setEnabled(enabled);
 		gridview.setEnabled(enabled);
+	}
+
+	@Override 
+	public void onSlidingLayerOpened() {
+		super.onSlidingLayerOpened();
+
+		mSlidingLayer.bringToFront();
+
+	}
+	@Override
+	public void onSlidingLayerClosed() {
+		super.onSlidingLayerClosed();
+
+		rootlayout.bringChildToFront(all_layout);
+		all_layout.bringChildToFront(calendar_layout);
+		all_layout.bringChildToFront(previousMonth);
 	}
 
 }

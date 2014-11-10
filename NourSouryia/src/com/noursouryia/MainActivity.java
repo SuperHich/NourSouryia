@@ -555,6 +555,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		hideOpenerTop();
 		hideImageTitle();
+		
 	}
 
 
