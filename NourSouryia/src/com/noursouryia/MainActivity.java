@@ -85,7 +85,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private MenuCustomAdapter adapter;
 
 	private NSManager mManager;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -582,7 +582,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	protected void setImageTitle(int imgResource){
 		img_title.setImageResource(imgResource);
 	}
-
+	
 	private boolean isOnLineModePopup = false;
 	protected void showOnLineModePopup(){
 		if(!isOnLineModePopup)

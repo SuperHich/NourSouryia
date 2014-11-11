@@ -1,6 +1,7 @@
 package com.noursouryia.utils;
 
 
+import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,7 +39,27 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	private Button opener_bottom, btn_news, btn_folders, btn_researches, btn_writers, btn_articles;
 	private int height_halfScreen ;
 	protected SlidingLayer mSlidingLayer;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+		if(!(this instanceof HomeFragment)){
+			NSManager nsManager = NSManager.getInstance(getActivity());
+			Log.i(TAG,  "nsManager " + nsManager);
+			Log.i(TAG,  "nsManager " + nsManager.getFragmentEnabler());
+			nsManager.getFragmentEnabler().setEnabled(false);
+		}
+	}
 
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		
+		if(!(this instanceof HomeFragment))
+			NSManager.getInstance(getActivity()).getFragmentEnabler().setEnabled(true);
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -42,19 +42,20 @@
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/btn_lamp" />
 
-<!--                     <Button -->
-<!--                         android:id="@+id/btn_settings" -->
-<!--                         android:layout_width="30dp" -->
-<!--                         android:layout_height="30dp" -->
-<!--                         android:layout_marginLeft="10dp" -->
-<!--                         android:background="@drawable/btn_settings" /> -->
+                    <!-- <Button -->
+                    <!-- android:id="@+id/btn_settings" -->
+                    <!-- android:layout_width="30dp" -->
+                    <!-- android:layout_height="30dp" -->
+                    <!-- android:layout_marginLeft="10dp" -->
+                    <!-- android:background="@drawable/btn_settings" /> -->
 
-<!--                     <Button -->
-<!--                         android:id="@+id/btn_rss" -->
-<!--                         android:layout_width="30dp" -->
-<!--                         android:layout_height="30dp" -->
-<!--                         android:layout_marginLeft="10dp" -->
-<!--                         android:background="@drawable/btn_rss" /> -->
+
+                    <!-- <Button -->
+                    <!-- android:id="@+id/btn_rss" -->
+                    <!-- android:layout_width="30dp" -->
+                    <!-- android:layout_height="30dp" -->
+                    <!-- android:layout_marginLeft="10dp" -->
+                    <!-- android:background="@drawable/btn_rss" /> -->
                 </LinearLayout>
 
                 <Button
@@ -65,30 +66,31 @@
                     android:layout_centerVertical="true"
                     android:background="@drawable/btn_menu" />
             </RelativeLayout>
-            
-            <View 
+
+            <View
                 android:id="@+id/headerSeparator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#FFF"
                 android:layout_below="@id/top"
-                android:visibility="gone"/>
+                android:background="#FFF"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/content_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/top" 
-                android:layout_marginTop="1dp">
+                android:layout_below="@id/top"
+                android:layout_marginTop="1dp" >
             </RelativeLayout>
-            
+
             <RelativeLayout
                 android:id="@+id/content_frame_second"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/top" 
-                android:layout_marginTop="1dp">
+                android:layout_below="@id/top"
+                android:layout_marginTop="1dp" >
             </RelativeLayout>
+
         </RelativeLayout>
 
         <LinearLayout
@@ -135,19 +137,19 @@
         android:id="@+id/btn_opener_top"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/ctrl_open_bottom" 
-        android:visibility="gone"/>
-    
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ctrl_open_bottom"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/img_title"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="40dp"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/btn_folders"
         android:visibility="gone" />
-    
+
 </RelativeLayout>

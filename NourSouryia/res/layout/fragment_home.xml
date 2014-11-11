@@ -8,9 +8,9 @@
     <RelativeLayout
         android:id="@+id/home_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:visibility="visible">
+        android:visibility="visible" >
 
         <ImageView
             android:id="@+id/top_img"
@@ -80,14 +80,21 @@
                 android:background="@drawable/paginate_right_selector" />
         </RelativeLayout>
     </RelativeLayout>
-    
-    <include 
+
+    <include
         android:id="@+id/media_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/fragment_medias"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        layout="@layout/fragment_medias"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/hidden_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        android:visibility="gone" />
 
     <com.slidinglayer.SlidingLayer
         xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"

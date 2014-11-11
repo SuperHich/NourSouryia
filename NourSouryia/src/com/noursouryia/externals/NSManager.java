@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.noursouryia.IFragmentEnabler;
 import com.noursouryia.adapters.IFragmentNotifier;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Author;
@@ -95,6 +96,8 @@ public class NSManager {
 	private Article currentArticle;
 	
 	private IMenuOpener menuOpener;
+	
+	private IFragmentEnabler fragmentEnabler;
 	
 	public NSManager(Context context) {
 		
@@ -620,6 +623,14 @@ public class NSManager {
 
 	public void setMenuOpener(IMenuOpener menuOpener) {
 		this.menuOpener = menuOpener;
+	}
+
+	public IFragmentEnabler getFragmentEnabler() {
+		return fragmentEnabler;
+	}
+
+	public void setFragmentEnabler(IFragmentEnabler fragmentEnabler) {
+		this.fragmentEnabler = fragmentEnabler;
 	}
 
 }

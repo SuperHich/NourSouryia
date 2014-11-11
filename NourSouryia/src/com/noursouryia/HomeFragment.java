@@ -56,7 +56,7 @@ import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
 
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 	private ImageButton btn_folder_sound, btn_folder_photos, btn_folder_video, item_image ;
 	private TextView item_text ;
@@ -98,6 +98,8 @@ public class HomeFragment extends BaseFragment {
 	private ArrayList<Article> mArticles = new ArrayList<Article>();
 
 	private boolean isFirstStart = true;
+	
+	private View hidden_view;
 
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -126,6 +128,15 @@ public class HomeFragment extends BaseFragment {
 
 		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_home, container, false);
 
+		hidden_view = (View) rootView.findViewById(R.id.hidden_view);
+		hidden_view.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				
+			}
+		});
+		
 		home_layout = (RelativeLayout) rootView.findViewById(R.id.home_layout);
 		media_layout = (RelativeLayout) rootView.findViewById(R.id.media_layout);
 		slider_photos = (RelativeLayout) rootView.findViewById(R.id.slider_photos);
@@ -355,8 +366,10 @@ public class HomeFragment extends BaseFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		mManager = new NSManager(getActivity());
-
+		mManager = NSManager.getInstance(getActivity());
+		mManager.setFragmentEnabler(this);
+		Log.v(TAG, " setFragmentEnabler ");
+		
 		initData();
 		initMediaData();
 
@@ -664,7 +677,7 @@ public class HomeFragment extends BaseFragment {
 
 	private void previousFeed(){
 
-		if(currentFeedPosition - 1 >= 0 ){
+		if(currentFeedPosition - 1 >= 0){
 			currentFeedPosition -= 1;
 			showFeed();
 		}
@@ -964,6 +977,22 @@ public class HomeFragment extends BaseFragment {
 			String url_image = all_photo_URLS.get(gallery_position + 1);
 			ImageLoader.getInstance().displayImage(url_image, slide_shower);
 		}
+	}
+
+	public void showHiddenView(){
+		hidden_view.setVisibility(View.VISIBLE);
+	}
+
+	public void hideHiddenView(){
+		hidden_view.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void setEnabled(boolean enable) {
+		if(enable)
+			hideHiddenView();
+		else
+			showHiddenView();
 	}
 
 }
