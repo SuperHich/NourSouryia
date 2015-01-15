@@ -111,7 +111,7 @@ public class SplashHome extends NSActivity {
 
 					if(Utils.isOnline(SplashHome.this) && mManager.isOnlineMode())
 					{
-						types =	NSManager.getInstance(SplashHome.this).getTypes(); // OK
+						types =	mManager.getTypes(); // OK
 
 						for(Type t : types){
 							NourSouryiaDB.insertOrUpdateType(t);

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -144,7 +145,11 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos", "revnews", "research", "article");
+//		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos", "revnews", "research", "article");
+		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos");
+		mTypes.addAll(getAnnexeTypes());
+		mTypes.add(getMediaType());
+		
 		adapter = new MenuCustomAdapter(this, mTypes);
 
 		mDrawerList.setAdapter(adapter);
@@ -157,8 +162,17 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					long arg3) {
 
 				Type selectedType = mTypes.get(arg2);
+				
 				if(selectedType.getCategories().size() == 0){
-					gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn(), selectedType.getNameAr());
+					if(selectedType.getLink().equals(NSManager.URL_AUTHORS))
+						onTypeItemClicked(AUTHORS_FRAGMENT, null);
+					else if(selectedType.getLink().equals(NSManager.URL_FILES))
+						onTypeItemClicked(FILES_FRAGMENT, null);
+//					else if(selectedType.getLink().equals(NSManager.URL_POLL))
+//						onTypeItemClicked(POLLS_FRAGMENT, null);
+					else
+						gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn(), selectedType.getNameAr());
+					
 					mDrawerLayout.closeDrawer(mDrawerLinear);
 				}
 				return false;
@@ -172,8 +186,19 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					int groupPosition, int childPosition, long id) {
 
 				Category selectedCategory = mTypes.get(groupPosition).getCategories().get(childPosition);
-				gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName(), selectedCategory.getName());
-
+				if(groupPosition < mTypes.size() - 1){
+					gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName(), selectedCategory.getName());
+				}else{
+					// Media group clicked
+					
+					if(currentFragment != null){
+						emptyBackStack();
+					}
+					
+					mManager.getFragmentEnabler().onFolderClicked(selectedCategory.getTid());
+					
+				}
+				
 				mDrawerLayout.closeDrawer(mDrawerLinear);
 
 				return false;
@@ -553,8 +578,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public void onBackPressed() {
 		super.onBackPressed();
 
-		hideOpenerTop();
-		hideImageTitle();
+//		hideOpenerTop();
+//		hideImageTitle();
 		
 	}
 
@@ -645,5 +670,92 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
 		startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
 
+	}
+	
+	private ArrayList<Type> getAnnexeTypes(){
+		ArrayList<Type> types = new ArrayList<Type>();
+		
+		Type t1 = new Type();
+		t1.setLink(NSManager.URL_AUTHORS);
+		t1.setNameEn("authors");
+		t1.setNameAr(getString(R.string.menu_writers));
+		
+		Type t2 = new Type();
+		t2.setLink(NSManager.URL_FILES);
+		t2.setNameEn("files");
+		t2.setNameAr(getString(R.string.menu_files));
+		
+		Type t3 = new Type();
+		t3.setLink(NSManager.URL_POLL);
+		t3.setNameEn("polls");
+		t3.setNameAr(getString(R.string.menu_polls));
+		
+		types.add(t1);
+		types.add(t2);
+		types.add(t3);
+		
+		return types;
+	}
+	
+	private Type getMediaType(){
+		Type mediaType = null;
+		try{
+			mediaType = new Type();
+			mediaType.setLink("#");
+			mediaType.setNameEn("mediaType");
+			mediaType.setNameAr(getString(R.string.medias_library));
+
+			Type t1 = NourSouryiaDB.getTypeByName("photos");
+			Type t2 = NourSouryiaDB.getTypeByName("sounds");
+			Type t3 = NourSouryiaDB.getTypeByName("videos");
+
+			ArrayList<Category> categories = new ArrayList<Category>();
+			Category cat1 = new Category();
+			cat1.setLink(t1.getLink());
+			cat1.setName(t1.getNameAr());
+			cat1.setTid(HomeFragment.PHOTOS_FOLDER_SELECTED);
+			categories.add(cat1);
+
+			Category cat2 = new Category();
+			cat2.setLink(t2.getLink());
+			cat2.setName(t2.getNameAr());
+			cat2.setTid(HomeFragment.SOUNDS_FOLDER_SELECTED);
+			categories.add(cat2);
+
+			Category cat3 = new Category();
+			cat3.setLink(t3.getLink());
+			cat3.setName(t3.getNameAr());
+			cat3.setTid(HomeFragment.VIDEOS_FOLDER_SELECTED);
+			categories.add(cat3);
+
+			mediaType.setCategories(categories);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		return mediaType;
+	}
+	
+	public void emptyBackStack() {
+		popBackStackTillEntry( 0 );
+	}
+	
+	/**
+	 * 
+	 * @param entryIndex
+	 *            is the index of fragment to be popped to, for example the
+	 *            first fragment will have a index 0;
+	 */
+	public void popBackStackTillEntry( int entryIndex ) {
+		if ( getSupportFragmentManager() == null )
+			return;
+		if ( getSupportFragmentManager().getBackStackEntryCount() <= entryIndex )
+			return;
+		BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(
+				entryIndex );
+		if ( entry != null ) {
+			getSupportFragmentManager().popBackStack( entry.getId(),
+					FragmentManager.POP_BACK_STACK_INCLUSIVE );
+		}
 	}
 }

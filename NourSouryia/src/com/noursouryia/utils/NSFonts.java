@@ -17,7 +17,8 @@ public class NSFonts {
 	
 	public void Init(Context context){
 		arabic  				= Typeface.createFromAsset(context.getAssets(), "fonts/Arabic.TTF");
-		noorFont  				= Typeface.createFromAsset(context.getAssets(), "fonts/GE_Dinar_One_Medium.otf");
+//		noorFont  				= Typeface.createFromAsset(context.getAssets(), "fonts/GE_Dinar_One_Medium.otf");
+		noorFont  				= Typeface.createFromAsset(context.getAssets(), "fonts/KUFAH.TTF");
 		setLatin(Typeface.createFromAsset(context.getAssets(), "fonts/DroidKufi-Regular.ttf"));
 	}
 

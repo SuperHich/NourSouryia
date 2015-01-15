@@ -55,6 +55,19 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		
 		if(!(this instanceof HomeFragment))
 			NSManager.getInstance(getActivity()).getFragmentEnabler().setEnabled(true);
+		
+		if(this instanceof FilesFragment
+				|| this instanceof AuthorsFragment 
+				|| this instanceof NewsFragment
+				|| this instanceof FragmentThawraDiaries
+				|| this instanceof ListArticlesFragment
+				|| this instanceof ListNewsFragment
+				|| this instanceof SearchArticlesFragment){
+			((MainActivity) getActivity()).hideOpenerTop();
+			((MainActivity) getActivity()).isTopOpener = false;
+			((MainActivity) getActivity()).hideImageTitle();
+		}
+		
 	}
 	
 	@Override

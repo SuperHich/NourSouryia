@@ -77,9 +77,9 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 	private CustomGridViewAdapter photosGridAdapter, soundsGridAdapter, videosGridAdapter;
 	private VideosListAdapter videoListAdpater ;
 
-	private final static int PHOTOS_FOLDER_SELECTED = 1;
-	private final static int SOUNDS_FOLDER_SELECTED = 2;
-	private final static int VIDEOS_FOLDER_SELECTED = 3;
+	public final static int PHOTOS_FOLDER_SELECTED = 1;
+	public final static int SOUNDS_FOLDER_SELECTED = 2;
+	public final static int VIDEOS_FOLDER_SELECTED = 3;
 
 	private int SELECTED_FOLDER ;
 
@@ -368,8 +368,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 		mManager = NSManager.getInstance(getActivity());
 		mManager.setFragmentEnabler(this);
-		Log.v(TAG, " setFragmentEnabler ");
-		
+
 		initData();
 		initMediaData();
 
@@ -551,9 +550,10 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 					soundsGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, sound_categories);					
 					videosGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, video_categories);	
 
-					gridView.setAdapter(photosGridAdapter);
 					SELECTED_FOLDER = PHOTOS_FOLDER_SELECTED ;
+					gridView.setAdapter(photosGridAdapter);
 					folderPhotosClick();
+					
 				}
 			}
 		}.execute();
@@ -993,6 +993,32 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 			hideHiddenView();
 		else
 			showHiddenView();
+	}
+
+	@Override
+	public void onFolderClicked(int folderId) {
+
+		if(mSlidingLayer.isOpened())
+			mSlidingLayer.closeLayer(true);
+		
+		SELECTED_FOLDER = folderId ;
+		
+		switch (SELECTED_FOLDER) {
+		case PHOTOS_FOLDER_SELECTED:
+			gridView.setAdapter(photosGridAdapter);
+			folderPhotosClick();
+			break;
+		case SOUNDS_FOLDER_SELECTED:
+			gridView.setAdapter(soundsGridAdapter);
+			folderSoundsClick();
+			break;
+		case VIDEOS_FOLDER_SELECTED:
+			gridView.setAdapter(videosGridAdapter);
+			folderVideosClick();
+			break;
+		default:
+			break;
+		}
 	}
 
 }
