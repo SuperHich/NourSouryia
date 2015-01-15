@@ -119,13 +119,14 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 			holder.row_bg = (RelativeLayout) convertView.findViewById(R.id.row_bg);
 			holder.expand = (ImageView) convertView.findViewById(R.id.expand);
 			
-			holder.tv.setTypeface(NSFonts.getNoorFont());
+			holder.tv.setTypeface(NSFonts.getKufah());
 
 			holder.row_bg.setBackgroundResource(R.drawable.drawer_list_selector);
 			
 			convertView.setTag(holder);
 		}
 		else {
+			
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
@@ -162,7 +163,7 @@ public class MenuCustomAdapter extends BaseExpandableListAdapter implements OnTo
 			holder.row_bg = (RelativeLayout) convertView.findViewById(R.id.row_bg);
 			holder.expand = (ImageView) convertView.findViewById(R.id.expand);
 			
-			holder.tv.setTypeface(NSFonts.getNoorFont());
+			holder.tv.setTypeface(NSFonts.getKufah());
 			
 			holder.row_bg.setBackgroundResource(R.drawable.drawer_subitem_selector);
 			holder.puce.setImageResource(R.drawable.blue_puce);

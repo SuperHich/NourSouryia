@@ -36,7 +36,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	public final String TAG = getClass().getSimpleName();
 
 	protected RelativeLayout rootView;
-	private Button opener_bottom, btn_news, btn_folders, btn_researches, btn_writers, btn_articles;
+	private Button opener_bottom, btn_news, btn_tahdhib, btn_researches, btn_letters, btn_opinions;
 	private int height_halfScreen ;
 	protected SlidingLayer mSlidingLayer;
 	
@@ -87,10 +87,10 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			NSManager.getInstance(getActivity()).setMenuOpener(this);
 
 			btn_news 		= (Button) view.findViewById(R.id.btn_news); 
-			btn_folders 	= (Button) view.findViewById(R.id.btn_folders);
+			btn_tahdhib 	= (Button) view.findViewById(R.id.btn_tahdhib);
 			btn_researches 	= (Button) view.findViewById(R.id.btn_researches); 
-			btn_writers 	= (Button) view.findViewById(R.id.btn_writers);
-			btn_articles 	= (Button) view.findViewById(R.id.btn_articles);
+			btn_letters 	= (Button) view.findViewById(R.id.btn_letters);
+			btn_opinions 	= (Button) view.findViewById(R.id.btn_opinions);
 
 			opener_bottom 	= (Button) view.findViewById(R.id.opener_bottom);
 
@@ -153,16 +153,16 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 
 
 			btn_news.setOnTouchListener(this); 
-			btn_folders.setOnTouchListener(this);
+			btn_tahdhib.setOnTouchListener(this);
 			btn_researches.setOnTouchListener(this);
-			btn_writers.setOnTouchListener(this);
-			btn_articles.setOnTouchListener(this);
+			btn_letters.setOnTouchListener(this);
+			btn_opinions.setOnTouchListener(this);
 
 			btn_news.setTag(MainActivity.NEWS_FRAGMENT); 
-			btn_folders.setTag(MainActivity.FILES_FRAGMENT);
+			btn_tahdhib.setTag(MainActivity.TAHDHIB_FRAGMENT);
 			btn_researches.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
-			btn_writers.setTag(MainActivity.AUTHORS_FRAGMENT);
-			btn_articles.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
+			btn_letters.setTag(MainActivity.LETTERS_FRAGMENT);
+			btn_opinions.setTag(MainActivity.OPINIONS_FRAGMENT);
 
 			//		if(this instanceof HomeFragment){
 			//			// start with opened sliding layer
@@ -207,10 +207,10 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			resBtn = status ? R.drawable.ctrl_close_bottom : R.drawable.ctrl_open_bottom;
 
 		btn_news.setVisibility(visibility);
-		btn_folders.setVisibility(visibility);
+		btn_tahdhib.setVisibility(visibility);
 		btn_researches.setVisibility(visibility);
-		btn_writers.setVisibility(visibility);
-		btn_articles.setVisibility(visibility);
+		btn_letters.setVisibility(visibility);
+		btn_opinions.setVisibility(visibility);
 
 		opener_bottom.setBackgroundResource(resBtn);
 
@@ -231,7 +231,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			Type type = null;
 			if(v == btn_researches)
 				type = ((MainActivity) getActivity()).NourSouryiaDB.getTypeByName("research");
-			else if(v == btn_articles)
+			else if(v == btn_opinions)
 				type = ((MainActivity) getActivity()).NourSouryiaDB.getTypeByName("article");
 
 			if(type != null){

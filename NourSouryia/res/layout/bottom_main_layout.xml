@@ -26,12 +26,12 @@
         android:background="@drawable/btn_news" />
 
     <Button
-        android:id="@+id/btn_folders"
+        android:id="@+id/btn_tahdhib"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:background="@drawable/btn_folders" />
+        android:background="@drawable/btn_tahdhib" />
 
     <Button
         android:id="@+id/btn_researches"
@@ -43,23 +43,23 @@
         android:background="@drawable/btn_researches" />
 
     <Button
-        android:id="@+id/btn_writers"
+        android:id="@+id/btn_letters"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/btn_folders"
+        android:layout_below="@id/btn_tahdhib"
         android:layout_marginRight="55dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn_writers" />
+        android:background="@drawable/btn_letters" />
 
     <Button
-        android:id="@+id/btn_articles"
+        android:id="@+id/btn_opinions"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_below="@id/btn_researches"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-35dp"
-        android:background="@drawable/btn_articles" />
+        android:background="@drawable/btn_thoughts" />
 
     <RelativeLayout
         android:layout_width="match_parent"

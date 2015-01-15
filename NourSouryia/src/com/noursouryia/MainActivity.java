@@ -56,6 +56,10 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String SEARCH_FRAGMENT 			= "search_fragment";
 	public static final String THAWRA_DIARIES 			= "thawra_diaries";
 	public static final String LIST_NEWS_FRAGMENT 		= "list_news_fragment";
+	public static final String OPINIONS_FRAGMENT 		= "opinions_fragment";
+	public static final String LETTERS_FRAGMENT 		= "letters_fragment";
+	public static final String TAHDHIB_FRAGMENT 		= "tahdhib_fragment";
+
 
 	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
 
@@ -86,7 +90,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private MenuCustomAdapter adapter;
 
 	private NSManager mManager;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -145,11 +149,11 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-//		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos", "revnews", "research", "article");
+		//		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos", "revnews", "research", "article");
 		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos");
 		mTypes.addAll(getAnnexeTypes());
 		mTypes.add(getMediaType());
-		
+
 		adapter = new MenuCustomAdapter(this, mTypes);
 
 		mDrawerList.setAdapter(adapter);
@@ -162,17 +166,17 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					long arg3) {
 
 				Type selectedType = mTypes.get(arg2);
-				
+
 				if(selectedType.getCategories().size() == 0){
 					if(selectedType.getLink().equals(NSManager.URL_AUTHORS))
 						onTypeItemClicked(AUTHORS_FRAGMENT, null);
 					else if(selectedType.getLink().equals(NSManager.URL_FILES))
 						onTypeItemClicked(FILES_FRAGMENT, null);
-//					else if(selectedType.getLink().equals(NSManager.URL_POLL))
-//						onTypeItemClicked(POLLS_FRAGMENT, null);
+					//					else if(selectedType.getLink().equals(NSManager.URL_POLL))
+					//						onTypeItemClicked(POLLS_FRAGMENT, null);
 					else
 						gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn(), selectedType.getNameAr());
-					
+
 					mDrawerLayout.closeDrawer(mDrawerLinear);
 				}
 				return false;
@@ -190,15 +194,15 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName(), selectedCategory.getName());
 				}else{
 					// Media group clicked
-					
+
 					if(currentFragment != null){
 						emptyBackStack();
 					}
-					
+
 					mManager.getFragmentEnabler().onFolderClicked(selectedCategory.getTid());
-					
+
 				}
-				
+
 				mDrawerLayout.closeDrawer(mDrawerLinear);
 
 				return false;
@@ -341,6 +345,12 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new FragmentThawraDiaries();
 		else if(fragTAG.equals(LIST_NEWS_FRAGMENT))
 			return new ListNewsFragment();
+		else if(fragTAG.equals(TAHDHIB_FRAGMENT))
+			return new TahdhibFragment();
+		else if(fragTAG.equals(OPINIONS_FRAGMENT))
+			return new OpinionsFragment();
+		else if(fragTAG.equals(LETTERS_FRAGMENT))
+			return new LettersFragment();
 
 		return null;
 	}
@@ -578,9 +588,9 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public void onBackPressed() {
 		super.onBackPressed();
 
-//		hideOpenerTop();
-//		hideImageTitle();
-		
+		//		hideOpenerTop();
+		//		hideImageTitle();
+
 	}
 
 
@@ -607,7 +617,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	protected void setImageTitle(int imgResource){
 		img_title.setImageResource(imgResource);
 	}
-	
+
 	private boolean isOnLineModePopup = false;
 	protected void showOnLineModePopup(){
 		if(!isOnLineModePopup)
@@ -671,32 +681,32 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
 
 	}
-	
+
 	private ArrayList<Type> getAnnexeTypes(){
 		ArrayList<Type> types = new ArrayList<Type>();
-		
+
 		Type t1 = new Type();
 		t1.setLink(NSManager.URL_AUTHORS);
 		t1.setNameEn("authors");
 		t1.setNameAr(getString(R.string.menu_writers));
-		
+
 		Type t2 = new Type();
 		t2.setLink(NSManager.URL_FILES);
 		t2.setNameEn("files");
 		t2.setNameAr(getString(R.string.menu_files));
-		
+
 		Type t3 = new Type();
 		t3.setLink(NSManager.URL_POLL);
 		t3.setNameEn("polls");
 		t3.setNameAr(getString(R.string.menu_polls));
-		
+
 		types.add(t1);
 		types.add(t2);
 		types.add(t3);
-		
+
 		return types;
 	}
-	
+
 	private Type getMediaType(){
 		Type mediaType = null;
 		try{
@@ -735,11 +745,11 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		return mediaType;
 	}
-	
+
 	public void emptyBackStack() {
 		popBackStackTillEntry( 0 );
 	}
-	
+
 	/**
 	 * 
 	 * @param entryIndex

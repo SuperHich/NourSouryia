@@ -10,21 +10,28 @@ import android.graphics.Typeface;
  */
 
 public class NSFonts {
-	
-	private static Typeface noorFont;
+
+	private static Typeface noorFont, kufah;
 	private static Typeface arabic;
 	private static Typeface latin;
-	
+
 	public void Init(Context context){
-		arabic  				= Typeface.createFromAsset(context.getAssets(), "fonts/Arabic.TTF");
-//		noorFont  				= Typeface.createFromAsset(context.getAssets(), "fonts/GE_Dinar_One_Medium.otf");
-		noorFont  				= Typeface.createFromAsset(context.getAssets(), "fonts/KUFAH.TTF");
+
+		setArabicFont(Typeface.createFromAsset(context.getAssets(), "fonts/Arabic.TTF"));
+		setNoorFont(Typeface.createFromAsset(context.getAssets(), "fonts/GE_Dinar_One_Medium.otf"));
+		setKufah(Typeface.createFromAsset(context.getAssets(), "fonts/mohammad bold art 1.ttf"));
 		setLatin(Typeface.createFromAsset(context.getAssets(), "fonts/DroidKufi-Regular.ttf"));
+
 	}
 
-	
+
+
 	public static Typeface getArabicFont() {
 		return arabic;
+	}
+
+	public static void setArabicFont(Typeface arabic) {
+		NSFonts.arabic = arabic;
 	}
 
 
@@ -45,5 +52,15 @@ public class NSFonts {
 
 	public static void setLatin(Typeface latin) {
 		NSFonts.latin = latin;
+	}
+
+
+	public static Typeface getKufah() {
+		return kufah;
+	}
+
+
+	public static void setKufah(Typeface kufah) {
+		NSFonts.kufah = kufah;
 	}
 }
