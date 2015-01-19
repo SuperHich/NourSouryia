@@ -24,6 +24,7 @@ import com.noursouryia.ListArticlesFragment;
 import com.noursouryia.ListNewsFragment;
 import com.noursouryia.MainActivity;
 import com.noursouryia.NewsFragment;
+import com.noursouryia.PollsFragment;
 import com.noursouryia.R;
 import com.noursouryia.SearchArticlesFragment;
 import com.noursouryia.entity.Type;
@@ -39,37 +40,38 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	private Button opener_bottom, btn_news, btn_tahdhib, btn_researches, btn_letters, btn_opinions;
 	private int height_halfScreen ;
 	protected SlidingLayer mSlidingLayer;
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		
+
 		if(!(this instanceof HomeFragment))
 			NSManager.getInstance(getActivity()).getFragmentEnabler().setEnabled(false);
-		
+
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		
+
 		if(!(this instanceof HomeFragment))
 			NSManager.getInstance(getActivity()).getFragmentEnabler().setEnabled(true);
-		
+
 		if(this instanceof FilesFragment
 				|| this instanceof AuthorsFragment 
 				|| this instanceof NewsFragment
 				|| this instanceof FragmentThawraDiaries
 				|| this instanceof ListArticlesFragment
 				|| this instanceof ListNewsFragment
+				|| this instanceof PollsFragment
 				|| this instanceof SearchArticlesFragment){
 			((MainActivity) getActivity()).hideOpenerTop();
 			((MainActivity) getActivity()).isTopOpener = false;
 			((MainActivity) getActivity()).hideImageTitle();
 		}
-		
+
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,7 +122,8 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 						|| this instanceof FragmentThawraDiaries
 						|| this instanceof ListArticlesFragment
 						|| this instanceof ListNewsFragment
-						|| this instanceof SearchArticlesFragment){
+						|| this instanceof SearchArticlesFragment
+						|| this instanceof PollsFragment){
 					((MainActivity) getActivity()).showOpenerTop();
 					((MainActivity) getActivity()).isTopOpener = true;
 				}else

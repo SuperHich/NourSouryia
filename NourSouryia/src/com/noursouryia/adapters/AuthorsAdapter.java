@@ -24,6 +24,7 @@ public class AuthorsAdapter extends BaseExpandableListAdapter implements OnTouch
 	IMenuListener listener;
 	ArrayList<Author> authors = new ArrayList<Author>();
 	LayoutInflater inflater;
+	
 	public AuthorsAdapter(Context context, ArrayList<Author> authors)
 	{
 		this.authors = authors;

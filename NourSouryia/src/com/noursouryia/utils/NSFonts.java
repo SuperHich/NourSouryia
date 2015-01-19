@@ -21,7 +21,6 @@ public class NSFonts {
 		setNoorFont(Typeface.createFromAsset(context.getAssets(), "fonts/GE_Dinar_One_Medium.otf"));
 		setKufah(Typeface.createFromAsset(context.getAssets(), "fonts/mohammad bold art 1.ttf"));
 		setLatin(Typeface.createFromAsset(context.getAssets(), "fonts/DroidKufi-Regular.ttf"));
-
 	}
 
 
@@ -63,4 +62,7 @@ public class NSFonts {
 	public static void setKufah(Typeface kufah) {
 		NSFonts.kufah = kufah;
 	}
+
+
+
 }

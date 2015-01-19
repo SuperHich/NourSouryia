@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.noursouryia"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_polls" >
+
+    <LinearLayout
+        android:id="@+id/display_polls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/title_polls"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@color/drawer_bg"
+                android:gravity="center_vertical|right"
+                android:paddingRight="30dp"
+                android:text="@string/menu_polls"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+            
+            <ImageView
+                android:id="@+id/back_charts"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="70dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/back_about" 
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/current_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_polls"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="40dp"
+                android:gravity="center_vertical|right"
+                android:paddingRight="30dp"
+                android:text="@string/menu_polls"
+                android:textColor="@color/blue_top"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/buttons"
+                android:layout_width="160dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <ImageView
+                    android:id="@+id/btn_polls_results"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="7dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_polls_results" />
+
+                <ImageView
+                    android:id="@+id/btn_polls_vote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_polls_vote" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/current_question"
+                android:layout_above="@id/buttons" >
+
+                <TextView
+                    android:id="@+id/txv_emptyList_prop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/empty_list"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+                <ListView
+                    android:id="@+id/listView_prop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:cacheColorHint="@null"
+                    android:divider="@color/gray_2"
+                    android:dividerHeight="0px"
+                    android:gravity="center"
+                    />
+                
+                 <ListView
+                    android:id="@+id/listView_prop_charts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:cacheColorHint="@null"
+                    android:divider="@color/gray_2"
+                    android:dividerHeight="0px"
+                    android:gravity="center"
+                    android:visibility="gone"/>
+                
+            </RelativeLayout>
+            
+            
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_previous_polls"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/title_previous_polls"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/drawer_bg"
+                android:gravity="center_vertical|right"
+                android:paddingRight="30dp"
+                android:text="@string/previous_polls"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txv_emptyList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/empty_list"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/title_previous_polls"
+                android:layout_margin="5dp"
+                android:cacheColorHint="@null"
+                android:divider="@color/gray_2"
+                android:dividerHeight="1px"
+                android:gravity="center" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <com.noursouryia.utils.GifMovieView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            custom:gif="@drawable/loader_cube_rev_colors" >
+        </com.noursouryia.utils.GifMovieView>
+
+        <TextView
+            android:id="@+id/txv_wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/please_wait"
+            android:textColor="@color/drawer_bg"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <com.slidinglayer.SlidingLayer
+        xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
+        android:id="@+id/slidingLayer1"
+        android:layout_width="@dimen/layer_width"
+        android:layout_height="match_parent" >
+
+        <include
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/top_main_layout" />
+    </com.slidinglayer.SlidingLayer>
+
+</RelativeLayout>

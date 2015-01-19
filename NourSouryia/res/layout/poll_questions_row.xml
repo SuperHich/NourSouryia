@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp" >
+
+    <RelativeLayout
+        android:id="@+id/row_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right" >
+
+        <ImageView
+            android:id="@+id/puce"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/q_puce" />
+
+        <TextView
+            android:id="@+id/txv_question"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/puce"
+            android:gravity="right|center_vertical"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:singleLine="true"
+            android:textColor="@color/poll_questions"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

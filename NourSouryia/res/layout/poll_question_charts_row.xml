@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.noursouryia"
+    android:layout_width="match_parent"
+    android:layout_height="50dp" >
+
+    <LinearLayout
+        android:id="@+id/row_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3" >
+
+        <TextView
+            android:id="@+id/txv_percentage"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:singleLine="true"
+            android:textColor="@color/drawer_bg"
+            android:textSize="12sp" />
+
+
+        <com.noursouryia.utils.CustomProgress
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.6" >
+         </com.noursouryia.utils.CustomProgress>
+
+        <TextView
+            android:id="@+id/txv_proposition"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:singleLine="true"
+            android:textColor="@color/drawer_bg"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</RelativeLayout>

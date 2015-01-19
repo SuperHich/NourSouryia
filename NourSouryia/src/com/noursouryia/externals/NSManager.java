@@ -15,6 +15,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationSet;
 
 import com.noursouryia.IFragmentEnabler;
 import com.noursouryia.adapters.IFragmentNotifier;
@@ -287,11 +292,11 @@ public class NSManager {
 	}
 	
 	
-	public Question getQuestionByID(String url) {
+	public Question getQuestionVotes(String questionLink) {
 
 		Question question = new Question();
 		try {
-			JSONObject jObj = jsonParser.getJSONObjectFromUrl(url);
+			JSONObject jObj = jsonParser.getJSONObjectFromUrl(questionLink);
 
 			question.setQid(jObj.getInt(QID));
 			question.setQuestion(jObj.getString(QUESTION));
@@ -599,6 +604,40 @@ public class NSManager {
 		
 		return ts.getTime();
 //		return calendar.getTimeInMillis();
+	}
+	
+	public void switchView(final View firstLayout, final View secondeLayout) {
+		final Animation in = new AlphaAnimation(0.0f, 1.0f);
+		in.setDuration(200);
+
+		final Animation out = new AlphaAnimation(1.0f, 0.0f);
+		out.setDuration(200);
+
+		AnimationSet as = new AnimationSet(true);
+		as.addAnimation(out);
+		in.setStartOffset(200);
+		as.addAnimation(in);
+
+		out.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				firstLayout.setVisibility(View.GONE);
+				secondeLayout.setVisibility(View.VISIBLE);
+				secondeLayout.startAnimation(in);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+		});
+
+		firstLayout.startAnimation(out);
+
 	}
 	
 	public IFragmentNotifier getFragmentNotifier() {

@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.noursouryia.adapters.IMenuListener;
+import com.noursouryia.adapters.IPollPropositionListener;
 import com.noursouryia.adapters.MenuCustomAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Category;
@@ -59,6 +60,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String OPINIONS_FRAGMENT 		= "opinions_fragment";
 	public static final String LETTERS_FRAGMENT 		= "letters_fragment";
 	public static final String TAHDHIB_FRAGMENT 		= "tahdhib_fragment";
+	public static final String POLLS_FRAGMENT 			= "polls_fragment";
+	
 
 
 	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
@@ -172,8 +175,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 						onTypeItemClicked(AUTHORS_FRAGMENT, null);
 					else if(selectedType.getLink().equals(NSManager.URL_FILES))
 						onTypeItemClicked(FILES_FRAGMENT, null);
-					//					else if(selectedType.getLink().equals(NSManager.URL_POLL))
-					//						onTypeItemClicked(POLLS_FRAGMENT, null);
+					else if(selectedType.getLink().equals(NSManager.URL_POLL))
+						onTypeItemClicked(POLLS_FRAGMENT, null);
 					else
 						gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn(), selectedType.getNameAr());
 
@@ -351,6 +354,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new OpinionsFragment();
 		else if(fragTAG.equals(LETTERS_FRAGMENT))
 			return new LettersFragment();
+		else if(fragTAG.equals(POLLS_FRAGMENT))
+			return new PollsFragment();
 
 		return null;
 	}
@@ -768,4 +773,5 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					FragmentManager.POP_BACK_STACK_INCLUSIVE );
 		}
 	}
+
 }
