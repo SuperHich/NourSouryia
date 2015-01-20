@@ -5,12 +5,15 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -51,7 +54,7 @@ public class MediaFragment extends BaseFragment {
 
 	private ImageButton btn_folder_sound, btn_folder_photos, btn_folder_video, item_image ;
 	private TextView item_text ;
-	private ImageView btn_folders_container , slide_shower, logo_sourya;
+	private ImageView btn_folders_container , slide_shower, logo_sourya, btn_element_share , btn_element_download;
 	private Gallery gallery ;
 	private Button paginate_left_slider, paginate_right_slider ;
 	private Type type_photo, type_video, type_sound ;
@@ -70,7 +73,6 @@ public class MediaFragment extends BaseFragment {
 
 	private int SELECTED_FOLDER ;
 
-	private NSFonts mNSFonts ;
 	private NSManager mManager ;
 	private Airy mAiry ;
 
@@ -85,7 +87,6 @@ public class MediaFragment extends BaseFragment {
 
 		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_medias, container, false);
 
-		mNSFonts = new NSFonts() ;
 		mManager = new NSManager(getActivity());
 
 		if(!ImageLoader.getInstance().isInited())
@@ -131,8 +132,12 @@ public class MediaFragment extends BaseFragment {
 		item_text = (TextView) rootView.findViewById(R.id.item_text);
 		item_image = (ImageButton) rootView.findViewById(R.id.item_image);
 		slide_shower = (ImageView) rootView.findViewById(R.id.slide_shower);
+		
+		btn_element_share = (ImageView) rootView.findViewById(R.id.btn_element_share);
+		btn_element_download = (ImageView) rootView.findViewById(R.id.btn_element_download);
 
-		item_text.setTypeface(mNSFonts.getNoorFont());
+		item_text.setTypeface(NSFonts.getNoorFont());
+		
 		item_image.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -149,6 +154,68 @@ public class MediaFragment extends BaseFragment {
 
 		initData();
 
+		
+		btn_element_share.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN: {
+					ImageView view = (ImageView) v;
+					view.getDrawable().setColorFilter(0x77ffffff,PorterDuff.Mode.SRC_ATOP);
+					view.invalidate();
+					break;
+				}
+				case MotionEvent.ACTION_UP: {
+
+
+				}
+				case MotionEvent.ACTION_CANCEL: {
+					ImageView view = (ImageView) v;
+					view.getDrawable().clearColorFilter();
+					view.invalidate();
+					break;
+				}
+				}
+
+				return true;
+			}
+
+
+		});
+		
+		btn_element_download.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN: {
+					ImageView view = (ImageView) v;
+					view.getDrawable().setColorFilter(0x77ffffff,PorterDuff.Mode.SRC_ATOP);
+					view.invalidate();
+					break;
+				}
+				case MotionEvent.ACTION_UP: {
+
+
+					
+				}
+				case MotionEvent.ACTION_CANCEL: {
+					ImageView view = (ImageView) v;
+					view.getDrawable().clearColorFilter();
+					view.invalidate();
+					break;
+				}
+				}
+
+				return true;
+			}
+
+
+		});
+		
 
 		/********************************************   FOLDERS TABS   *******************************************************/		
 
@@ -189,6 +256,8 @@ public class MediaFragment extends BaseFragment {
 
 				one_media.setVisibility(View.GONE);
 				gridView.setVisibility(View.VISIBLE);
+				
+				
 			}
 		});
 
@@ -212,6 +281,9 @@ public class MediaFragment extends BaseFragment {
 					item_text.setText(photo_categories.get(position).getName());
 					String link = photo_categories.get(position).getLink();
 
+					btn_element_download.setVisibility(View.VISIBLE);
+					btn_element_share.setVisibility(View.VISIBLE);
+					
 					getPhotosSlider(link);
 
 					//					String url_image = all_photo_URLS.get(2);
@@ -225,7 +297,7 @@ public class MediaFragment extends BaseFragment {
 
 					//					switchView(gridView, one_media);
 					//					item_text.setText(sound_categories.get(position).getName());
-
+					
 
 					one_media.setVisibility(View.GONE);
 					gridView.setVisibility(View.VISIBLE);
@@ -236,12 +308,14 @@ public class MediaFragment extends BaseFragment {
 
 					Log.e("VIDEO GRID CLICK", "OK");
 					
+					
+					
 					switchView(gridView, one_media);
 					item_text.setText(video_categories.get(position).getName());
-
 					
+					btn_element_download.setVisibility(View.GONE);
+					btn_element_share.setVisibility(View.GONE);
 					
-
 
 					break;
 				default:
@@ -519,6 +593,9 @@ public class MediaFragment extends BaseFragment {
 					};
 
 					slide_shower.setOnTouchListener(mAiry);
+					
+					btn_element_download.setVisibility(View.VISIBLE);
+					btn_element_share.setVisibility(View.VISIBLE);
 					
 					
 

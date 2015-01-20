@@ -85,7 +85,7 @@
             android:visibility="gone" >
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="60dp" >
 
                 <ImageButton
@@ -107,6 +107,28 @@
                     android:textColor="#FFF"
                     android:textSize="15sp"
                     android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/btn_element_share"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="35dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_share_media" />
+
+                <ImageView
+                    android:id="@+id/btn_element_download"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@id/btn_element_share"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_download_media" />
             </RelativeLayout>
 
             <ListView
@@ -115,8 +137,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:divider="#fff"
-          		android:dividerHeight="1dp"
-          		android:padding="5dp"
+                android:dividerHeight="1dp"
+                android:padding="5dp"
                 android:visibility="gone" >
             </ListView>
 
