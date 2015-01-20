@@ -2,7 +2,6 @@ package com.noursouryia;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -64,6 +64,14 @@ public class PollsFragment extends BaseFragment implements IPollPropositionListe
 
 		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_polls, container, false);
 
+		rootView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
 		mManager = NSManager.getInstance(getActivity());
 
 		title_polls = (TextView) rootView.findViewById(R.id.title_polls);
