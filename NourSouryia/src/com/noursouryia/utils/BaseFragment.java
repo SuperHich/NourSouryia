@@ -27,6 +27,7 @@ import com.noursouryia.NewsFragment;
 import com.noursouryia.PollsFragment;
 import com.noursouryia.R;
 import com.noursouryia.SearchArticlesFragment;
+import com.noursouryia.entity.Category;
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
 import com.slidinglayer.SlidingLayer;
@@ -162,10 +163,10 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			btn_opinions.setOnTouchListener(this);
 
 			btn_news.setTag(MainActivity.NEWS_FRAGMENT); 
-			btn_tahdhib.setTag(MainActivity.TAHDHIB_FRAGMENT);
+			btn_tahdhib.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
 			btn_researches.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
-			btn_letters.setTag(MainActivity.LETTERS_FRAGMENT);
-			btn_opinions.setTag(MainActivity.OPINIONS_FRAGMENT);
+			btn_letters.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
+			btn_opinions.setTag(MainActivity.LIST_ARTICLE_FRAGMENT);
 
 			//		if(this instanceof HomeFragment){
 			//			// start with opened sliding layer
@@ -232,19 +233,30 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			String fragTAG = (String) v.getTag();
 			Bundle args = null;
 			Type type = null;
+			Category category = null;
 			if(v == btn_researches)
 				type = ((MainActivity) getActivity()).NourSouryiaDB.getTypeByName("research");
-			else if(v == btn_opinions)
+			else if(v == btn_news)
 				type = ((MainActivity) getActivity()).NourSouryiaDB.getTypeByName("article");
+			else if(v == btn_tahdhib)
+				category = ((MainActivity) getActivity()).NourSouryiaDB.getCategoryByID(17);
+			else if(v == btn_letters)
+				category = ((MainActivity) getActivity()).NourSouryiaDB.getCategoryByID(16);
+			else if(v == btn_opinions)
+				category = ((MainActivity) getActivity()).NourSouryiaDB.getCategoryByID(40);
 
 			if(type != null){
 				args = new Bundle();
 				args.putString(ListArticlesFragment.ARG_ARTICLE_LINK, type.getLink());
 				args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, type.getNameEn());
 				args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, type.getNameAr());
+				((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
 			}
-
-			((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
+			
+			if(category != null){
+				((MainActivity) getActivity()).gotoListArticlesFragment(category.getLink(), category.getName(), category.getName());
+			}
+			
 
 		}
 		case MotionEvent.ACTION_CANCEL: {

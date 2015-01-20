@@ -140,6 +140,27 @@ public class NSDatabaseManager extends NSDatabase {
 		return type;
 	}
 	
+	public Category getCategoryByID(int catID){
+
+		open();
+		Category category = new Category();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_CATEGORIES+ " WHERE " + NSManager.TID + " = " + catID;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// looping through all rows and adding to type
+		if (cursor.moveToFirst()) {
+
+			category.setTid(cursor.getInt(cursor.getColumnIndex(NSManager.TID)));
+			category.setName(cursor.getString(cursor.getColumnIndex(NSManager.NAME)));
+			category.setLink(cursor.getString((cursor.getColumnIndex(NSManager.LINK))));
+			category.setParent(cursor.getString((cursor.getColumnIndex(COL_TYPE_ID))));
+				
+			Log.e(TAG,"category : " + category.toString());
+		}
+
+		return category;
+	}
+	
 	public ArrayList<Category> getCategoriesByType(String type_id){
 		open();
 		ArrayList<Category> cats = new ArrayList<Category>();
@@ -163,29 +184,6 @@ public class NSDatabaseManager extends NSDatabase {
 		return cats;
 	}
 
-	public Category getCategoriesByID(int catID){
-
-		open();
-		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_CATEGORIES + " WHERE " + NSManager.TID + " = " + catID;
-		Cursor cursor = db.rawQuery(selectQuery, null);
-		// looping through all rows and adding to type
-		if (cursor.moveToFirst()) {
-				Category category = new Category();
-
-				category.setTid(cursor.getInt(cursor.getColumnIndex(NSManager.TID)));
-				category.setName(cursor.getString(cursor.getColumnIndex(NSManager.NAME)));
-				category.setLink(cursor.getString((cursor.getColumnIndex(NSManager.LINK))));
-				category.setParent(cursor.getString((cursor.getColumnIndex(COL_TYPE_ID))));
-//				Log.e(TAG,"Category : " + category.toString());
-				
-				return category;
-		}
-
-		return null;
-	}
-
-	
 	public void insertOrUpdateCategory(Category category, String type_id) {
 		open();
 

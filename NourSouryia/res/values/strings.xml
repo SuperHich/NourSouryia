@@ -79,7 +79,10 @@
     <string name="problem">مشكل !</string>
     <string name="please_retry">الرجاء إعادة المحاولة</string>
     <string name="problem_vote">التصويت لم يتم</string>
-     <string name="success_vote">تم التصويت بنجاح !</string>
-     <string name="choice_vote">الرجاء إختيار الاقتراح المراد التصويت له</string>
+    <string name="success_vote">تم التصويت بنجاح !</string>
+    <string name="choice_vote">الرجاء إختيار الاقتراح المراد التصويت له</string>
+    <string name="old_comments">التعليقات السابقة</string>
+    <string name="add_comment">إضافة تعليق جديد</string>
+    <string name="send_comment">إرسال التعليق</string>
 
 </resources>

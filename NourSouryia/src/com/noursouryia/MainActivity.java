@@ -32,7 +32,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.noursouryia.adapters.IMenuListener;
-import com.noursouryia.adapters.IPollPropositionListener;
 import com.noursouryia.adapters.MenuCustomAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Category;
@@ -57,9 +56,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String SEARCH_FRAGMENT 			= "search_fragment";
 	public static final String THAWRA_DIARIES 			= "thawra_diaries";
 	public static final String LIST_NEWS_FRAGMENT 		= "list_news_fragment";
-	public static final String OPINIONS_FRAGMENT 		= "opinions_fragment";
-	public static final String LETTERS_FRAGMENT 		= "letters_fragment";
-	public static final String TAHDHIB_FRAGMENT 		= "tahdhib_fragment";
 	public static final String POLLS_FRAGMENT 			= "polls_fragment";
 	
 
@@ -194,7 +190,30 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 				Category selectedCategory = mTypes.get(groupPosition).getCategories().get(childPosition);
 				if(groupPosition < mTypes.size() - 1){
-					gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName(), selectedCategory.getName());
+					
+					switch (selectedCategory.getTid()) {
+					case 12:
+						gotoListNewsFragment(selectedCategory.getLink(), selectedCategory.getParent(), R.drawable.comment_news, true);
+						break;
+					case 13:
+						gotoListNewsFragment(selectedCategory.getLink(), selectedCategory.getParent(), R.drawable.jawla_sahafa, false);
+						break;
+					case 14:
+						gotoListNewsFragment(selectedCategory.getLink(), selectedCategory.getParent(), R.drawable.takarir_news, false);
+						break;
+					case 15:
+						Bundle args = new Bundle();
+						args.putString(ListNewsFragment.ARG_ARTICLE_LINK, selectedCategory.getLink());
+						args.putString(ListNewsFragment.ARG_ARTICLE_CATEGORY, selectedCategory.getParent());
+
+						gotoFragmentByTag(MainActivity.THAWRA_DIARIES, args);
+						break;
+
+					default:
+						gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName(), selectedCategory.getName());
+						break;
+					}
+					
 				}else{
 					// Media group clicked
 
@@ -348,12 +367,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new FragmentThawraDiaries();
 		else if(fragTAG.equals(LIST_NEWS_FRAGMENT))
 			return new ListNewsFragment();
-		else if(fragTAG.equals(TAHDHIB_FRAGMENT))
-			return new TahdhibFragment();
-		else if(fragTAG.equals(OPINIONS_FRAGMENT))
-			return new OpinionsFragment();
-		else if(fragTAG.equals(LETTERS_FRAGMENT))
-			return new LettersFragment();
 		else if(fragTAG.equals(POLLS_FRAGMENT))
 			return new PollsFragment();
 

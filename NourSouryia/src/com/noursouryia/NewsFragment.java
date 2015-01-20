@@ -52,22 +52,22 @@ public class NewsFragment extends BaseFragment  {
 
 			switch (v.getId()) {
 			case R.id.comment_news:
-				Category cat1 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(12);
+				Category cat1 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoryByID(12);
 				((MainActivity) getActivity()).gotoListNewsFragment(cat1.getLink(), cat1.getParent(), R.drawable.comment_news, true);
 				break;
 				
 			case R.id.jawla_sahafa:
-				Category cat2 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(13);
+				Category cat2 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoryByID(13);
 				((MainActivity) getActivity()).gotoListNewsFragment(cat2.getLink(), cat2.getParent(), R.drawable.jawla_sahafa, false);
 				break;
 				
 			case R.id.takarir_news:
-				Category cat3 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(14);
+				Category cat3 = ((MainActivity) getActivity()).NourSouryiaDB.getCategoryByID(14);
 				((MainActivity) getActivity()).gotoListNewsFragment(cat3.getLink(), cat3.getParent(), R.drawable.takarir_news, false);
 				break;
 
 			case R.id.thawra_diaries:
-				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoriesByID(15);
+				Category cat = ((MainActivity) getActivity()).NourSouryiaDB.getCategoryByID(15);
 
 				Bundle args = new Bundle();
 				args.putString(ListNewsFragment.ARG_ARTICLE_LINK, cat.getLink());
