@@ -337,15 +337,13 @@ public class NSManager {
 		
 		if(url == null)
 			url = URL_MATERIALS;
-		else
-			url += "&";
 		
 		if(timeStamp != DEFAULT_TIMESTAMP)
-			url += "timestamp=" + timeStamp + "&";
+			url += "&timestamp=" + timeStamp;
 		if(numPager != DEFAULT_VALUE)
-			url += "NumPager=" + numPager + "&";
+			url += "&NumPager=" + numPager;
 		if(page != DEFAULT_VALUE)
-			url += "page=" + page;
+			url += "&page=" + page;
 
 		Log.i(TAG, "url " + url);
 		

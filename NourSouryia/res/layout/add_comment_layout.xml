@@ -25,7 +25,8 @@
                 android:textColor="@android:color/black" 
                 android:nextFocusDown="@+id/edt_email"
            		android:imeOptions="actionNext"
-           		android:textSize="14sp"/>
+           		android:textSize="14sp"
+           		android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/txv_name"
@@ -35,7 +36,8 @@
                 android:layout_weight="0.8"
                 android:text="@string/comment_name"
                 android:textColor="@color/dark_slate_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp" 
+                android:singleLine="true"/>
         </LinearLayout>
 
         <LinearLayout
@@ -55,7 +57,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:textColor="@android:color/black" 
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/txv_country"
@@ -65,7 +68,8 @@
                 android:layout_weight="0.8"
                 android:text="@string/comment_country"
                 android:textColor="@color/dark_slate_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp" 
+                android:singleLine="true"/>
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +90,9 @@
                 android:textColor="@android:color/black" 
                 android:nextFocusDown="@+id/edt_comment"
             	android:imeOptions="actionNext"
-            	android:textSize="14sp"/>
+            	android:textSize="14sp"
+            	android:singleLine="true"
+            	android:inputType="textEmailAddress"/>
 
             <TextView
                 android:id="@+id/txv_email"
@@ -96,7 +102,8 @@
                 android:layout_weight="0.8"
                 android:text="@string/comment_email"
                 android:textColor="@color/dark_slate_gray" 
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:singleLine="true"/>
         </LinearLayout>
 
         <LinearLayout
@@ -126,7 +133,8 @@
                 android:layout_weight="0.8"
                 android:text="@string/comment_text"
                 android:textColor="@color/dark_slate_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:singleLine="true" />
         </LinearLayout>
 
         <LinearLayout

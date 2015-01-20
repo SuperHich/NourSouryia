@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -670,14 +669,17 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 			protected ArrayList<Article> doInBackground(Void... params) {
 
 				try{
-					mArticles = NSManager.getInstance(getActivity()).getArticles(null, 
-							NSManager.DEFAULT_TIMESTAMP, 
-							NSManager.DEFAULT_VALUE, 
-							NSManager.DEFAULT_VALUE);
+					if(Utils.isOnline(getActivity())){
+						mArticles = NSManager.getInstance(getActivity()).getArticles(null, 
+								NSManager.DEFAULT_TIMESTAMP, 
+								NSManager.DEFAULT_VALUE, 
+								NSManager.DEFAULT_VALUE);
 
-					for(Article a : mArticles){
-						((NSActivity) getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
-					}
+						for(Article a : mArticles){
+							((NSActivity) getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
+						}
+					}else
+						mArticles = ((MainActivity) getActivity()).NourSouryiaDB.getLastArticles();
 				}catch(Exception e){
 					Log.e(TAG, "Error while init Data !");
 					//					e.printStackTrace();

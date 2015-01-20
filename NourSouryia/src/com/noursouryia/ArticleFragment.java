@@ -168,8 +168,8 @@ public class ArticleFragment extends BaseFragment {
 
 		txv_article_title.setTypeface(NSFonts.getNoorFont());
 		txv_author_name.setTypeface(NSFonts.getNoorFont());
-		txv_article_content1.setTypeface(NSFonts.getNoorFont());
-		txv_article_content2.setTypeface(NSFonts.getNoorFont());
+		txv_article_content1.setTypeface(NSFonts.getKufah());
+		txv_article_content2.setTypeface(NSFonts.getKufah());
 
 		currentArticle = NSManager.getInstance(getActivity()).getCurrentArticle();
 
@@ -391,7 +391,9 @@ public class ArticleFragment extends BaseFragment {
 				if(result != null){
 					if(result != NSManager.DEFAULT_VALUE){
 						Toast.makeText(getActivity(), getString(R.string.comment_added), Toast.LENGTH_LONG).show();
-						getActivity().onBackPressed();
+						edt_name.setText("");
+						edt_email.setText("");
+						edt_comment.setText("");
 					}else
 						Toast.makeText(getActivity(), getString(R.string.comment_not_added), Toast.LENGTH_LONG).show();
 				}else{
@@ -426,7 +428,7 @@ public class ArticleFragment extends BaseFragment {
 			@Override
 			protected ArrayList<Comment> doInBackground(Void... params) {
 				try{
-					if(!NSManager.getInstance(getActivity()).isOnlineMode())
+					if(!Utils.isOnline(getActivity()))
 					{
 						if(comments.size() == 0)
 							return ((NSActivity)getActivity()).NourSouryiaDB.getCommentsById(currentArticle.getNid());

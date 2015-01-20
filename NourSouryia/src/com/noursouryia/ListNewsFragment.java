@@ -147,9 +147,9 @@ public class ListNewsFragment extends BaseFragment {
 			public void onLoadMore() {
 				// Do the work to load more items at the end of list
 				// here
-				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				if(!Utils.isOnline(getActivity()))
 				{	
-					((MainActivity)getActivity()).showOnLineModePopup();
+//					((MainActivity)getActivity()).showOnLineModePopup();
 					((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
 				}
 				else{
@@ -172,9 +172,9 @@ public class ListNewsFragment extends BaseFragment {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				if(!Utils.isOnline(getActivity()))
 				{	
-					((MainActivity)getActivity()).showOnLineModePopup();
+//					((MainActivity)getActivity()).showOnLineModePopup();
 					listView.onRefreshComplete();
 				}
 				else{
@@ -204,13 +204,14 @@ public class ListNewsFragment extends BaseFragment {
 					loading.setVisibility(View.VISIBLE);
 					listView.setVisibility(View.GONE);
 					img_title.setVisibility(View.GONE);
+					txv_empty.setVisibility(View.GONE);
 				}
 			}
 			
 			@Override
 			protected ArrayList<Article> doInBackground(Void... params) {
 				try{
-					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !listView.isRefreshing())
+					if(!Utils.isOnline(getActivity()) && !listView.isRefreshing())
 					{
 						if(articles.size() == 0)
 							return ((NSActivity)getActivity()).NourSouryiaDB.getArticlesByStringID(NSManager.TYPE, category);

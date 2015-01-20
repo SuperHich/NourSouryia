@@ -155,9 +155,9 @@ public class SearchArticlesFragment extends BaseFragment {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				if(!Utils.isOnline(getActivity()))
 				{	
-					((MainActivity)getActivity()).showOnLineModePopup();
+//					((MainActivity)getActivity()).showOnLineModePopup();
 					listView.onRefreshComplete();
 				}
 				else{
@@ -189,7 +189,7 @@ public class SearchArticlesFragment extends BaseFragment {
 			@Override
 			protected ArrayList<Article> doInBackground(Void... params) {
 				try{
-					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !listView.isRefreshing())
+					if(!Utils.isOnline(getActivity()) && !listView.isRefreshing())
 					{
 						if(articles.size() == 0)
 							return ((NSActivity)getActivity()).NourSouryiaDB.searchArticlesByKeyword(keyword);

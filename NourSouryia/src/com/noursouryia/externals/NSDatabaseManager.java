@@ -484,6 +484,43 @@ public class NSDatabaseManager extends NSDatabase {
 		return articles;
 	}
 	
+	public ArrayList<Article> getLastArticles(){
+
+		int requiredNb = 10;
+		open();
+		ArrayList<Article> articles = new ArrayList<Article>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		// looping through all rows and adding to type
+		if (cursor.moveToFirst()) {
+			do {
+				Article article = new Article();
+				
+				article.setNid(cursor.getInt((cursor.getColumnIndex(NSManager.NID))));
+				article.setTitle(cursor.getString((cursor.getColumnIndex(NSManager.TITLE))));
+				article.setBody(cursor.getString((cursor.getColumnIndex(NSManager.BODY))));
+				article.setType(cursor.getString((cursor.getColumnIndex(NSManager.TYPE))));
+				article.setTypeAr(cursor.getString((cursor.getColumnIndex(NSManager.TYPE_A))));
+				article.setVisits(cursor.getInt((cursor.getColumnIndex(NSManager.VISITS))));
+				article.setCreated(cursor.getString((cursor.getColumnIndex(NSManager.CREATED))));
+				article.setName(cursor.getString((cursor.getColumnIndex(NSManager.NAME))));
+				article.setTid(cursor.getInt((cursor.getColumnIndex(NSManager.TID))));
+				article.setYoutubeLink(cursor.getString((cursor.getColumnIndex(NSManager.YOUTUBE_LINK))));
+				article.setMp4Link(cursor.getString((cursor.getColumnIndex(NSManager.MP4_LINK))));
+				article.setMp3Link(cursor.getString((cursor.getColumnIndex(NSManager.MP3_LINK))));
+				article.setPdfLink(cursor.getString((cursor.getColumnIndex(NSManager.PDF_LINK))));
+
+				Log.e(TAG,"article : " + article.toString());
+				articles.add(article);
+				requiredNb--;
+			} while (cursor.moveToNext() && requiredNb > 0);
+		}
+
+		return articles;
+	}
+
+	
 	public ArrayList<Article> getArticlesByID(String column, int ID){
 
 		open();

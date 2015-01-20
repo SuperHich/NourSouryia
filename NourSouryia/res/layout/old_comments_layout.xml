@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:maxLines="1"
+        android:singleLine="true"
         android:text="@string/no_comments"
         android:textColor="#37a13d"
         android:textSize="14sp"
@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone" >
 
@@ -38,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:maxLines="1"
+            android:singleLine="true"
             android:text="@string/please_wait"
             android:textColor="@color/blue_dark"
             android:textSize="14sp" />

@@ -69,8 +69,8 @@ public class ArticleNewsFragment extends BaseFragment {
 		
 		txv_article_title.setTypeface(NSFonts.getNoorFont());
 //		txv_author_name.setTypeface(NSFonts.getNoorFont());
-		txv_article_content1.setTypeface(NSFonts.getNoorFont());
-		txv_article_content2.setTypeface(NSFonts.getNoorFont());
+		txv_article_content1.setTypeface(NSFonts.getKufah());
+		txv_article_content2.setTypeface(NSFonts.getKufah());
 		
 //		if(withComments)
 //			btn_comments.setVisibility(View.VISIBLE);
@@ -112,33 +112,10 @@ public class ArticleNewsFragment extends BaseFragment {
 //			isFirstStart = false;
 			initData();
 //		}
-		
-//		btn_share.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				// Share Article
-//			}
-//		});
-//		
-//		btn_comments.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				// go to comments
-//				//				((MainActivity)getActivity()).gotoCommentsFragment(6687);	
-//				((MainActivity)getActivity()).gotoCommentsFragment(currentArticle.getNid());
-//				//				((MainActivity)getActivity()).gotoAddCommentFragment(currentArticle.getNid());
-//			}
-//		});
+
 	}
 
 	private void initData(){
-		
-//		String[] contentParts = splitContent(currentArticle.getBody());
-//		txv_article_content1.setText(formatText(contentParts[0]));
-//		txv_article_content2.setText(formatText(contentParts[1]));
-		
 		txv_article_title.setText(currentArticle.getName());
 		txv_article_content1.setText(currentArticle.getTitle());
 		txv_article_content2.setText(formatText(currentArticle.getBody()));

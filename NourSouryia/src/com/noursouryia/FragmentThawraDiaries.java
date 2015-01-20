@@ -291,10 +291,9 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticles(link, NSManager.getTimeStamp(month), NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
 
-						if(list.size() > 0)
-							for(Article a : list){
-								((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
-							}
+						for(Article a : list){
+							((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
+						}
 
 						return list;
 					}

@@ -194,9 +194,9 @@ public class AuthorsFragment extends BaseFragment {
 			@Override
 			public void onRefresh(
 					PullToRefreshBase<ExpandableListView> refreshView) {
-				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				if(!Utils.isOnline(getActivity()))
 				{	
-					((MainActivity)getActivity()).showOnLineModePopup();
+//					((MainActivity)getActivity()).showOnLineModePopup();
 					expandableLV.onRefreshComplete();
 				}
 				else{
@@ -216,12 +216,13 @@ public class AuthorsFragment extends BaseFragment {
 				loading.setVisibility(View.VISIBLE);
 				sideList.setVisibility(View.GONE);
 				expandableLV.setVisibility(View.GONE);
+				txv_empty.setVisibility(View.GONE);
 			}
 
 			@Override
 			protected ArrayList<Author> doInBackground(Void... params) {
 				try{
-					if(!NSManager.getInstance(getActivity()).isOnlineMode() && !expandableLV.isRefreshing())
+					if(!Utils.isOnline(getActivity()) && !expandableLV.isRefreshing())
 						return ((NSActivity)getActivity()).NourSouryiaDB.getAllAuthors();
 
 					else if(Utils.isOnline(getActivity())){
