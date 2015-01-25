@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.noursouryia.adapters.QuestionsPollsAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
@@ -48,7 +49,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private LinearLayout all_layout ,month_calendar_layout;
 	private RelativeLayout calendar_layout ,rootlayout;
 
-	private TextView monthText, yearText, txv_title;
+	private TextView monthText, yearText, txv_title, btn_daytime;
 	private ImageView nextMonth, previousMonth;
 	private GridView gridview ;
 
@@ -66,6 +67,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private PageIndicator mIndicator;
 
 	private RelativeLayout pager_layout;
+	
+	private boolean daytime_switch  = false ;
 
 	@Override
 	public void onDetach() {
@@ -103,6 +106,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 		monthText = (TextView) rootView.findViewById(R.id.month_text);
 		yearText = (TextView) rootView.findViewById(R.id.year_text);
+		btn_daytime = (TextView) rootView.findViewById(R.id.btn_daytime);
 
 		loading = (LinearLayout) rootView.findViewById(R.id.loading);
 
@@ -118,18 +122,19 @@ public class FragmentThawraDiaries extends BaseFragment{
 		previousMonth.bringToFront();
 
 		rootlayout.bringChildToFront(all_layout);
-		all_layout.bringChildToFront(calendar_layout);
+		//		all_layout.bringChildToFront(calendar_layout);
 		all_layout.bringChildToFront(previousMonth);
 
 
 
-		//		previousMonth.bringToFront();
+		calendar_layout.bringToFront();
 		//		mSlidingLayer.invalidate();
 		//		all_layout.invalidate();
 		//		month_calendar_layout.invalidate();
 
 		monthText.setTypeface(NSFonts.getNoorFont());
-		yearText.setTypeface(NSFonts.getLatin());
+		yearText.setTypeface(NSFonts.getNoorFont());
+		btn_daytime.setTypeface(NSFonts.getNoorFont());
 
 		month = Calendar.getInstance();
 
@@ -144,8 +149,31 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 
 		String monthName = String.format(Locale.US,"%tB",month);
-		monthText.setText(monthName+"");
+		monthText.setText(getArabicMonthName(monthName)+"");
 		yearText.setText(month.get(Calendar.YEAR)+"");
+		
+// HERE THE PROBLEM		
+		
+		btn_daytime.setText(getArabicDaySpell(month.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US))+" "+ month.get(Calendar.DAY_OF_MONTH));
+		Log.e("DAYTIME", month.get(Calendar.DAY_OF_WEEK)+" "+ month.get(Calendar.DAY_OF_MONTH));
+
+
+		
+		btn_daytime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				if (!daytime_switch){
+				calendar_layout.setVisibility(View.VISIBLE);
+				daytime_switch = true ;
+				} else {
+					calendar_layout.setVisibility(View.INVISIBLE);
+					daytime_switch = false ;
+				}
+
+
+			}
+		});
 
 		nextMonth.setOnClickListener(new OnClickListener() {
 			@Override
@@ -155,7 +183,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 				refreshCalendar();
 
 				String monthName = String.format(Locale.US,"%tB",month);
-				monthText.setText(monthName+"");
+				monthText.setText(getArabicMonthName(monthName)+"");
 				yearText.setText(month.get(Calendar.YEAR)+"");
 			}
 		});
@@ -168,7 +196,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 				refreshCalendar();
 
 				String monthName = String.format(Locale.US,"%tB",month);
-				monthText.setText(monthName+"");
+				monthText.setText(getArabicMonthName(monthName)+"");
 				yearText.setText(month.get(Calendar.YEAR)+"");
 
 			}
@@ -186,6 +214,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 					}
 
 					month.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
+					
+					btn_daytime.setText(getArabicDaySpell(month.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US))+" "+ month.get(Calendar.DAY_OF_MONTH));
 
 					Calendar today = Calendar.getInstance();
 
@@ -209,6 +239,62 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 
 		return rootView;
+	}
+
+	private String getArabicDaySpell(String day) {
+
+
+		if (day.equalsIgnoreCase(month.getDisplayName(Calendar.SUNDAY, Calendar.LONG, Locale.US)))
+			return "الأحد" ;
+		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.MONDAY, Calendar.LONG, Locale.US)))
+			return "الاثنان" ;
+		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.TUESDAY, Calendar.LONG, Locale.US)))
+			return "الثلاثاء" ;
+		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.WEDNESDAY, Calendar.LONG, Locale.US)))
+			return "الاربعاء";
+		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.THURSDAY, Calendar.LONG, Locale.US)))
+			return "الخميس";
+		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.FRIDAY, Calendar.LONG, Locale.US)))
+			return "الجمعة";
+		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.SATURDAY, Calendar.LONG, Locale.US)))
+			return "السبت";
+
+
+		return "";
+	}
+
+	protected String getArabicMonthName(String monthName) {
+
+		String arabicMonth = "";
+
+		if (monthName.equalsIgnoreCase("January"))
+			return  "جانفي";
+		else if (monthName.equalsIgnoreCase("February"))
+			return "فيفري";
+		else if (monthName.equalsIgnoreCase("March"))
+			return "مارس";
+		else if (monthName.equalsIgnoreCase("April"))
+			return "آفريل";
+		else if (monthName.equalsIgnoreCase("May"))
+			return "ماي";
+		else if (monthName.equalsIgnoreCase("June"))
+			return "جوان";
+		else if (monthName.equalsIgnoreCase("July"))
+			return "جويلية";
+		else if (monthName.equalsIgnoreCase("August"))
+			return "أوت";
+		else if (monthName.equalsIgnoreCase("September"))
+			return "سبتمبر";
+		else if (monthName.equalsIgnoreCase("October"))
+			return "أكتوبر";
+		else if (monthName.equalsIgnoreCase("November"))
+			return "نوفمبر";
+		else if (monthName.equalsIgnoreCase("December"))
+			return "ديسمبر";
+
+		return monthName;
+
+
 	}
 
 	@Override
@@ -347,8 +433,9 @@ public class FragmentThawraDiaries extends BaseFragment{
 		super.onSlidingLayerClosed();
 
 		rootlayout.bringChildToFront(all_layout);
-		all_layout.bringChildToFront(calendar_layout);
+		//		all_layout.bringChildToFront(calendar_layout);
 		all_layout.bringChildToFront(previousMonth);
+		calendar_layout.bringToFront();
 	}
 
 }

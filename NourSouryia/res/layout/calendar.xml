@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_calendar_popup" >
 
     <ImageView
         android:id="@+id/days"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
         android:scaleType="centerInside"
         android:src="@drawable/calendar_days" />
 
@@ -14,9 +16,9 @@
         android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_below="@id/days"
         android:layout_marginLeft="5dp"
+        android:gravity="center"
         android:horizontalSpacing="0dp"
         android:numColumns="7"
         android:stretchMode="columnWidth"
