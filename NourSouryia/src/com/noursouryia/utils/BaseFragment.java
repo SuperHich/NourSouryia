@@ -47,7 +47,8 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		super.onAttach(activity);
 
 		if(!(this instanceof HomeFragment))
-			NSManager.getInstance(getActivity()).getFragmentEnabler().setEnabled(false);
+			if(NSManager.getInstance(getActivity()).getFragmentEnabler() != null)
+				NSManager.getInstance(getActivity()).getFragmentEnabler().setEnabled(false);
 
 	}
 

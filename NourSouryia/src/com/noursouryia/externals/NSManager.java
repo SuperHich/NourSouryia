@@ -47,16 +47,17 @@ public class NSManager {
 	public static final int DEFAULT_VALUE 	= -1;
 	public static final int MAX_ARTICLE_PER_PAGE = 10;
 	
-	public static final String URL_MATERIALS 	= "http://syrianoor.net/get/materials?";
-	public static final String URL_SEARCH 		= "http://syrianoor.net/app/search";
-	public static final String URL_TYPES 		= "http://syrianoor.net/get/types";
-	public static final String URL_COMMENTS		= "http://syrianoor.net/get/comments?";
-	public static final String URL_ADD_COMMENT	= "http://syrianoor.net/add/comments";
-	public static final String URL_FILES 		= "http://syrianoor.net/app/files";
-	public static final String URL_AUTHORS 		= "http://syrianoor.net/app/authors";
-	public static final String URL_ADD_SHARES 	= "http://syrianoor.net/add/shares";
-	public static final String URL_POLL 		= "http://syrianoor.net/app/poll";
-	public static final String URL_ADD_VOTE 	= "http://syrianoor.net/add/vote";
+	public static final String BASE_URL 		= "http://syrianoor.net/";
+	public static final String URL_MATERIALS 	= BASE_URL + "get/materials?";
+	public static final String URL_SEARCH 		= BASE_URL + "app/search";
+	public static final String URL_TYPES 		= BASE_URL + "get/types";
+	public static final String URL_COMMENTS		= BASE_URL + "get/comments?";
+	public static final String URL_ADD_COMMENT	= BASE_URL + "add/comments";
+	public static final String URL_FILES 		= BASE_URL + "app/files";
+	public static final String URL_AUTHORS 		= BASE_URL + "app/authors";
+	public static final String URL_ADD_SHARES 	= BASE_URL + "add/shares";
+	public static final String URL_POLL 		= BASE_URL + "app/poll";
+	public static final String URL_ADD_VOTE 	= BASE_URL + "add/vote";
 		
 	
 	public static final String NAME_EN			= "name_en";

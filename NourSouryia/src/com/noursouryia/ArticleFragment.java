@@ -228,21 +228,21 @@ public class ArticleFragment extends BaseFragment {
 			ImageLoader.getInstance().init(config);
 		}
 
-		//		if(isFirstStart){
-		//			isFirstStart = false;
-		initData();
-		//		}
+		if(isFirstStart){
+			isFirstStart = false;
+			initData();
 
-		adapter = new CommentsAdapter(getActivity(), comments);
-		listView.setAdapter(adapter);
+			adapter = new CommentsAdapter(getActivity(), comments);
+			listView.setAdapter(adapter);
 
-		if(withComments)
-			if(isFirstStart)
-			{
-				isFirstStart = false;
-				refreshOldComments();
-			}else
-				toggleEmptyMessage();
+			if(withComments)
+				if(isFirstStart)
+				{
+					isFirstStart = false;
+					refreshOldComments();
+				}else
+					toggleEmptyMessage();
+		}
 
 		btn_share.setOnTouchListener(this);
 
@@ -336,8 +336,13 @@ public class ArticleFragment extends BaseFragment {
 
 		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 		sharingIntent.setType("text/plain");
+		
+		String shareBody = NSManager.BASE_URL + currentArticle.getType() + "/" + currentArticle.getNid();  
+		
 		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, currentArticle.getTitle());
-		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, formatText(currentArticle.getBody()));
+		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+//		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, formatText(currentArticle.getBody()));
+		
 
 		//		if(currentArticle.getFilePath().size() > 0){
 		//			String imageUri = ImageLoader.getInstance().getLoadingUriForView(img_article);
