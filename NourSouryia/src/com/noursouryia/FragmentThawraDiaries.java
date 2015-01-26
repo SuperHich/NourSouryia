@@ -1,7 +1,11 @@
 package com.noursouryia;
 
+import java.security.acl.LastOwnerException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
@@ -23,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.noursouryia.adapters.QuestionsPollsAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
@@ -67,7 +70,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private PageIndicator mIndicator;
 
 	private RelativeLayout pager_layout;
-	
+
 	private boolean daytime_switch  = false ;
 
 	@Override
@@ -151,21 +154,52 @@ public class FragmentThawraDiaries extends BaseFragment{
 		String monthName = String.format(Locale.US,"%tB",month);
 		monthText.setText(getArabicMonthName(monthName)+"");
 		yearText.setText(month.get(Calendar.YEAR)+"");
+
+		// HERE THE PROBLEM		
+
+		SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		
-// HERE THE PROBLEM		
+		String currentDateandTime = inFormat.format(new Date());
 		
-		btn_daytime.setText(getArabicDaySpell(month.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US))+" "+ month.get(Calendar.DAY_OF_MONTH));
+		try {
+			Date ndate = inFormat.parse(currentDateandTime);
+			SimpleDateFormat outFormat = new SimpleDateFormat("EEEE", Locale.US);
+			String goal = outFormat.format(ndate);
+
+			String day = currentDateandTime.substring(currentDateandTime.lastIndexOf("-")+1, currentDateandTime.length());
+			
+			btn_daytime.setText(getArabicDaySpell(goal)+" "+day);
+
+			
+			
+			Log.e("CHOSEN DATE", "CHOSEN DATE" + goal +" ///// "+day);
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+
+			Log.e("CHOSEN DATE", "CHOSEN DATE ERROOOOR");
+
+		}
+
+		
+		
+		
+//		btn_daytime.setText(getArabicDaySpell(month.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US))+" "+ month.get(Calendar.DAY_OF_MONTH));
+
+
+
+
 		Log.e("DAYTIME", month.get(Calendar.DAY_OF_WEEK)+" "+ month.get(Calendar.DAY_OF_MONTH));
 
 
-		
+
 		btn_daytime.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
 				if (!daytime_switch){
-				calendar_layout.setVisibility(View.VISIBLE);
-				daytime_switch = true ;
+					calendar_layout.setVisibility(View.VISIBLE);
+					daytime_switch = true ;
 				} else {
 					calendar_layout.setVisibility(View.INVISIBLE);
 					daytime_switch = false ;
@@ -214,8 +248,8 @@ public class FragmentThawraDiaries extends BaseFragment{
 					}
 
 					month.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
-					
-					btn_daytime.setText(getArabicDaySpell(month.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US))+" "+ month.get(Calendar.DAY_OF_MONTH));
+
+
 
 					Calendar today = Calendar.getInstance();
 
@@ -223,6 +257,26 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 						// return chosen date as string format 
 						chosenDate =  android.text.format.DateFormat.format("yyyy-MM", month)+"-"+day;
+
+
+						SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+						try {
+							Date ndate = inFormat.parse(chosenDate);
+							SimpleDateFormat outFormat = new SimpleDateFormat("EEEE", Locale.US);
+							String goal = outFormat.format(ndate);
+
+							btn_daytime.setText(getArabicDaySpell(goal)+" "+day);
+
+							Log.e("CHOSEN DATE", "CHOSEN DATE" + goal);
+
+						} catch (ParseException e) {
+							e.printStackTrace();
+
+							Log.e("CHOSEN DATE", "CHOSEN DATE ERROOOOR");
+
+						}
+
+
 
 						initData();
 
@@ -244,21 +298,35 @@ public class FragmentThawraDiaries extends BaseFragment{
 	private String getArabicDaySpell(String day) {
 
 
-		if (day.equalsIgnoreCase(month.getDisplayName(Calendar.SUNDAY, Calendar.LONG, Locale.US)))
-			return "الأحد" ;
-		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.MONDAY, Calendar.LONG, Locale.US)))
-			return "الاثنان" ;
-		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.TUESDAY, Calendar.LONG, Locale.US)))
-			return "الثلاثاء" ;
-		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.WEDNESDAY, Calendar.LONG, Locale.US)))
-			return "الاربعاء";
-		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.THURSDAY, Calendar.LONG, Locale.US)))
-			return "الخميس";
-		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.FRIDAY, Calendar.LONG, Locale.US)))
-			return "الجمعة";
-		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.SATURDAY, Calendar.LONG, Locale.US)))
-			return "السبت";
+		//		if (day.equalsIgnoreCase(month.getDisplayName(Calendar.SUNDAY, Calendar.LONG, Locale.US)))
+		//			return "الأحد" ;
+		//		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.MONDAY, Calendar.LONG, Locale.US)))
+		//			return "الاثنان" ;
+		//		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.TUESDAY, Calendar.LONG, Locale.US)))
+		//			return "الثلاثاء" ;
+		//		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.WEDNESDAY, Calendar.LONG, Locale.US)))
+		//			return "الاربعاء";
+		//		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.THURSDAY, Calendar.LONG, Locale.US)))
+		//			return "الخميس";
+		//		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.FRIDAY, Calendar.LONG, Locale.US)))
+		//			return "الجمعة";
+		//		else if (day.equalsIgnoreCase(month.getDisplayName(Calendar.SATURDAY, Calendar.LONG, Locale.US)))
+		//			return "السبت";
 
+		if (day.equalsIgnoreCase("Sunday"))
+			return "الأحد" ;
+		else if (day.equalsIgnoreCase("Monday"))
+			return "الاثنان" ;
+		else if (day.equalsIgnoreCase("Tuesday"))
+			return "الثلاثاء" ;
+		else if (day.equalsIgnoreCase("Wednesday"))
+			return "الاربعاء";
+		else if (day.equalsIgnoreCase("Thursday"))
+			return "الخميس";
+		else if (day.equalsIgnoreCase("Friday"))
+			return "الجمعة";
+		else if (day.equalsIgnoreCase("Saturday"))
+			return "السبت";
 
 		return "";
 	}
