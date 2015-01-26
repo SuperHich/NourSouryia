@@ -61,32 +61,6 @@
         android:layout_marginTop="-35dp"
         android:background="@drawable/btn_thoughts" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginRight="50dp" 
-        android:layout_marginLeft="50dp" 
-        android:layout_marginBottom="70dp">
 
-        <ImageView
-            android:id="@+id/btn_search"
-            android:layout_width="50dp"
-            android:layout_height="24dp"
-            android:layout_alignParentRight="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_research" />
-
-        <EditText
-            android:id="@+id/edt_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="3dp"
-            android:layout_toLeftOf="@id/btn_search"
-            android:background="#fff"
-            android:inputType="text"
-            android:imeOptions="actionDone" />
-    </RelativeLayout>
 
 </RelativeLayout>

@@ -37,7 +37,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 
 	public final String TAG = getClass().getSimpleName();
 
-	protected RelativeLayout rootView;
+	protected RelativeLayout rootView, mlayout_search;
 	private Button opener_bottom, btn_news, btn_tahdhib, btn_researches, btn_letters, btn_opinions;
 	private int height_halfScreen ;
 	protected SlidingLayer mSlidingLayer;
@@ -85,6 +85,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		super.onViewCreated(view, savedInstanceState);
 
 		mSlidingLayer = (SlidingLayer) view.findViewById(R.id.slidingLayer1);
+		mlayout_search = (RelativeLayout) getActivity().findViewById(R.id.layout_search);
 
 		if(mSlidingLayer != null){
 
@@ -177,6 +178,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 		}
 
 
+		mlayout_search.bringToFront();
 	}
 
 	public void buttonClicked(View v) {

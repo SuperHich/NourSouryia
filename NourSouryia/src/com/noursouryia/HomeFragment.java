@@ -108,8 +108,8 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 	private Article currentArticle;
 	private View loading_feeds ;
 	private RelativeLayout home_layout, media_layout;
-	private ImageView btn_search;
-	private EditText edt_search;
+//	private ImageView btn_search;
+//	private EditText edt_search;
 
 	private ArrayList<Article> mArticles = new ArrayList<Article>();
 
@@ -167,8 +167,8 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);
 		paginate_right = (Button) rootView.findViewById(R.id.paginate_right_news);
 
-		btn_search = (ImageView) rootView.findViewById(R.id.btn_search);
-		edt_search = (EditText) rootView.findViewById(R.id.edt_search);
+//		btn_search = (ImageView) rootView.findViewById(R.id.btn_search);
+//		edt_search = (EditText) rootView.findViewById(R.id.edt_search);
 		list_videos = (ListView) rootView.findViewById(R.id.list_videos);
 
 		loading_feeds = (View) rootView.findViewById(R.id.loading_feeds);
@@ -528,31 +528,31 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 			}
 		});
 
-		btn_search.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String keyword = edt_search.getText().toString();
-				if(!keyword.equals("")){
-					((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
-					Utils.hideKeyboard(getActivity(), edt_search);
-				}
-			}
-		});
-
-		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if (actionId == EditorInfo.IME_ACTION_DONE) {
-					String keyword = edt_search.getText().toString();
-					if(!keyword.equals("")){
-						((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
-						Utils.hideKeyboard(getActivity(), edt_search);
-					}
-					return true;
-				}
-				return false;
-			}
-		});
+//		btn_search.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				String keyword = edt_search.getText().toString();
+//				if(!keyword.equals("")){
+//					((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
+//					Utils.hideKeyboard(getActivity(), edt_search);
+//				}
+//			}
+//		});
+//
+//		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
+//			public boolean onEditorAction(TextView v, int aoString();
+//					if(!keyword.equals("")){
+//						((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
+//						Utils.hideKeyboard(getActivity(), edt_search);
+//					}ctionId, KeyEvent event) {
+//				if (actionId == EditorInfo.IME_ACTION_DONE) {
+//					String keyword = edt_search.getText().t
+//					return true;
+//				}
+//				return false;
+//			}
+//		});
 
 		return rootView;
 	}

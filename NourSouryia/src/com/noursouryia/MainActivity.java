@@ -17,10 +17,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -29,6 +33,8 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.noursouryia.adapters.IMenuListener;
@@ -38,6 +44,8 @@ import com.noursouryia.entity.Category;
 import com.noursouryia.entity.Type;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.NSActivity;
+import com.noursouryia.utils.NSFonts;
+import com.noursouryia.utils.Utils;
 
 public class MainActivity extends NSActivity implements IMenuListener, OnTouchListener{
 
@@ -57,7 +65,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String THAWRA_DIARIES 			= "thawra_diaries";
 	public static final String LIST_NEWS_FRAGMENT 		= "list_news_fragment";
 	public static final String POLLS_FRAGMENT 			= "polls_fragment";
-	
+
 
 
 	public static final String SAVED_STATE_ACTION_BAR_HIDDEN = "saved_state_action_bar_hidden";
@@ -66,12 +74,13 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private ExpandableListView mDrawerList;
 	private LinearLayout mDrawerLinear ;
 
-	private Button btn_menu_outside, btn_menu_inside, btn_share, btn_lamp,  btn_opener_top;
-	private ImageView img_title;
+	private Button btn_menu_outside, btn_menu_inside, btn_share, btn_lamp,  btn_opener_top, btn_search_top, btn_rss, btn_settings;
+	private ImageView img_title, btn_search;
 	private View headerSeparator;
 
 	private ActionBarDrawerToggle mDrawerToggle;
-	private RelativeLayout mainView , moving_layout;
+	private RelativeLayout mainView , moving_layout, layout_search;
+	private EditText edt_search;
 
 	public static final int MESSAGE_START = 1;
 
@@ -79,6 +88,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private boolean isFirstStart = true;
 	public boolean isTopOpener = false;
 	public boolean isImgTitle = false;
+	public boolean searchBtnEnable = false;
 
 	private Fragment fragment, fragment1;
 	private String currentFragment;
@@ -103,23 +113,64 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		moving_layout = (RelativeLayout) findViewById(R.id.moving_layout);
 		mainView = (RelativeLayout) findViewById(R.id.content_frame);
+		layout_search = (RelativeLayout) findViewById(R.id.layout_search);
 
 		btn_menu_outside 	= (Button) findViewById(R.id.btn_menu_outside);
 		btn_menu_inside 	= (Button) findViewById(R.id.btn_menu_inside);
 		btn_share 			= (Button) findViewById(R.id.btn_share); 
 		btn_lamp 			= (Button) findViewById(R.id.btn_lamp); 
-		//		btn_settings 		= (Button) findViewById(R.id.btn_settings); 
-		//		btn_rss 			= (Button) findViewById(R.id.btn_rss);
+		btn_settings 		= (Button) findViewById(R.id.btn_settings); 
+		btn_rss 			= (Button) findViewById(R.id.btn_rss);
+		btn_search_top			= (Button) findViewById(R.id.btn_search_top);
 
 		btn_opener_top		= (Button) findViewById(R.id.btn_opener_top);
 		img_title			= (ImageView) findViewById(R.id.img_title);
 		headerSeparator		= (View) findViewById(R.id.headerSeparator);
+		btn_search = (ImageView) findViewById(R.id.btn_search);
+		edt_search = (EditText) findViewById(R.id.edt_search);
+
+		edt_search.setTypeface(NSFonts.getNoorFont());
+
+		btn_search.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String keyword = edt_search.getText().toString();
+				if(!keyword.equals("")){
+					gotoSearchArticlesFragment(keyword);
+					Utils.hideKeyboard(MainActivity.this, edt_search);
+					layout_search.bringToFront();
+					edt_search.bringToFront();
+					btn_search.bringToFront();
+				}
+			}
+		});
+
+
+		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					String keyword = edt_search.getText().toString();
+					if(!keyword.equals("")){
+						gotoSearchArticlesFragment(keyword);
+						Utils.hideKeyboard(MainActivity.this, edt_search);
+						layout_search.bringToFront();
+						edt_search.bringToFront();
+						btn_search.bringToFront();
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
 
 		btn_share.setOnTouchListener(this); 
 		btn_lamp.setOnTouchListener(this);
-		//		btn_settings.setOnTouchListener(this); 
-		//		btn_rss.setOnTouchListener(this);
+		btn_settings.setOnTouchListener(this); 
+		btn_rss.setOnTouchListener(this);
 		btn_opener_top.setOnTouchListener(this);
+		btn_search_top.setOnTouchListener(this);
 
 		mDrawerList.setGroupIndicator(null);
 		mDrawerList.setOnGroupExpandListener(new OnGroupExpandListener() {
@@ -190,7 +241,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 				Category selectedCategory = mTypes.get(groupPosition).getCategories().get(childPosition);
 				if(groupPosition < mTypes.size() - 1){
-					
+
 					switch (selectedCategory.getTid()) {
 					case 12:
 						gotoListNewsFragment(selectedCategory.getLink(), selectedCategory.getParent(), R.drawable.comment_news, true);
@@ -213,7 +264,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 						gotoListArticlesFragment(selectedCategory.getLink(), selectedCategory.getName(), selectedCategory.getName());
 						break;
 					}
-					
+
 				}else{
 					// Media group clicked
 
@@ -417,6 +468,30 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 				break;
 
+
+			case R.id.btn_rss :
+				// Share App
+				break;
+
+			case R.id.btn_settings :
+				// Share App
+				break;
+
+			case R.id.btn_search_top :
+
+				if (!searchBtnEnable){
+					layout_search.setVisibility(View.VISIBLE);
+					layout_search.bringToFront();
+					searchBtnEnable = true ;
+				}
+
+				else
+				{
+					layout_search.setVisibility(View.INVISIBLE);
+					searchBtnEnable = false ;
+				}
+
+				break;
 			case R.id.btn_share :
 				// Share App
 				shareApp();

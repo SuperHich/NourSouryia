@@ -158,20 +158,18 @@ public class FragmentThawraDiaries extends BaseFragment{
 		// HERE THE PROBLEM		
 
 		SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-		
+
 		String currentDateandTime = inFormat.format(new Date());
-		
+
 		try {
 			Date ndate = inFormat.parse(currentDateandTime);
 			SimpleDateFormat outFormat = new SimpleDateFormat("EEEE", Locale.US);
 			String goal = outFormat.format(ndate);
 
 			String day = currentDateandTime.substring(currentDateandTime.lastIndexOf("-")+1, currentDateandTime.length());
-			
+
 			btn_daytime.setText(getArabicDaySpell(goal)+" "+day);
 
-			
-			
 			Log.e("CHOSEN DATE", "CHOSEN DATE" + goal +" ///// "+day);
 
 		} catch (ParseException e) {
@@ -181,26 +179,27 @@ public class FragmentThawraDiaries extends BaseFragment{
 
 		}
 
-		
-		
-		
-//		btn_daytime.setText(getArabicDaySpell(month.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US))+" "+ month.get(Calendar.DAY_OF_MONTH));
 
 
 
+		//		btn_daytime.setText(getArabicDaySpell(month.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US))+" "+ month.get(Calendar.DAY_OF_MONTH));
 
 		Log.e("DAYTIME", month.get(Calendar.DAY_OF_WEEK)+" "+ month.get(Calendar.DAY_OF_MONTH));
 
 
 
 		btn_daytime.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 
 				if (!daytime_switch){
+
 					calendar_layout.setVisibility(View.VISIBLE);
 					daytime_switch = true ;
+
 				} else {
+
 					calendar_layout.setVisibility(View.INVISIBLE);
 					daytime_switch = false ;
 				}

@@ -13,7 +13,7 @@
         <RelativeLayout
             android:id="@+id/moving_layout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:background="@color/blue_top" >
 
             <RelativeLayout
@@ -31,31 +31,37 @@
 
                     <Button
                         android:id="@+id/btn_share"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:background="@drawable/btn_share" />
 
                     <Button
                         android:id="@+id/btn_lamp"
-                        android:layout_width="22.5dp"
-                        android:layout_height="30dp"
+                        android:layout_width="20dp"
+                        android:layout_height="25dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/btn_lamp" />
 
-                    <!-- <Button -->
-                    <!-- android:id="@+id/btn_settings" -->
-                    <!-- android:layout_width="30dp" -->
-                    <!-- android:layout_height="30dp" -->
-                    <!-- android:layout_marginLeft="10dp" -->
-                    <!-- android:background="@drawable/btn_settings" /> -->
+                    <Button
+                        android:id="@+id/btn_settings"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_settings" />
 
+                    <Button
+                        android:id="@+id/btn_rss"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_rss" />
 
-                    <!-- <Button -->
-                    <!-- android:id="@+id/btn_rss" -->
-                    <!-- android:layout_width="30dp" -->
-                    <!-- android:layout_height="30dp" -->
-                    <!-- android:layout_marginLeft="10dp" -->
-                    <!-- android:background="@drawable/btn_rss" /> -->
+                    <Button
+                        android:id="@+id/btn_search_top"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_search_article" />
                 </LinearLayout>
 
                 <Button
@@ -90,7 +96,6 @@
                 android:layout_below="@id/top"
                 android:layout_marginTop="1dp" >
             </RelativeLayout>
-
         </RelativeLayout>
 
         <LinearLayout
@@ -151,5 +156,40 @@
         android:layout_marginTop="40dp"
         android:src="@drawable/btn_folders"
         android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="40dp"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/btn_search"
+            android:layout_width="35dp"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_article_search_bar" />
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@id/btn_search"
+            android:background="@drawable/bg_article_search_bar"
+            android:gravity="right|center_vertical"
+            android:hint="@string/hint_search"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:paddingRight="15dp"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
 </RelativeLayout>
