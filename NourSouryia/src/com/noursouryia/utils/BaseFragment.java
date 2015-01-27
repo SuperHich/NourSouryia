@@ -253,7 +253,7 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 				args.putString(ListArticlesFragment.ARG_ARTICLE_LINK, type.getLink());
 				args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, type.getNameEn());
 				args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, type.getNameAr());
-				((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args);
+				((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args, true);
 			}
 			
 			if(category != null){

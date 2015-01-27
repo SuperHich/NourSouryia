@@ -21,7 +21,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,12 +31,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -46,7 +43,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -74,6 +70,8 @@ import com.thin.downloadmanager.ThinDownloadManager;
 
 public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
+	public static final String ARG_FOLDER_ID = "folder_id";
+	
 	private ImageButton btn_folder_sound, btn_folder_photos, btn_folder_video, item_image ;
 	private TextView item_text ;
 	private ImageView btn_folders_container , slide_shower, logo_sourya, btn_element_share , btn_element_download;;
@@ -82,7 +80,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 	private Type type_photo, type_video, type_sound ;
 	private GridView gridView ;
 	private LinearLayout one_media ;
-	private RelativeLayout slider_photos ;
+	private RelativeLayout slider_photos, toggle_folders ;
 	private ListView list_videos;
 	private ArrayList<Category> photo_categories = new ArrayList<Category>();
 	private ArrayList<Category> sound_categories = new ArrayList<Category>();
@@ -162,6 +160,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		home_layout = (RelativeLayout) rootView.findViewById(R.id.home_layout);
 		media_layout = (RelativeLayout) rootView.findViewById(R.id.media_layout);
 		slider_photos = (RelativeLayout) rootView.findViewById(R.id.slider_photos);
+		toggle_folders	= (RelativeLayout) rootView.findViewById(R.id.toggle_folders);
 
 		news_feed = (TextView) rootView.findViewById(R.id.news_feed);
 		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);
@@ -629,7 +628,12 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 		if(isFirstStart)
 		{
-			mSlidingLayer.openLayer(true);
+			Log.e(TAG, ">>> isFirstStart ");
+			if(getArguments() == null)
+				mSlidingLayer.openLayer(true);
+			else
+				mSlidingLayer.closeLayer(true);
+			
 			isFirstStart = false;
 		}
 		//		else{
@@ -748,9 +752,12 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 					soundsGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, sound_categories);					
 					videosGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, video_categories);	
 
-					SELECTED_FOLDER = PHOTOS_FOLDER_SELECTED ;
-					gridView.setAdapter(photosGridAdapter);
-					folderPhotosClick();
+					if(getArguments() != null)
+						SELECTED_FOLDER = getArguments().getInt(ARG_FOLDER_ID);
+					else
+						SELECTED_FOLDER = PHOTOS_FOLDER_SELECTED ;
+					
+					selectFolder();
 
 				}
 			}
@@ -817,6 +824,8 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		btn_folder_video.setImageResource(R.drawable.btn_folder_video);
 
 		btn_folders_container.setImageResource(R.drawable.bg_btn_folder_photos);
+		toggle_folders.setVisibility(View.VISIBLE);
+		gridView.setVisibility(View.VISIBLE);
 
 	}
 
@@ -827,6 +836,8 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		btn_folder_video.setImageResource(R.drawable.btn_folder_video);
 
 		btn_folders_container.setImageResource(R.drawable.bg_btn_folder_sounds);
+		toggle_folders.setVisibility(View.VISIBLE);
+		gridView.setVisibility(View.VISIBLE);
 
 	}
 
@@ -837,6 +848,8 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		btn_folder_video.setImageResource(R.drawable.btn_folder_video_clicked);
 
 		btn_folders_container.setImageResource(R.drawable.bg_btn_folder_videos);
+		toggle_folders.setVisibility(View.VISIBLE);
+		gridView.setVisibility(View.VISIBLE);
 
 	}
 
@@ -1177,20 +1190,20 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		}
 	}
 
-	public void showHiddenView(){
-		hidden_view.setVisibility(View.VISIBLE);
-	}
-
-	public void hideHiddenView(){
-		hidden_view.setVisibility(View.GONE);
-	}
+//	public void showHiddenView(){
+//		hidden_view.setVisibility(View.VISIBLE);
+//	}
+//
+//	public void hideHiddenView(){
+//		hidden_view.setVisibility(View.GONE);
+//	}
 
 	@Override
 	public void setEnabled(boolean enable) {
-		if(enable)
-			hideHiddenView();
-		else
-			showHiddenView();
+//		if(enable)
+//			hideHiddenView();
+//		else
+//			showHiddenView();
 	}
 
 	@Override
@@ -1201,6 +1214,10 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 		SELECTED_FOLDER = folderId ;
 
+		selectFolder();
+	}
+
+	private void selectFolder(){
 		switch (SELECTED_FOLDER) {
 		case PHOTOS_FOLDER_SELECTED:
 			gridView.setAdapter(photosGridAdapter);
@@ -1218,5 +1235,4 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 			break;
 		}
 	}
-
 }

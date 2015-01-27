@@ -82,14 +82,6 @@
                 android:visibility="gone" />
 
             <RelativeLayout
-                android:id="@+id/content_frame"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/top"
-                android:layout_marginTop="1dp" >
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/content_frame_second"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

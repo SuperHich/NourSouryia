@@ -95,7 +95,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	private int width_halfScreen ;
 
-	private ArrayList<Type> mTypes;
+	private ArrayList<Type> mTypes = new ArrayList<Type>();
 	private MenuCustomAdapter adapter;
 
 	private NSManager mManager;
@@ -112,7 +112,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		mDrawerLinear = (LinearLayout) findViewById(R.id.drawer_linear);
 
 		moving_layout = (RelativeLayout) findViewById(R.id.moving_layout);
-		mainView = (RelativeLayout) findViewById(R.id.content_frame);
+//		mainView = (RelativeLayout) findViewById(R.id.content_frame);
 		layout_search = (RelativeLayout) findViewById(R.id.layout_search);
 
 		btn_menu_outside 	= (Button) findViewById(R.id.btn_menu_outside);
@@ -189,8 +189,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			}
 		});
 
-
-
 		DisplayMetrics displaymetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 		width_halfScreen = (displaymetrics.widthPixels)/2;
@@ -200,7 +198,14 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		//		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos", "revnews", "research", "article");
-		mTypes = NourSouryiaDB.getTypesExcept("photos", "sounds", "videos");
+		
+		//HomeType
+		Type homeType = new Type();
+		homeType.setNameEn("homeType");
+		homeType.setNameAr(getString(R.string.menu_home));
+
+		mTypes.add(homeType);
+		mTypes.addAll(NourSouryiaDB.getTypesExcept("photos", "sounds", "videos"));
 		mTypes.addAll(getAnnexeTypes());
 		mTypes.add(getMediaType());
 
@@ -218,12 +223,15 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				Type selectedType = mTypes.get(arg2);
 
 				if(selectedType.getCategories().size() == 0){
-					if(selectedType.getLink().equals(NSManager.URL_AUTHORS))
-						onTypeItemClicked(AUTHORS_FRAGMENT, null);
+					if(selectedType.getNameEn().equals("homeType")){
+						onTypeItemClicked(HOME_FRAGMENT, null, false);
+					}
+					else if(selectedType.getLink().equals(NSManager.URL_AUTHORS))
+						onTypeItemClicked(AUTHORS_FRAGMENT, null, true);
 					else if(selectedType.getLink().equals(NSManager.URL_FILES))
-						onTypeItemClicked(FILES_FRAGMENT, null);
+						onTypeItemClicked(FILES_FRAGMENT, null, true);
 					else if(selectedType.getLink().equals(NSManager.URL_POLL))
-						onTypeItemClicked(POLLS_FRAGMENT, null);
+						onTypeItemClicked(POLLS_FRAGMENT, null, true);
 					else
 						gotoListArticlesFragment(selectedType.getLink(), selectedType.getNameEn(), selectedType.getNameAr());
 
@@ -257,7 +265,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 						args.putString(ListNewsFragment.ARG_ARTICLE_LINK, selectedCategory.getLink());
 						args.putString(ListNewsFragment.ARG_ARTICLE_CATEGORY, selectedCategory.getParent());
 
-						gotoFragmentByTag(MainActivity.THAWRA_DIARIES, args);
+						gotoFragmentByTag(MainActivity.THAWRA_DIARIES, args, true);
 						break;
 
 					default:
@@ -268,11 +276,19 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				}else{
 					// Media group clicked
 
-					if(currentFragment != null){
-						emptyBackStack();
+					if(fragment1 instanceof HomeFragment)
+						mManager.getFragmentEnabler().onFolderClicked(selectedCategory.getTid());
+					else{
+						Bundle args = new Bundle();
+						args.putInt(HomeFragment.ARG_FOLDER_ID, selectedCategory.getTid());
+						gotoFragmentByTag(MainActivity.HOME_FRAGMENT, args, false);
 					}
-
-					mManager.getFragmentEnabler().onFolderClicked(selectedCategory.getTid());
+					
+//					if(currentFragment != null){
+//						emptyBackStack();
+//					}
+//
+//					mManager.getFragmentEnabler().onFolderClicked(selectedCategory.getTid());
 
 				}
 
@@ -330,7 +346,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		super.onStart();
 
 		if(isFirstStart){
-			selectItem(lastPosition);
+//			selectItem(lastPosition);
+			gotoFragmentByTag(HOME_FRAGMENT, null, false);
 
 			isFirstStart = false;
 		}
@@ -343,62 +360,64 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	}
 
 
-	private void selectItem(int position) {
-
-		lastPosition = position;
-		boolean shouldSwitch = true;
-
-		switch (position) {
-		case 0:
-			fragment = new HomeFragment();
-			break;
-		default:
-			shouldSwitch = false;
-			break;
-		}
-
-		if(shouldSwitch)
-			switchTab(fragment, false);
-
-		// update selected item and title, then close the drawer
-		mDrawerList.setItemChecked(position, true);
-		mDrawerLayout.closeDrawer(mDrawerLinear);
-
-	}
-
-
-	private void switchTab(Fragment tab, boolean withAnimation) {
-		FragmentManager fm = getSupportFragmentManager();
-		Fragment fragment = fm.findFragmentById(R.id.content_frame);
-
-		final FragmentTransaction ft = fm.beginTransaction();
-		if(withAnimation)
-			ft.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-
-		if (fragment == null) {
-			ft.add(R.id.content_frame, tab);
-
-		} else {
-			ft.replace(R.id.content_frame, tab);
-		}
-
-		ft.commit();
-
-	}
+//	private void selectItem(int position) {
+//
+//		lastPosition = position;
+//		boolean shouldSwitch = true;
+//
+//		switch (position) {
+//		case 0:
+//			fragment = new HomeFragment();
+//			break;
+//		default:
+//			shouldSwitch = false;
+//			break;
+//		}
+//
+//		if(shouldSwitch)
+//			switchTab(fragment, false);
+//
+//		// update selected item and title, then close the drawer
+//		mDrawerList.setItemChecked(position, true);
+//		mDrawerLayout.closeDrawer(mDrawerLinear);
+//
+//	}
+//
+//
+//	private void switchTab(Fragment tab, boolean withAnimation) {
+//		FragmentManager fm = getSupportFragmentManager();
+//		Fragment fragment = fm.findFragmentById(R.id.content_frame);
+//
+//		final FragmentTransaction ft = fm.beginTransaction();
+//		if(withAnimation)
+//			ft.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+//
+//		if (fragment == null) {
+//			ft.add(R.id.content_frame, tab);
+//
+//		} else {
+//			ft.replace(R.id.content_frame, tab);
+//		}
+//
+//		ft.commit();
+//
+//	}
 
 	@Override
 	public void onMenuItemClicked(int position) {
-		selectItem(position);
+//		selectItem(position);
 	}
 
-	public void onTypeItemClicked(String fragmentTAG, Bundle args){
-		gotoFragmentByTag(fragmentTAG, args);
+	public void onTypeItemClicked(String fragmentTAG, Bundle args, boolean addToBack){
+		gotoFragmentByTag(fragmentTAG, args, addToBack);
 	}
 
 	private Fragment getFragmentByTag(String fragTAG){
-		if(fragTAG.equals(NEWS_FRAGMENT))
+		if(fragTAG.equals(HOME_FRAGMENT))
+			return new HomeFragment();
+		else if(fragTAG.equals(NEWS_FRAGMENT))
 			return new NewsFragment();
-		if(fragTAG.equals(FILES_FRAGMENT))
+		else if(fragTAG.equals(FILES_FRAGMENT))
 			return new FilesFragment();
 		else if(fragTAG.equals(AUTHORS_FRAGMENT))
 			return new AuthorsFragment();
@@ -408,10 +427,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new ArticleFragment();
 		else if(fragTAG.equals(LIST_ARTICLE_FRAGMENT))
 			return new ListArticlesFragment();
-		else if(fragTAG.equals(COMMENTS_FRAGMENT))
-			return new CommentsFragment();
-		else if(fragTAG.equals(ADD_COMMENT_FRAGMENT))
-			return new AddCommentFragment();
 		else if(fragTAG.equals(SEARCH_FRAGMENT))
 			return new SearchArticlesFragment();
 		else if(fragTAG.equals(THAWRA_DIARIES))
@@ -464,6 +479,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				//				Toast.makeText(MainActivity.this, mManager.isOnlineMode() ? getString(R.string.online_on) : getString(R.string.online_off), Toast.LENGTH_LONG).show();
 
 				startActivity(new Intent(MainActivity.this, AboutNS.class));
+				overridePendingTransition(R.anim.up_in, R.anim.up_out);
 
 
 				break;
@@ -515,7 +531,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		return true;
 	}
 
-	public void gotoFragmentByTag(String fragmentTAG, Bundle arguments){
+	public void gotoFragmentByTag(String fragmentTAG, Bundle arguments, boolean addToBack){
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
@@ -530,7 +546,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 					fragment1.setArguments(arguments);
 
 				transaction.replace(R.id.content_frame_second, fragment1, fragmentTAG);
-				transaction.addToBackStack(fragmentTAG);
+				if(addToBack)
+					transaction.addToBackStack(fragmentTAG);
 			}
 		}else{
 			transaction.attach(fragment1);
@@ -547,38 +564,38 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		NSManager.getInstance(this).setCurrentArticle(article);
 		Bundle args = new Bundle();
 		args.putBoolean(ArticleFragment.ARG_WITH_COMMENTS, withComments);
-		gotoFragmentByTag(ARTICLE_FRAGMENT, args);
+		gotoFragmentByTag(ARTICLE_FRAGMENT, args, true);
 
 	}
 
 	public void gotoArticleFragment(Article article){
 
 		NSManager.getInstance(this).setCurrentArticle(article);
-		gotoFragmentByTag(ARTICLE_FRAGMENT, null);
+		gotoFragmentByTag(ARTICLE_FRAGMENT, null, true);
 
 	}
 
-	public void gotoCommentsFragment(int articleNID){
-
-		Bundle args = new Bundle();
-		args.putInt(NSManager.NID, articleNID);
-		gotoFragmentByTag(COMMENTS_FRAGMENT, args);
-
-	}
-
-	public void gotoAddCommentFragment(int articleNID){
-
-		Bundle args = new Bundle();
-		args.putInt(NSManager.NID, articleNID);
-		gotoFragmentByTag(ADD_COMMENT_FRAGMENT, args);
-
-	}
+//	public void gotoCommentsFragment(int articleNID){
+//
+//		Bundle args = new Bundle();
+//		args.putInt(NSManager.NID, articleNID);
+//		gotoFragmentByTag(COMMENTS_FRAGMENT, args);
+//
+//	}
+//
+//	public void gotoAddCommentFragment(int articleNID){
+//
+//		Bundle args = new Bundle();
+//		args.putInt(NSManager.NID, articleNID);
+//		gotoFragmentByTag(ADD_COMMENT_FRAGMENT, args);
+//
+//	}
 
 	public void gotoSearchArticlesFragment(String keyword){
 
 		Bundle args = new Bundle();
 		args.putString(SearchArticlesFragment.ARG_ARTICLE_KEYWORD, keyword);
-		gotoFragmentByTag(SEARCH_FRAGMENT, args);
+		gotoFragmentByTag(SEARCH_FRAGMENT, args, true);
 
 	}
 
@@ -588,20 +605,21 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		args.putString(ListArticlesFragment.ARG_ARTICLE_LINK, link);
 		args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, categoryName);
 		args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, title);
-		//			gotoFragmentByTag(LIST_ARTICLE_FRAGMENT, args);
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
 
-		fragment1 = getFragmentByTag(LIST_ARTICLE_FRAGMENT);
+		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(LIST_ARTICLE_FRAGMENT+link);
 
-		if(args != null)
+		if(fragment1 == null){
+			fragment1 = getFragmentByTag(LIST_ARTICLE_FRAGMENT);
 			fragment1.setArguments(args);
 
-		if(fragment1 != null){
-			transaction.replace(R.id.content_frame_second, fragment1, LIST_ARTICLE_FRAGMENT);
-			transaction.addToBackStack(LIST_ARTICLE_FRAGMENT);
+			transaction.replace(R.id.content_frame_second, fragment1, LIST_ARTICLE_FRAGMENT+link);
+//			transaction.addToBackStack(LIST_ARTICLE_FRAGMENT+link);
+		}else{
+			transaction.attach(fragment1);
 		}
 
 		transaction.commit();

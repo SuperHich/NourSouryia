@@ -73,7 +73,7 @@ public class NewsFragment extends BaseFragment  {
 				args.putString(ListNewsFragment.ARG_ARTICLE_LINK, cat.getLink());
 				args.putString(ListNewsFragment.ARG_ARTICLE_CATEGORY, cat.getParent());
 
-				((MainActivity) getActivity()).gotoFragmentByTag(MainActivity.THAWRA_DIARIES, args);
+				((MainActivity) getActivity()).gotoFragmentByTag(MainActivity.THAWRA_DIARIES, args, true);
 				break;
 			default:
 				break;
