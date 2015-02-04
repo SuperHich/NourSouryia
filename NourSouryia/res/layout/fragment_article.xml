@@ -13,8 +13,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.55" >
+            android:layout_height="match_parent" >
 
             <Button
                 android:id="@+id/btn_share"
@@ -103,69 +102,68 @@
                         android:paddingRight="15dp"
                         android:textColor="#000"
                         android:textSize="14sp" />
+
+                    <RelativeLayout
+                        android:id="@+id/comments_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" 
+                        android:layout_below="@+id/txv_article_content2">
+
+                        <LinearLayout
+                            android:id="@+id/comments_btn_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal" >
+
+                            <Button
+                                android:id="@+id/btn_old_comments"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="0.5"
+                                android:background="@drawable/btn_selected_selector"
+                                android:gravity="center"
+                                android:text="@string/old_comments"
+                                android:textColor="#FFF"
+                                android:textSize="14sp" />
+
+                            <Button
+                                android:id="@+id/btn_new_comment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="0.5"
+                                android:background="@drawable/btn_selector"
+                                android:gravity="center"
+                                android:text="@string/add_comment"
+                                android:textColor="#FFF"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <include
+                            android:id="@+id/comments_listview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/comments_btn_layout"
+                            android:layout_marginTop="5dp"
+                            layout="@layout/old_comments_layout"
+                            android:visibility="visible" />
+
+                        <include
+                            android:id="@+id/add_comment_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/comments_btn_layout"
+                            android:layout_marginTop="5dp"
+                            layout="@layout/add_comment_layout"
+                            android:visibility="gone" />
+                    </RelativeLayout>
                 </RelativeLayout>
             </ScrollView>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/comments_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.45" 
-            android:visibility="gone">
-
-            <LinearLayout
-                android:id="@+id/comments_btn_layout"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp" 
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_old_comments"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/btn_selected_selector"
-                    android:gravity="center"
-                    android:text="@string/old_comments"
-                    android:textColor="#FFF"
-                    android:textSize="14sp" />
-
-                <Button
-                    android:id="@+id/btn_new_comment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/btn_selector"
-                    android:gravity="center"
-                    android:text="@string/add_comment"
-                    android:textColor="#FFF" 
-                    android:textSize="14sp"/>
-            </LinearLayout>
-            
-            <include 
-                android:id="@+id/comments_listview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/old_comments_layout"
-                android:layout_below="@+id/comments_btn_layout"
-                android:layout_marginTop="5dp"
-                android:visibility="visible"/>
-            
-            <include 
-                android:id="@+id/add_comment_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/add_comment_layout"
-                android:layout_below="@+id/comments_btn_layout"
-                android:layout_marginTop="5dp"
-                android:visibility="gone"/>
-            
         </RelativeLayout>
     </LinearLayout>
 

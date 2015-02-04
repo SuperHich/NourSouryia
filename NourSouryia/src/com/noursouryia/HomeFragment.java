@@ -120,6 +120,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 	private ThinDownloadManager downloadManager;
 	private NotificationManager mNotifyManager;
 	private Builder mBuilder;
+	private boolean isHome = true;
 
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -628,32 +629,18 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 		if(isFirstStart)
 		{
-			Log.e(TAG, ">>> isFirstStart ");
+			Log.e(TAG, ">>> isFirstStart= "+ isFirstStart);
 			if(getArguments() == null)
 				mSlidingLayer.openLayer(true);
 			else
 				mSlidingLayer.closeLayer(true);
 			
 			isFirstStart = false;
+		}else{
+			Log.e(TAG, ">>> isHome= " + isHome);
+			media_layout.setVisibility(View.GONE);
+			home_layout.setVisibility(View.VISIBLE);
 		}
-		//		else{
-		//
-		//			if (isHome){
-		//
-		//				switchView2(media_layout, home_layout);
-		////				home_layout.setVisibility(View.VISIBLE);
-		////				media_layout.setVisibility(View.GONE);
-		//
-		//			} else {
-		//
-		//				switchView2(home_layout, media_layout);
-		////				home_layout.setVisibility(View.GONE);
-		////				media_layout.setVisibility(View.VISIBLE);
-		//
-		//			}
-		//		}
-
-
 
 	}
 
@@ -912,6 +899,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 			switchView2(media_layout, home_layout);
 		}
 
+		isHome = true;
 	}
 
 	@Override
@@ -921,6 +909,8 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		if(!isFirstStart){
 			switchView2(home_layout, media_layout);
 		}
+		
+		isHome = false;
 	}
 
 

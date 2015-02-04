@@ -205,7 +205,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		homeType.setNameAr(getString(R.string.menu_home));
 
 		mTypes.add(homeType);
-		mTypes.addAll(NourSouryiaDB.getTypesExcept("photos", "sounds", "videos"));
+//		mTypes.addAll(NourSouryiaDB.getTypesExcept("photos", "sounds", "videos"));
+		mTypes.addAll(getOrderedTypes());
 		mTypes.addAll(getAnnexeTypes());
 		mTypes.add(getMediaType());
 
@@ -223,8 +224,12 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				Type selectedType = mTypes.get(arg2);
 
 				if(selectedType.getCategories().size() == 0){
+					int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+					if(backStackCount > 1)
+						popBackStackTillEntry(1);
+					
 					if(selectedType.getNameEn().equals("homeType")){
-						onTypeItemClicked(HOME_FRAGMENT, null, false);
+						onTypeItemClicked(HOME_FRAGMENT, null, true);
 					}
 					else if(selectedType.getLink().equals(NSManager.URL_AUTHORS))
 						onTypeItemClicked(AUTHORS_FRAGMENT, null, true);
@@ -247,6 +252,10 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
 
+				int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+				if(backStackCount > 1)
+					popBackStackTillEntry(1);
+				
 				Category selectedCategory = mTypes.get(groupPosition).getCategories().get(childPosition);
 				if(groupPosition < mTypes.size() - 1){
 
@@ -347,7 +356,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		if(isFirstStart){
 //			selectItem(lastPosition);
-			gotoFragmentByTag(HOME_FRAGMENT, null, false);
+			gotoFragmentByTag(HOME_FRAGMENT, null, true);
 
 			isFirstStart = false;
 		}
@@ -358,50 +367,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		super.onStop();
 
 	}
-
-
-//	private void selectItem(int position) {
-//
-//		lastPosition = position;
-//		boolean shouldSwitch = true;
-//
-//		switch (position) {
-//		case 0:
-//			fragment = new HomeFragment();
-//			break;
-//		default:
-//			shouldSwitch = false;
-//			break;
-//		}
-//
-//		if(shouldSwitch)
-//			switchTab(fragment, false);
-//
-//		// update selected item and title, then close the drawer
-//		mDrawerList.setItemChecked(position, true);
-//		mDrawerLayout.closeDrawer(mDrawerLinear);
-//
-//	}
-//
-//
-//	private void switchTab(Fragment tab, boolean withAnimation) {
-//		FragmentManager fm = getSupportFragmentManager();
-//		Fragment fragment = fm.findFragmentById(R.id.content_frame);
-//
-//		final FragmentTransaction ft = fm.beginTransaction();
-//		if(withAnimation)
-//			ft.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-//
-//		if (fragment == null) {
-//			ft.add(R.id.content_frame, tab);
-//
-//		} else {
-//			ft.replace(R.id.content_frame, tab);
-//		}
-//
-//		ft.commit();
-//
-//	}
 
 	@Override
 	public void onMenuItemClicked(int position) {
@@ -601,6 +566,9 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	public void gotoListArticlesFragment(String link, String categoryName, String title){
 
+		if(currentFragment.equals(LIST_ARTICLE_FRAGMENT+link))
+			return;
+		
 		Bundle args = new Bundle();
 		args.putString(ListArticlesFragment.ARG_ARTICLE_LINK, link);
 		args.putString(ListArticlesFragment.ARG_ARTICLE_CATEGORY, categoryName);
@@ -610,17 +578,17 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
 
-		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(LIST_ARTICLE_FRAGMENT+link);
-
-		if(fragment1 == null){
+//		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(LIST_ARTICLE_FRAGMENT+link);
+//
+//		if(fragment1 == null){
 			fragment1 = getFragmentByTag(LIST_ARTICLE_FRAGMENT);
 			fragment1.setArguments(args);
 
 			transaction.replace(R.id.content_frame_second, fragment1, LIST_ARTICLE_FRAGMENT+link);
-//			transaction.addToBackStack(LIST_ARTICLE_FRAGMENT+link);
-		}else{
-			transaction.attach(fragment1);
-		}
+			transaction.addToBackStack(LIST_ARTICLE_FRAGMENT+link);
+//		}else{
+//			transaction.attach(fragment1);
+//		}
 
 		transaction.commit();
 
@@ -656,52 +624,19 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	}
 
-	//	public void gotoMediaFragment(){
-	//
-	//		FragmentManager fragmentManager = getSupportFragmentManager();
-	//		FragmentTransaction transaction = fragmentManager.beginTransaction();
-	//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
-	//
-	//		fragment1 = getFragmentByTag(MEDIA_FRAGMENT);
-	//
-	//		if(fragment1 != null){
-	//			transaction.replace(R.id.media_frame, fragment1, MEDIA_FRAGMENT);
-	//			transaction.addToBackStack(MEDIA_FRAGMENT);
-	//		}
-	//
-	//		transaction.commit();
-	//
-	//		currentFragment = MEDIA_FRAGMENT;
-	//
-	//	}
-	//	
-	//	public void gotoHomeFragment(){
-	//
-	//		FragmentManager fragmentManager = getSupportFragmentManager();
-	//		FragmentTransaction transaction = fragmentManager.beginTransaction();
-	//		transaction.setCustomAnimations(R.anim.down_in, R.anim.down_out, R.anim.up_in, R.anim.up_out);
-	//
-	//		fragment1 = getFragmentByTag(HOME_FRAGMENT);
-	//
-	//		if(fragment1 != null){
-	//			transaction.replace(R.id.content_frame, fragment1, HOME_FRAGMENT);
-	//			transaction.addToBackStack(HOME_FRAGMENT);
-	//		}
-	//
-	//		transaction.commit();
-	//
-	//		currentFragment = HOME_FRAGMENT;
-	//
-	//	}
-
-
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 
-		//		hideOpenerTop();
-		//		hideImageTitle();
-
+		int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+		Log.d(TAG, ">>> NUM FRAGMENT(s) " + backStackCount);
+		if(backStackCount > 1)
+			popBackStackTillEntry(backStackCount);
+		else if(backStackCount == 1)
+			gotoFragmentByTag(HOME_FRAGMENT, null, false);
+		else
+			super.onBackPressed();
+		
 	}
 
 
@@ -793,6 +728,26 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	}
 
+	private ArrayList<Type> getOrderedTypes(){
+		ArrayList<Type> types = new ArrayList<Type>();
+		
+		types.add(NourSouryiaDB.getTypeByName("revnews"));
+		types.add(NourSouryiaDB.getTypeByName("revmarsad"));
+		types.add(NourSouryiaDB.getTypeByName("revto"));
+		types.add(NourSouryiaDB.getTypeByName("revsucc"));
+		types.add(NourSouryiaDB.getTypeByName("sham"));
+		types.add(NourSouryiaDB.getTypeByName("todaysyria"));
+		types.add(NourSouryiaDB.getTypeByName("biographies"));
+		
+		Type tArticle = NourSouryiaDB.getTypeByName("article");
+		tArticle.setNameAr(getString(R.string.articles));
+		types.add(tArticle);
+		
+		types.add(NourSouryiaDB.getTypeByName("research"));
+		
+		return types;
+	}
+	
 	private ArrayList<Type> getAnnexeTypes(){
 		ArrayList<Type> types = new ArrayList<Type>();
 
@@ -831,24 +786,25 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			Type t3 = NourSouryiaDB.getTypeByName("videos");
 
 			ArrayList<Category> categories = new ArrayList<Category>();
-			Category cat1 = new Category();
-			cat1.setLink(t1.getLink());
-			cat1.setName(t1.getNameAr());
-			cat1.setTid(HomeFragment.PHOTOS_FOLDER_SELECTED);
-			categories.add(cat1);
-
-			Category cat2 = new Category();
-			cat2.setLink(t2.getLink());
-			cat2.setName(t2.getNameAr());
-			cat2.setTid(HomeFragment.SOUNDS_FOLDER_SELECTED);
-			categories.add(cat2);
-
+			
 			Category cat3 = new Category();
 			cat3.setLink(t3.getLink());
 			cat3.setName(t3.getNameAr());
 			cat3.setTid(HomeFragment.VIDEOS_FOLDER_SELECTED);
 			categories.add(cat3);
 
+			Category cat2 = new Category();
+			cat2.setLink(t2.getLink());
+			cat2.setName(t2.getNameAr());
+			cat2.setTid(HomeFragment.SOUNDS_FOLDER_SELECTED);
+			categories.add(cat2);
+			
+			Category cat1 = new Category();
+			cat1.setLink(t1.getLink());
+			cat1.setName(t1.getNameAr());
+			cat1.setTid(HomeFragment.PHOTOS_FOLDER_SELECTED);
+			categories.add(cat1);
+			
 			mediaType.setCategories(categories);
 		}catch(Exception e){
 			e.printStackTrace();

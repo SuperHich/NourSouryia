@@ -43,10 +43,10 @@ import android.util.Log;
 
 public class JSONParser {
  
-    static InputStream is = null;
-    static JSONObject jObj = null;
-    static JSONArray jArray = null;
-    static String json = "";
+//    static InputStream is = null;
+//    static JSONObject jObj = null;
+//    static JSONArray jArray = null;
+//    static String json = "";
  
     // constructor
     public JSONParser() {
@@ -55,6 +55,9 @@ public class JSONParser {
     
     public JSONArray getJSONFromUrl(String url) {
     	
+    	InputStream is = null;
+    	JSONArray jArray = null;
+    	String json = "";
     	int statusCode = -1;
         // Making HTTP request
         try {
@@ -107,6 +110,9 @@ public class JSONParser {
     
     public JSONObject getJSONObjectFromUrl(String url) {
 
+    	InputStream is = null;
+    	JSONObject jObj = null;
+    	String json = "";
     	int statusCode = -1;
     	// Making HTTP request
     	try {
@@ -159,6 +165,9 @@ public class JSONParser {
     
     public JSONArray getJSONArrayFromUrl(String url, List<NameValuePair> params) {
     	
+    	InputStream is = null;
+    	JSONArray jArray = null;
+    	String json = "";
     	int statusCode = NSManager.DEFAULT_VALUE;
         // Making HTTP request
         try {
@@ -209,58 +218,61 @@ public class JSONParser {
  
     }
     
-public JSONObject getJSONObjectFromUrl(String url, List<NameValuePair> params) {
-    	
+    public JSONObject getJSONObjectFromUrl(String url, List<NameValuePair> params) {
+
+    	InputStream is = null;
+    	JSONObject jObj = null;
+    	String json = "";
     	int statusCode = NSManager.DEFAULT_VALUE;
-        // Making HTTP request
-        try {
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new UrlEncodedFormEntity(params));
- 
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            statusCode = httpResponse.getStatusLine().getStatusCode();
-            is = httpEntity.getContent();
- 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
- 
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            is.close();
-            json = sb.toString();
-            Log.e("JSON", json);
-        } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
-        }
-        
-        if(statusCode == HttpStatus.SC_OK)
-        {
-        	// try parse the string to an Integer value
-        	try {
-        		jObj = new JSONObject(json);            
-        	} catch (JSONException e) {
-        		Log.e("JSON Parser", "Error parsing data " + e.toString());
-        	}
-        }
- 
-        // return status code / response
-        return jObj;
- 
+    	// Making HTTP request
+    	try {
+    		HttpClient httpClient = new DefaultHttpClient();
+    		HttpPost httpPost = new HttpPost(url);
+    		httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+    		HttpResponse httpResponse = httpClient.execute(httpPost);
+    		HttpEntity httpEntity = httpResponse.getEntity();
+    		statusCode = httpResponse.getStatusLine().getStatusCode();
+    		is = httpEntity.getContent();
+
+    	} catch (UnsupportedEncodingException e) {
+    		e.printStackTrace();
+    	} catch (ClientProtocolException e) {
+    		e.printStackTrace();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+
+    	try {
+    		BufferedReader reader = new BufferedReader(new InputStreamReader(
+    				is, "iso-8859-1"), 8);
+    		StringBuilder sb = new StringBuilder();
+    		String line = null;
+    		while ((line = reader.readLine()) != null) {
+    			sb.append(line + "\n");
+    		}
+    		is.close();
+    		json = sb.toString();
+    		Log.e("JSON", json);
+    	} catch (Exception e) {
+    		Log.e("Buffer Error", "Error converting result " + e.toString());
+    	}
+
+    	if(statusCode == HttpStatus.SC_OK)
+    	{
+    		// try parse the string to an Integer value
+    		try {
+    			jObj = new JSONObject(json);            
+    		} catch (JSONException e) {
+    			Log.e("JSON Parser", "Error parsing data " + e.toString());
+    		}
+    	}
+
+    	// return status code / response
+    	return jObj;
+
     }
-    
+
 //    public int getIntegerFromUrl(String url, List<NameValuePair> params) {
 //    	
 //    	int statusCode = NSManager.DEFAULT_VALUE;

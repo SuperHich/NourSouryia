@@ -4,6 +4,9 @@ package com.noursouryia.utils;
 import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -41,6 +44,36 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 	private Button opener_bottom, btn_news, btn_tahdhib, btn_researches, btn_letters, btn_opinions;
 	private int height_halfScreen ;
 	protected SlidingLayer mSlidingLayer;
+	
+	private Handler mHandler = new Handler(new Callback() {
+		
+		@Override
+		public boolean handleMessage(Message msg) {
+			if(BaseFragment.this instanceof HomeFragment){
+				((MainActivity) getActivity()).isTopOpener = false;
+				((MainActivity) getActivity()).hideOpenerTop();
+			}else{
+				((MainActivity) getActivity()).isTopOpener = false;
+
+				if(BaseFragment.this instanceof FilesFragment
+						|| BaseFragment.this instanceof AuthorsFragment 
+						|| BaseFragment.this instanceof NewsFragment
+						|| BaseFragment.this instanceof FragmentThawraDiaries
+						|| BaseFragment.this instanceof ListArticlesFragment
+						|| BaseFragment.this instanceof ListNewsFragment
+						|| BaseFragment.this instanceof SearchArticlesFragment
+						|| BaseFragment.this instanceof PollsFragment){
+					((MainActivity) getActivity()).showOpenerTop();
+					((MainActivity) getActivity()).isTopOpener = true;
+				}else
+					((MainActivity) getActivity()).hideOpenerTop();
+
+				if(BaseFragment.this instanceof FilesFragment || BaseFragment.this instanceof AuthorsFragment)
+					((MainActivity) getActivity()).isImgTitle = true;
+			}
+			return false;
+		}
+	});
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -108,33 +141,17 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 
 			((MainActivity) getActivity()).hideImageTitle();
 			((MainActivity) getActivity()).isImgTitle = false;
+			
+			mHandler.sendMessageDelayed(new Message(), 1000);
 
 			if(this instanceof HomeFragment){
 				mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
 				rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-				((MainActivity) getActivity()).isTopOpener = false;
-				((MainActivity) getActivity()).hideOpenerTop();
 			}else{
 				mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_TOP);
 				rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-				((MainActivity) getActivity()).isTopOpener = false;
-
-				if(this instanceof FilesFragment
-						|| this instanceof AuthorsFragment 
-						|| this instanceof NewsFragment
-						|| this instanceof FragmentThawraDiaries
-						|| this instanceof ListArticlesFragment
-						|| this instanceof ListNewsFragment
-						|| this instanceof SearchArticlesFragment
-						|| this instanceof PollsFragment){
-					((MainActivity) getActivity()).showOpenerTop();
-					((MainActivity) getActivity()).isTopOpener = true;
-				}else
-					((MainActivity) getActivity()).hideOpenerTop();
-
-				if(this instanceof FilesFragment || this instanceof AuthorsFragment)
-					((MainActivity) getActivity()).isImgTitle = true;
 			}
+			
 			rlp.width = LayoutParams.MATCH_PARENT;
 			//		rlp.height = getResources().getDimensionPixelSize(R.dimen.layer_width);
 
@@ -144,7 +161,6 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 			height_halfScreen = (displaymetrics.heightPixels)/2;
 
 			rlp.height = height_halfScreen;
-
 
 			mSlidingLayer.setLayoutParams(rlp);
 

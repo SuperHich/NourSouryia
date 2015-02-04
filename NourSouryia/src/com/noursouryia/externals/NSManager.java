@@ -236,10 +236,10 @@ public class NSManager {
 		return files;
 	}
 	
-	public ArrayList<Author> getAuthors() {
+	public ArrayList<Author> getAuthors(int pageNb) {
 
 		ArrayList<Author> authors = new ArrayList<Author>();
-		JSONArray array = jsonParser.getJSONFromUrl(URL_AUTHORS);
+		JSONArray array = jsonParser.getJSONFromUrl(URL_AUTHORS+"?page="+pageNb);
 		if (array != null) 
 			for (int i = 0; i < array.length(); i++) {
 				try {
@@ -411,6 +411,7 @@ public class NSManager {
 		
 		Log.i(TAG, "url " + url);
 		
+		JSONParser jsonParser = new JSONParser();
 		JSONArray array = jsonParser.getJSONFromUrl(url);
 		if (array != null) 
 			for (int i = 0; i < array.length(); i++) {
