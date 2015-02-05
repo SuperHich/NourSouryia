@@ -178,7 +178,7 @@
             android:background="@drawable/bg_article_search_bar"
             android:gravity="right|center_vertical"
             android:hint="@string/hint_search"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionSearch"
             android:inputType="text"
             android:paddingRight="15dp"
             android:textSize="12sp" />

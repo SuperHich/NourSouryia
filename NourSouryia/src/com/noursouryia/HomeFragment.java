@@ -1225,4 +1225,10 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 			break;
 		}
 	}
+
+	@Override
+	public void resetSearch(String keyword) {
+		// TODO Auto-generated method stub
+		
+	}
 }

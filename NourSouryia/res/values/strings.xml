@@ -71,5 +71,5 @@
     <string name="download_successful">تم التحميل بنجاح !</string>
     <string name="hint_search">أدخل كلمة البحث</string>
     <string name="articles">مقالات منوعة</string>
-
+    <string name="result">نتيجة</string>
 </resources>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -20,8 +21,11 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView.InternalListView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView.OnLoadMoreListener;
 import com.noursouryia.adapters.ArticlesAdapter;
 import com.noursouryia.entity.Article;
+import com.noursouryia.entity.SearchResult;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
@@ -29,7 +33,7 @@ import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
 
 
-public class SearchArticlesFragment extends BaseFragment {
+public class SearchArticlesFragment extends BaseFragment implements IFragmentEnabler{
 	
 	public static final String ARG_ARTICLE_KEYWORD 	= "article_keyword";
 	
@@ -46,6 +50,8 @@ public class SearchArticlesFragment extends BaseFragment {
 	private int pageNb = 0;
 	
 	private String keyword;
+
+	private NSManager mManager;
 	
 	public SearchArticlesFragment() {
 		// Empty constructor required for fragment subclasses
@@ -93,19 +99,29 @@ public class SearchArticlesFragment extends BaseFragment {
 		txv_showMore = (TextView) footer.findViewById(R.id.txv_showMore);
 		progressBar = (ProgressBar) footer.findViewById(R.id.progressBar);
 		footer.setBackgroundResource(R.drawable.drawer_subitem_selector);
-//		listView.getRefreshableView().addFooterView(footer, null, true);
 		
 		txv_wait.setTypeface(NSFonts.getNoorFont());
 		txv_empty.setTypeface(NSFonts.getNoorFont());
 		txv_title.setTypeface(NSFonts.getNoorFont());
-		txv_title.setText("\"" + keyword + "\"");
+		refreshTitle(NSManager.DEFAULT_VALUE);
 		
 		return rootView;
+	}
+	
+	private void refreshTitle(int total_items){
+		String title = "\"" + keyword + "\"";
+		if(total_items != NSManager.DEFAULT_VALUE)
+			title += " : " + total_items + " " + getString(R.string.result);
+		
+		txv_title.setText(title);
 	}
 	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		
+		mManager = NSManager.getInstance(getActivity());
+		mManager.setFragmentEnabler(this);
 		
 		adapter = new ArticlesAdapter(getActivity(), articles);
 		listView.setAdapter(adapter);
@@ -126,30 +142,30 @@ public class SearchArticlesFragment extends BaseFragment {
 			}
 		});
 		
-//		((InternalListView)listView.getRefreshableView()).setOnLoadMoreListener(new OnLoadMoreListener() {
-//			public void onLoadMore() {
-//				// Do the work to load more items at the end of list
-//				// here
-//				if(!NSManager.getInstance(getActivity()).isOnlineMode())
-//				{	
+		((InternalListView)listView.getRefreshableView()).setOnLoadMoreListener(new OnLoadMoreListener() {
+			public void onLoadMore() {
+				// Do the work to load more items at the end of list
+				// here
+				if(!NSManager.getInstance(getActivity()).isOnlineMode())
+				{	
 //					((MainActivity)getActivity()).showOnLineModePopup();
-//					((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
-//				}
-//				else{
-//					initData();
-//				}
-//			}
-//		});
+					((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
+				}
+				else{
+					initData();
+				}
+			}
+		});
 		
-//		footer.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				txv_showMore.setVisibility(View.GONE);
-//				progressBar.setVisibility(View.VISIBLE);
-//				initData();
-//			}
-//		});
+		footer.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				txv_showMore.setVisibility(View.GONE);
+				progressBar.setVisibility(View.VISIBLE);
+				initData();
+			}
+		});
 		
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
@@ -161,21 +177,30 @@ public class SearchArticlesFragment extends BaseFragment {
 					listView.onRefreshComplete();
 				}
 				else{
-					txv_showMore.setVisibility(View.VISIBLE);
-					progressBar.setVisibility(View.GONE);
-					articles.clear();
-					pageNb = 0;
-					initData();
+					if(pageNb==1)
+						listView.getRefreshableView().removeFooterView(footer);
+					
+					resetSearch();
 				}
 			}
 		});
 		
+	}
+	
+	private void resetSearch(){
+		txv_showMore.setVisibility(View.VISIBLE);
+		progressBar.setVisibility(View.GONE);
+		articles.clear();
+		pageNb = 0;
+		initData();
 	}
 
 	private void initData(){
 		
 		new AsyncTask<Void, Void, ArrayList<Article>>() {
 
+			SearchResult searchResult;
+			
 			@Override
 			protected void onPreExecute() {
 				if(articles.size() == 0)
@@ -183,6 +208,7 @@ public class SearchArticlesFragment extends BaseFragment {
 					loading.setVisibility(View.VISIBLE);
 					listView.setVisibility(View.GONE);
 					txv_title.setVisibility(View.GONE);
+					txv_empty.setVisibility(View.GONE);
 				}
 			}
 			
@@ -198,7 +224,8 @@ public class SearchArticlesFragment extends BaseFragment {
 						if(pageNb == 0)
 							articles.clear();
 						
-						ArrayList<Article> list = NSManager.getInstance(getActivity()).searchArticlesByKeyword(keyword, NSManager.DEFAULT_VALUE);
+						searchResult = NSManager.getInstance(getActivity()).searchArticlesByKeyword(keyword, pageNb++);
+						ArrayList<Article> list = searchResult.getArticles();
 						
 						if(list.size() > 0)
 							for(Article a : list){
@@ -223,21 +250,26 @@ public class SearchArticlesFragment extends BaseFragment {
 				listView.setVisibility(View.VISIBLE);
 				txv_title.setVisibility(View.VISIBLE);
 
-//				((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
+				((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
 				
 				if(listView.isRefreshing())
 					listView.onRefreshComplete();
 				
 				if(result != null){
 					
-//					if(pageNb == 1)
-//						listView.getRefreshableView().addFooterView(footer, null, true);
-//					else 
-//					if(pageNb == 2)
-//						listView.getRefreshableView().removeFooterView(footer);
+					if(pageNb == 1)
+						listView.getRefreshableView().addFooterView(footer, null, true);
+					else 
+					if(pageNb == 2)
+						listView.getRefreshableView().removeFooterView(footer);
+					
+					refreshTitle(searchResult.getTotal_items());
 					
 					articles.addAll(result);
 					adapter.notifyDataSetChanged();
+					
+					if(articles.isEmpty())
+						listView.getRefreshableView().removeFooterView(footer);
 				}else
 					((MainActivity)getActivity()).showConnectionErrorPopup();
 				
@@ -252,5 +284,27 @@ public class SearchArticlesFragment extends BaseFragment {
 			txv_empty.setVisibility(View.VISIBLE);
 		else
 			txv_empty.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void setEnabled(boolean enable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onFolderClicked(int folderId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resetSearch(String keyword) {
+		this.keyword = keyword;
+		
+		if(listView.getRefreshableView().getFooterViewsCount() > 0)
+			listView.getRefreshableView().removeFooterView(footer);
+		
+		resetSearch();
 	}
 }

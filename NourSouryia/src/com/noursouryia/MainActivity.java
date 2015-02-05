@@ -20,7 +20,6 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -79,18 +78,17 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private View headerSeparator;
 
 	private ActionBarDrawerToggle mDrawerToggle;
-	private RelativeLayout mainView , moving_layout, layout_search;
+	private RelativeLayout layout_search;
 	private EditText edt_search;
 
 	public static final int MESSAGE_START = 1;
 
-	private int lastPosition = 0;
 	private boolean isFirstStart = true;
 	public boolean isTopOpener = false;
 	public boolean isImgTitle = false;
 	public boolean searchBtnEnable = false;
 
-	private Fragment fragment, fragment1;
+	private Fragment fragment1;
 	private String currentFragment;
 
 	private int width_halfScreen ;
@@ -111,8 +109,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		mDrawerList = (ExpandableListView) findViewById(R.id.right_drawer);
 		mDrawerLinear = (LinearLayout) findViewById(R.id.drawer_linear);
 
-		moving_layout = (RelativeLayout) findViewById(R.id.moving_layout);
-//		mainView = (RelativeLayout) findViewById(R.id.content_frame);
 		layout_search = (RelativeLayout) findViewById(R.id.layout_search);
 
 		btn_menu_outside 	= (Button) findViewById(R.id.btn_menu_outside);
@@ -131,25 +127,25 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		edt_search.setTypeface(NSFonts.getNoorFont());
 
-		btn_search.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String keyword = edt_search.getText().toString();
-				if(!keyword.equals("")){
-					gotoSearchArticlesFragment(keyword);
-					Utils.hideKeyboard(MainActivity.this, edt_search);
-					layout_search.bringToFront();
-					edt_search.bringToFront();
-					btn_search.bringToFront();
-				}
-			}
-		});
+//		btn_search.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				String keyword = edt_search.getText().toString();
+//				if(!keyword.equals("")){
+//					gotoSearchArticlesFragment(keyword);
+//					Utils.hideKeyboard(MainActivity.this, edt_search);
+//					layout_search.bringToFront();
+//					edt_search.bringToFront();
+//					btn_search.bringToFront();
+//				}
+//			}
+//		});
 
 
 		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if (actionId == EditorInfo.IME_ACTION_DONE) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 					String keyword = edt_search.getText().toString();
 					if(!keyword.equals("")){
 						gotoSearchArticlesFragment(keyword);
@@ -444,8 +440,6 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 				//				Toast.makeText(MainActivity.this, mManager.isOnlineMode() ? getString(R.string.online_on) : getString(R.string.online_off), Toast.LENGTH_LONG).show();
 
 				startActivity(new Intent(MainActivity.this, AboutNS.class));
-				overridePendingTransition(R.anim.up_in, R.anim.up_out);
-
 
 				break;
 
@@ -499,7 +493,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public void gotoFragmentByTag(String fragmentTAG, Bundle arguments, boolean addToBack){
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+		transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
 		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(fragmentTAG);
 
@@ -540,28 +534,16 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	}
 
-//	public void gotoCommentsFragment(int articleNID){
-//
-//		Bundle args = new Bundle();
-//		args.putInt(NSManager.NID, articleNID);
-//		gotoFragmentByTag(COMMENTS_FRAGMENT, args);
-//
-//	}
-//
-//	public void gotoAddCommentFragment(int articleNID){
-//
-//		Bundle args = new Bundle();
-//		args.putInt(NSManager.NID, articleNID);
-//		gotoFragmentByTag(ADD_COMMENT_FRAGMENT, args);
-//
-//	}
-
 	public void gotoSearchArticlesFragment(String keyword){
 
-		Bundle args = new Bundle();
-		args.putString(SearchArticlesFragment.ARG_ARTICLE_KEYWORD, keyword);
-		gotoFragmentByTag(SEARCH_FRAGMENT, args, true);
-
+		if(currentFragment.equals(SEARCH_FRAGMENT))
+			mManager.getFragmentEnabler().resetSearch(keyword);
+		else{
+			popBackStackTillEntry(1);
+			Bundle args = new Bundle();
+			args.putString(SearchArticlesFragment.ARG_ARTICLE_KEYWORD, keyword);
+			gotoFragmentByTag(SEARCH_FRAGMENT, args, true);
+		}
 	}
 
 	public void gotoListArticlesFragment(String link, String categoryName, String title){
@@ -576,7 +558,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+		transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
 //		fragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag(LIST_ARTICLE_FRAGMENT+link);
 //
@@ -606,7 +588,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+		transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
 		fragment1 = getFragmentByTag(LIST_NEWS_FRAGMENT);
 

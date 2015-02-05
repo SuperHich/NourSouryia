@@ -60,11 +60,10 @@ public class AboutNS extends Activity {
 			@Override
 			public void onClick(View arg0) {
 
-				finish();
+				onBackPressed();
 
 			}
 		});
-
-
 	}
+	
 }
