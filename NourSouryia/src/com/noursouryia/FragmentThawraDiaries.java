@@ -314,7 +314,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 		if (day.equalsIgnoreCase("Sunday"))
 			return "الأحد" ;
 		else if (day.equalsIgnoreCase("Monday"))
-			return "الاثنان" ;
+			return "الاثنين" ;
 		else if (day.equalsIgnoreCase("Tuesday"))
 			return "الثلاثاء" ;
 		else if (day.equalsIgnoreCase("Wednesday"))
@@ -334,21 +334,21 @@ public class FragmentThawraDiaries extends BaseFragment{
 		String arabicMonth = "";
 
 		if (monthName.equalsIgnoreCase("January"))
-			return  "جانفي";
+			return  "يناير";
 		else if (monthName.equalsIgnoreCase("February"))
-			return "فيفري";
+			return "فبراير";
 		else if (monthName.equalsIgnoreCase("March"))
 			return "مارس";
 		else if (monthName.equalsIgnoreCase("April"))
-			return "آفريل";
+			return "أبريل";
 		else if (monthName.equalsIgnoreCase("May"))
-			return "ماي";
+			return "مايو";
 		else if (monthName.equalsIgnoreCase("June"))
-			return "جوان";
+			return "يونيو";
 		else if (monthName.equalsIgnoreCase("July"))
-			return "جويلية";
+			return "يوليو";
 		else if (monthName.equalsIgnoreCase("August"))
-			return "أوت";
+			return "أغسطس";
 		else if (monthName.equalsIgnoreCase("September"))
 			return "سبتمبر";
 		else if (monthName.equalsIgnoreCase("October"))
@@ -441,7 +441,7 @@ public class FragmentThawraDiaries extends BaseFragment{
 					}
 					else if(Utils.isOnline(getActivity())){
 
-						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticles(link, NSManager.getTimeStamp(month), NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);
+						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticles(link, NSManager.getTimeStamp(month), 10, 0);
 
 						for(Article a : list){
 							((NSActivity)getActivity()).NourSouryiaDB.insertOrUpdateArticle(a, NSManager.DEFAULT_VALUE, NSManager.DEFAULT_VALUE);

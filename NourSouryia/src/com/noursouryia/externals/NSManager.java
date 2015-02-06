@@ -612,7 +612,7 @@ public class NSManager {
 			calendar = Calendar.getInstance();
 		
 		Timestamp ts = new Timestamp(calendar.getTimeInMillis());
-		return ts.getTime();
+		return ts.getTime()/1000L;
 //		return calendar.getTimeInMillis();
 	}
 	
