@@ -1,8 +1,0 @@
-<resources>
-
-    <integer-array name="menu_drawables">
-        <item>@drawable/btn_jana2ez</item>
-        <item>@drawable/btn_dourouss</item>
-    </integer-array>
-
-</resources>
