@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_top" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/notif_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <Switch
+                android:id="@+id/notif_switch"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="right|center_vertical"
+                android:layout_weight="0.6"
+                android:textOff="@string/no"
+                android:textOn="@string/yes"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/notif_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:layout_weight="0.4"
+                android:paddingRight="20dp"
+                android:scaleType="fitCenter"
+                android:text="@string/push_activate"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/notif_sound_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:weightSum="1" >
+
+            <Switch
+                android:id="@+id/notif_sound_switch"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="right|center_vertical"
+                android:layout_weight="0.6"
+                android:textOff="@string/no"
+                android:textOn="@string/yes"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/notif_sound_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:gravity="right|center_vertical"
+                android:paddingRight="20dp"
+                android:scaleType="fitCenter"
+                android:text="@string/push_activate_sound"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/about"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="20dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/back_about" />
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.noursouryia;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,29 +69,30 @@ import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.ThinDownloadManager;
 
-
+@SuppressWarnings("deprecation")
 public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 	public static final String ARG_FOLDER_ID = "folder_id";
-	
+
 	private ImageButton btn_folder_sound, btn_folder_photos, btn_folder_video, item_image ;
 	private TextView item_text ;
-	private ImageView btn_folders_container , slide_shower, logo_sourya, btn_element_share , btn_element_download;;
+	private ImageView btn_folders_container , slide_shower, logo_sourya, btn_element_share , btn_element_download, player_play, player_pause,player_stop;
 	private Gallery gallery ;
 	private Button paginate_left_slider, paginate_right_slider ;
 	private Type type_photo, type_video, type_sound ;
 	private GridView gridView ;
-	private LinearLayout one_media ;
+	private LinearLayout one_media, layout_audio ;
 	private RelativeLayout slider_photos, toggle_folders ;
-	private ListView list_videos;
+	private ListView list_videos, list_audios;
 	private ArrayList<Category> photo_categories = new ArrayList<Category>();
 	private ArrayList<Category> sound_categories = new ArrayList<Category>();
 	private ArrayList<Category> video_categories = new ArrayList<Category>();
 
-	private ArrayList<String> all_photo_URLS = new ArrayList<String>();
-	private ArrayList<Article> all_video_titles = new ArrayList<Article>();
+	MediaPlayer mp = new MediaPlayer();
+
+
 	private CustomGridViewAdapter photosGridAdapter, soundsGridAdapter, videosGridAdapter;
-	private VideosListAdapter videoListAdpater ;
+	private VideosListAdapter videoListAdpater, audioListAdapter ;
 
 	public final static int PHOTOS_FOLDER_SELECTED = 1;
 	public final static int SOUNDS_FOLDER_SELECTED = 2;
@@ -106,12 +109,18 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 	private Article currentArticle;
 	private View loading_feeds ;
 	private RelativeLayout home_layout, media_layout;
-//	private ImageView btn_search;
-//	private EditText edt_search;
+	//	private ImageView btn_search;
+	//	private EditText edt_search;
 
 	private ArrayList<Article> mArticles = new ArrayList<Article>();
+	private ArrayList<String> all_photo_URLS = new ArrayList<String>();
+	private ArrayList<Article> all_video_titles = new ArrayList<Article>();
+	private ArrayList<Article> allSounds = new ArrayList<Article>();
 
 	private boolean isFirstStart = true;
+
+	private boolean isPaused = false;
+	private int selectedAudioPlayer = -1;
 
 	private View hidden_view;
 
@@ -121,6 +130,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 	private NotificationManager mNotifyManager;
 	private Builder mBuilder;
 	private boolean isHome = true;
+
 
 	public HomeFragment() {
 		// Empty constructor required for fragment subclasses
@@ -162,19 +172,25 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		media_layout = (RelativeLayout) rootView.findViewById(R.id.media_layout);
 		slider_photos = (RelativeLayout) rootView.findViewById(R.id.slider_photos);
 		toggle_folders	= (RelativeLayout) rootView.findViewById(R.id.toggle_folders);
+		layout_audio	= (LinearLayout) rootView.findViewById(R.id.layout_audio);
 
 		news_feed = (TextView) rootView.findViewById(R.id.news_feed);
 		paginate_left = (Button) rootView.findViewById(R.id.paginate_left_news);
 		paginate_right = (Button) rootView.findViewById(R.id.paginate_right_news);
 
-//		btn_search = (ImageView) rootView.findViewById(R.id.btn_search);
-//		edt_search = (EditText) rootView.findViewById(R.id.edt_search);
+		//		btn_search = (ImageView) rootView.findViewById(R.id.btn_search);
+		//		edt_search = (EditText) rootView.findViewById(R.id.edt_search);
 		list_videos = (ListView) rootView.findViewById(R.id.list_videos);
+		list_audios = (ListView) rootView.findViewById(R.id.list_audios);
 
 		loading_feeds = (View) rootView.findViewById(R.id.loading_feeds);
 
 		btn_element_share = (ImageView) rootView.findViewById(R.id.btn_element_share);
 		btn_element_download = (ImageView) rootView.findViewById(R.id.btn_element_download);
+
+		player_play = (ImageView) rootView.findViewById(R.id.player_play);
+		player_pause = (ImageView) rootView.findViewById(R.id.player_pause);
+		player_stop = (ImageView) rootView.findViewById(R.id.player_stop);
 
 
 		news_feed.setTypeface(NSFonts.getNoorFont());
@@ -309,26 +325,26 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 					if (actual_image_link != null)
 					{
-						
+
 						Toast.makeText(getActivity(),getString(R.string.isdownloading), Toast.LENGTH_SHORT).show();
-						
+
 						Random r = new Random();
 						int i = r.nextInt();
-						
+
 						final Intent openPicintent = new Intent();
 						openPicintent.setAction(Intent.ACTION_VIEW);
 						openPicintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						openPicintent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()+"/NoorSouryia_pic_"+i+".jpg")), "image/jpg");
-						
+
 						PendingIntent resultPendingIntent =
-							    PendingIntent.getActivity(
-							    getActivity(),
-							    0,
-							    openPicintent,
-							    PendingIntent.FLAG_UPDATE_CURRENT
-							);
-						
-						
+								PendingIntent.getActivity(
+										getActivity(),
+										0,
+										openPicintent,
+										PendingIntent.FLAG_UPDATE_CURRENT
+										);
+
+
 						mNotifyManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 						mBuilder = new NotificationCompat.Builder(getActivity());
 						mBuilder.setContentTitle(getString(R.string.app_name))
@@ -336,28 +352,28 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 						.setContentIntent(resultPendingIntent)
 						.setAutoCancel(true)
 						.setSmallIcon(R.drawable.logo_app);
-						
-						
-						
+
+
+
 						Uri downloadUri = Uri.parse(actual_image_link);
 						DownloadRequest downloadRequest = new DownloadRequest(downloadUri);
-						
+
 						final int mDownloadId = downloadManager.add(downloadRequest);
 						final Uri destinationUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()+"/NoorSouryia_pic_"+i+".jpg");
-						
-						
+
+
 						downloadRequest.setDestinationURI(destinationUri).setPriority(DownloadRequest.Priority.HIGH);
 						downloadRequest.setDownloadListener(new DownloadStatusListener() {
-							
+
 							@Override
 							public void onDownloadComplete(int id) {
 
 								Toast.makeText(getActivity(),getString(R.string.download_successful), Toast.LENGTH_SHORT).show();
 								startActivity(Intent.createChooser(openPicintent, "Open Picture"));
-							
+
 							}
-							
-							
+
+
 							@Override
 							public void onDownloadFailed(int id, int errorCode, String errorMessage) {
 
@@ -370,13 +386,13 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 							public void onProgress(int id, long totalBytes, long downlaodedBytes, int progress) {
 								mBuilder.setProgress(100, progress, false);
 								mNotifyManager.notify(mDownloadId, mBuilder.build());
-								
+
 							}
 						});
-						
-						
 
-						
+
+
+
 
 
 					}
@@ -463,6 +479,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 					slider_photos.setVisibility(View.VISIBLE);
 					gallery.setVisibility(View.VISIBLE);
 					list_videos.setVisibility(View.GONE);
+					layout_audio.setVisibility(View.GONE);
 
 					btn_element_download.setVisibility(View.VISIBLE);
 					btn_element_share.setVisibility(View.VISIBLE);
@@ -478,12 +495,180 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 				case SOUNDS_FOLDER_SELECTED:
 
-					//					switchView(gridView, one_media);
-					//					item_text.setText(sound_categories.get(position).getName());
+					switchView(gridView, one_media);
+					item_text.setText(sound_categories.get(position).getName());
+
+					list_videos.setVisibility(View.GONE);
+					slider_photos.setVisibility(View.GONE);
+					gallery.setVisibility(View.GONE);
+					layout_audio.setVisibility(View.VISIBLE);
 
 
-					one_media.setVisibility(View.GONE);
-					gridView.setVisibility(View.VISIBLE);
+					btn_element_download.setVisibility(View.GONE);
+					btn_element_share.setVisibility(View.GONE);
+
+
+					initListSounds(sound_categories.get(position));
+
+
+					player_pause.setOnTouchListener(new OnTouchListener() {
+
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+
+							switch (event.getAction()) {
+							case MotionEvent.ACTION_DOWN: {
+								ImageView view = (ImageView) v;
+								//overlay is black with transparency of 0x77 (119)
+								view.getDrawable().setColorFilter(0x5545c2ce,PorterDuff.Mode.SRC_ATOP);
+								view.invalidate();
+								break;
+							}
+							case MotionEvent.ACTION_UP: {
+
+								mp.pause();
+								isPaused = true ;
+
+							}
+							case MotionEvent.ACTION_CANCEL: {
+								ImageView view = (ImageView) v;
+								//clear the overlay
+								view.getDrawable().clearColorFilter();
+								view.invalidate();
+								break;
+							}
+							}
+
+							return true;
+						}
+					});
+
+					player_stop.setOnTouchListener(new OnTouchListener() {
+
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+
+							switch (event.getAction()) {
+							case MotionEvent.ACTION_DOWN: {
+								ImageView view = (ImageView) v;
+								//overlay is black with transparency of 0x77 (119)
+								view.getDrawable().setColorFilter(0x5545c2ce,PorterDuff.Mode.SRC_ATOP);
+								view.invalidate();
+								break;
+							}
+							case MotionEvent.ACTION_UP: {
+
+								mp.stop();
+								isPaused = false ;
+
+							}
+							case MotionEvent.ACTION_CANCEL: {
+								ImageView view = (ImageView) v;
+								//clear the overlay
+								view.getDrawable().clearColorFilter();
+								view.invalidate();
+								break;
+							}
+							}
+
+							return true;
+						}
+					});
+
+					player_play.setOnTouchListener(new OnTouchListener() {
+
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+
+							switch (event.getAction()) {
+							case MotionEvent.ACTION_DOWN: {
+								ImageView view = (ImageView) v;
+								//overlay is black with transparency of 0x77 (119)
+								view.getDrawable().setColorFilter(0x5545c2ce,PorterDuff.Mode.SRC_ATOP);
+								view.invalidate();
+								break;
+							}
+							case MotionEvent.ACTION_UP: {
+
+
+								if (isPaused) {
+									mp.start();
+								}
+
+								else {
+
+									if (selectedAudioPlayer != -1){
+
+										if ( !mp.isPlaying()){
+											mp = new MediaPlayer();
+
+											try {
+												mp.setDataSource(allSounds.get(selectedAudioPlayer).getMp3Link());
+												mp.prepare();
+												mp.start();
+
+											} catch (IllegalArgumentException e) {
+												e.printStackTrace();
+											} catch (SecurityException e) {
+												e.printStackTrace();
+											} catch (IllegalStateException e) {
+												e.printStackTrace();
+											} catch (IOException e) {
+												e.printStackTrace();
+											}
+										}
+									}
+								}
+
+								isPaused = false ;
+
+							}
+							case MotionEvent.ACTION_CANCEL: {
+								ImageView view = (ImageView) v;
+								//clear the overlay
+								view.getDrawable().clearColorFilter();
+								view.invalidate();
+								break;
+							}
+							}
+
+							return true;
+						}
+					});
+
+					list_audios.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> parent,
+								View view, int position, long id) {
+
+							view.setSelected(true);
+
+							selectedAudioPlayer = position ;
+
+							Log.e("AUDIO LINK ********", allSounds.get(position).getMp3Link());
+
+							if (mp.isPlaying() ) mp.release();
+
+							mp = new MediaPlayer();
+							try {
+								mp.setDataSource(allSounds.get(position).getMp3Link());
+								mp.prepare();
+								mp.start();
+
+							} catch (IllegalArgumentException e) {
+								e.printStackTrace();
+							} catch (SecurityException e) {
+								e.printStackTrace();
+							} catch (IllegalStateException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+
+
+						}
+					});
 
 					actual_image_link = null ;
 
@@ -497,6 +682,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 					slider_photos.setVisibility(View.GONE);
 					gallery.setVisibility(View.GONE);
 					list_videos.setVisibility(View.VISIBLE);
+					layout_audio.setVisibility(View.GONE);
 
 					btn_element_download.setVisibility(View.GONE);
 					btn_element_share.setVisibility(View.GONE);
@@ -528,31 +714,31 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 			}
 		});
 
-//		btn_search.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				String keyword = edt_search.getText().toString();
-//				if(!keyword.equals("")){
-//					((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
-//					Utils.hideKeyboard(getActivity(), edt_search);
-//				}
-//			}
-//		});
-//
-//		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
-//			public boolean onEditorAction(TextView v, int aoString();
-//					if(!keyword.equals("")){
-//						((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
-//						Utils.hideKeyboard(getActivity(), edt_search);
-//					}ctionId, KeyEvent event) {
-//				if (actionId == EditorInfo.IME_ACTION_DONE) {
-//					String keyword = edt_search.getText().t
-//					return true;
-//				}
-//				return false;
-//			}
-//		});
+		//		btn_search.setOnClickListener(new OnClickListener() {
+		//
+		//			@Override
+		//			public void onClick(View v) {
+		//				String keyword = edt_search.getText().toString();
+		//				if(!keyword.equals("")){
+		//					((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
+		//					Utils.hideKeyboard(getActivity(), edt_search);
+		//				}
+		//			}
+		//		});
+		//
+		//		edt_search.setOnEditorActionListener(new OnEditorActionListener() {
+		//			public boolean onEditorAction(TextView v, int aoString();
+		//					if(!keyword.equals("")){
+		//						((MainActivity) getActivity()).gotoSearchArticlesFragment(keyword);
+		//						Utils.hideKeyboard(getActivity(), edt_search);
+		//					}ctionId, KeyEvent event) {
+		//				if (actionId == EditorInfo.IME_ACTION_DONE) {
+		//					String keyword = edt_search.getText().t
+		//					return true;
+		//				}
+		//				return false;
+		//			}
+		//		});
 
 		return rootView;
 	}
@@ -563,6 +749,9 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 
 		mManager = NSManager.getInstance(getActivity());
 		mManager.setFragmentEnabler(this);
+
+		audioListAdapter = new VideosListAdapter(getActivity(),  allSounds);
+		list_audios.setAdapter(audioListAdapter);
 
 		initData();
 		initMediaData();
@@ -634,7 +823,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 				mSlidingLayer.openLayer(true);
 			else
 				mSlidingLayer.closeLayer(true);
-			
+
 			isFirstStart = false;
 		}else{
 			Log.e(TAG, ">>> isHome= " + isHome);
@@ -743,9 +932,63 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 						SELECTED_FOLDER = getArguments().getInt(ARG_FOLDER_ID);
 					else
 						SELECTED_FOLDER = PHOTOS_FOLDER_SELECTED ;
-					
+
 					selectFolder();
 
+				}
+			}
+		}.execute();
+
+	}
+
+	private void initListSounds(final Category category){
+
+		new AsyncTask<Void, Void, ArrayList<Article>>() {
+
+			ProgressDialog loading ;
+
+			@Override
+			protected void onPreExecute() {
+
+				allSounds.clear();
+
+				loading = new ProgressDialog(getActivity());
+				loading.setCancelable(false);
+				loading.setMessage(getString(R.string.please_wait));
+				loading.show();
+			}
+
+
+			@Override
+			protected ArrayList<Article> doInBackground(Void... params) {
+
+				ArrayList<Article> articles = mManager.getArticlesByUrl(category.getLink());
+
+
+				if(articles.size() > 0 ){
+
+					for (int i = 0; i < articles.size(); i++) {
+
+						allSounds.add(articles.get(i));
+
+						Log.e("SOUND **********************", "link : "+articles.get(i).getMp3Link()+" ///"+articles.get(i).getTitle());
+
+					}
+				}
+
+
+				return allSounds;
+			}
+
+
+			@Override
+			protected void onPostExecute(ArrayList<Article> result) {
+				loading.dismiss();
+
+				if(result.size() > 0){
+					audioListAdapter.notifyDataSetChanged();
+
+					//					audio_shower.loadUrl(result.get(0).getMp3Link());
 				}
 			}
 		}.execute();
@@ -801,8 +1044,6 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		}.execute();
 
 	}
-
-
 
 	public void folderPhotosClick(){
 
@@ -909,7 +1150,7 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		if(!isFirstStart){
 			switchView2(home_layout, media_layout);
 		}
-		
+
 		isHome = false;
 	}
 
@@ -1180,20 +1421,20 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 		}
 	}
 
-//	public void showHiddenView(){
-//		hidden_view.setVisibility(View.VISIBLE);
-//	}
-//
-//	public void hideHiddenView(){
-//		hidden_view.setVisibility(View.GONE);
-//	}
+	//	public void showHiddenView(){
+	//		hidden_view.setVisibility(View.VISIBLE);
+	//	}
+	//
+	//	public void hideHiddenView(){
+	//		hidden_view.setVisibility(View.GONE);
+	//	}
 
 	@Override
 	public void setEnabled(boolean enable) {
-//		if(enable)
-//			hideHiddenView();
-//		else
-//			showHiddenView();
+		//		if(enable)
+		//			hideHiddenView();
+		//		else
+		//			showHiddenView();
 	}
 
 	@Override
@@ -1229,6 +1470,6 @@ public class HomeFragment extends BaseFragment implements IFragmentEnabler{
 	@Override
 	public void resetSearch(String keyword) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

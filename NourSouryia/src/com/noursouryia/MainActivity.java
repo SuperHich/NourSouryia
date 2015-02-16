@@ -446,10 +446,16 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 			case R.id.btn_rss :
 				// Share App
+				
+				startActivity(new Intent(MainActivity.this, AboutNS.class));
+				
 				break;
 
 			case R.id.btn_settings :
 				// Share App
+				
+				startActivity(new Intent(MainActivity.this, Settings.class));
+				
 				break;
 
 			case R.id.btn_search_top :

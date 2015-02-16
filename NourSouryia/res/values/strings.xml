@@ -72,4 +72,11 @@
     <string name="hint_search">أدخل كلمة البحث</string>
     <string name="articles">مقالات منوعة</string>
     <string name="result">نتيجة</string>
+    
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="push_activate">تشغيل الاشعارات :</string>
+    <string name="push_activate_sound">تشغيل صوت الاشعارات :</string>
+    
+    
 </resources>
