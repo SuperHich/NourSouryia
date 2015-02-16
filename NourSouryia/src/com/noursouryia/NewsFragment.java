@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.noursouryia.entity.Category;
 import com.noursouryia.utils.BaseFragment;
@@ -20,7 +21,7 @@ public class NewsFragment extends BaseFragment  {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.news_fragment, container, false);
+		rootView = (RelativeLayout) inflater.inflate(R.layout.news_fragment, container, false);
 
 		diaries = (Button) rootView.findViewById(R.id.thawra_diaries);
 		jawla = (Button) rootView.findViewById(R.id.jawla_sahafa);

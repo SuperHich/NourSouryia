@@ -73,9 +73,17 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	private ExpandableListView mDrawerList;
 	private LinearLayout mDrawerLinear ;
 
-	private Button btn_menu_outside, btn_menu_inside, btn_share, btn_lamp,  btn_opener_top, btn_search_top, btn_rss, btn_settings;
+	private Button btn_menu_outside, btn_menu_inside, btn_share, btn_lamp;
+
+	private static Button btn_opener_top;
+
+	private Button btn_search_top;
+
+	private Button btn_rss;
+
+	private Button btn_settings;
 	private ImageView img_title, btn_search;
-	private View headerSeparator;
+	private static View headerSeparator;
 
 	private ActionBarDrawerToggle mDrawerToggle;
 	private RelativeLayout layout_search;
@@ -83,10 +91,10 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	public static final int MESSAGE_START = 1;
 
-	private boolean isFirstStart = true;
-	public boolean isTopOpener = false;
-	public boolean isImgTitle = false;
-	public boolean searchBtnEnable = false;
+	private static boolean isFirstStart = true;
+	public static boolean isTopOpener = false;
+	public static boolean isImgTitle = false;
+	public static boolean searchBtnEnable = false;
 
 	private Fragment fragment1;
 	private String currentFragment;
@@ -628,13 +636,13 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	}
 
 
-	public void showOpenerTop(){
+	public static void showOpenerTop(){
 		Log.v(TAG, ">>> showOpenerTop");
 		btn_opener_top.setVisibility(View.VISIBLE);
 		headerSeparator.setVisibility(View.VISIBLE);
 	}
 
-	public void hideOpenerTop(){
+	public static  void hideOpenerTop(){
 		Log.v(TAG, ">>> hideOpenerTop");
 		btn_opener_top.setVisibility(View.GONE);
 		headerSeparator.setVisibility(View.GONE);
