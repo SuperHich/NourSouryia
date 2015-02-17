@@ -271,12 +271,11 @@ public class BaseFragment extends Fragment implements ISlidingLayerOpenCloseList
 				args.putString(ListArticlesFragment.ARG_ARTICLE_TITLE, type.getNameAr());
 				((MainActivity) getActivity()).onTypeItemClicked(fragTAG, args, true);
 			}
+			else
+				if(category != null){
+					((MainActivity) getActivity()).gotoListArticlesFragment(category.getLink(), category.getName(), category.getName());
+				}
 			
-			if(category != null){
-				((MainActivity) getActivity()).gotoListArticlesFragment(category.getLink(), category.getName(), category.getName());
-			}
-			
-
 		}
 		case MotionEvent.ACTION_CANCEL: {
 			Button view = (Button) v;

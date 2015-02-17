@@ -88,7 +88,7 @@ public class NewsFragment extends BaseFragment  {
 			break;
 		}
 		}
-		return true;
+		return super.onTouch(v, event);
 	}
 
 }

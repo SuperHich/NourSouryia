@@ -339,7 +339,6 @@ public class AuthorsFragment extends BaseFragment {
 			int taskExecutionNumber = executedTasksCount.get();
             Log.i("", "doInBackground: entered, taskExecutionNumber = " + taskExecutionNumber);
             ArrayList<Article> articles = NSManager.getInstance(getActivity()).getArticlesByUrl(link); // some job
-//            SystemClock.sleep(3000); // emulates some job
             taskExecutionNumber = executedTasksCount.decrementAndGet();
             Log.i("", "doInBackground: is about to finish, taskExecutionNumber = " + taskExecutionNumber);
             
@@ -401,6 +400,8 @@ public class AuthorsFragment extends BaseFragment {
 
 		if(authors != null){
 			adapter.notifyDataSetChanged();
+			if(authors.size() % 10 != 0)
+				expandableLV.getRefreshableView().removeFooterView(footer);
 		}else
 			((MainActivity)getActivity()).showConnectionErrorPopup();
 

@@ -209,10 +209,10 @@ public class NSManager {
 		return comments;
 	}
 	
-	public ArrayList<File> getFiles() {
+	public ArrayList<File> getFiles(int pageNb) {
 
 		ArrayList<File> files = new ArrayList<File>();
-		JSONArray array = jsonParser.getJSONFromUrl(URL_FILES);
+		JSONArray array = jsonParser.getJSONFromUrl(URL_FILES+"?page="+pageNb);
 		if (array != null) 
 			for (int i = 0; i < array.length(); i++) {
 				try {
