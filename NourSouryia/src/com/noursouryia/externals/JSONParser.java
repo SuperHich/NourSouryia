@@ -36,9 +36,9 @@ import org.json.JSONObject;
 import android.util.Log;
  
 /**
- * Sa7i7 Al Boukhari
+ * NourSyria
  * @author HICHEM LAROUSSI - RAMI TRABELSI
- * Copyright (c) 2014 Zad Group. All rights reserved.
+ * Copyright (c) 2014. All rights reserved.
  */
 
 public class JSONParser {
@@ -79,7 +79,7 @@ public class JSONParser {
  
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
+                    is, "utf-8"), 8);
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -134,7 +134,7 @@ public class JSONParser {
 
     	try {
     		BufferedReader reader = new BufferedReader(new InputStreamReader(
-    				is, "iso-8859-1"), 8);
+    				is, "utf-8"), 8);
     		StringBuilder sb = new StringBuilder();
     		String line = null;
     		while ((line = reader.readLine()) != null) {
@@ -190,7 +190,7 @@ public class JSONParser {
  
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
+                    is, "utf-8"), 8);
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -245,7 +245,7 @@ public class JSONParser {
 
     	try {
     		BufferedReader reader = new BufferedReader(new InputStreamReader(
-    				is, "iso-8859-1"), 8);
+    				is, "utf-8"), 8);
     		StringBuilder sb = new StringBuilder();
     		String line = null;
     		while ((line = reader.readLine()) != null) {
@@ -297,7 +297,7 @@ public class JSONParser {
 // 
 //        try {
 //            BufferedReader reader = new BufferedReader(new InputStreamReader(
-//                    is, "iso-8859-1"), 8);
+//                    is, "utf-8"), 8);
 //            StringBuilder sb = new StringBuilder();
 //            String line = null;
 //            while ((line = reader.readLine()) != null) {

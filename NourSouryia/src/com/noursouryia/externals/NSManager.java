@@ -130,6 +130,24 @@ public class NSManager {
 		return settings.getBoolean(PREF_ONLINE_MODE, true);		
 	}
 	
+	public void setNotificationSettings(boolean isRegistered){
+		editor.putBoolean("notifs", isRegistered);
+		editor.commit();
+	}
+	
+	public boolean isNotificationEnabled(){
+		return settings.getBoolean("notifs", false);
+	}
+	
+	public void setNotificationSoundSettings(boolean isRegistered){
+		editor.putBoolean("notifs_sound", isRegistered);
+		editor.commit();
+	}
+	
+	public boolean isNotificationSoundEnabled(){
+		return settings.getBoolean("notifs_sound", false);
+	}
+	
 	public ArrayList<Type> getTypes() {
 
 		ArrayList<Type> types = new ArrayList<Type>();
@@ -209,10 +227,11 @@ public class NSManager {
 		return comments;
 	}
 	
-	public ArrayList<File> getFiles(int pageNb) {
+	public ArrayList<File> getFiles() {
 
 		ArrayList<File> files = new ArrayList<File>();
-		JSONArray array = jsonParser.getJSONFromUrl(URL_FILES+"?page="+pageNb);
+//		JSONArray array = jsonParser.getJSONFromUrl(URL_FILES+"?page="+pageNb);
+		JSONArray array = jsonParser.getJSONFromUrl(URL_FILES+"?NumPager=2500");
 		if (array != null) 
 			for (int i = 0; i < array.length(); i++) {
 				try {
@@ -237,10 +256,11 @@ public class NSManager {
 		return files;
 	}
 	
-	public ArrayList<Author> getAuthors(int pageNb) {
+	public ArrayList<Author> getAuthors() {
 
 		ArrayList<Author> authors = new ArrayList<Author>();
-		JSONArray array = jsonParser.getJSONFromUrl(URL_AUTHORS+"?page="+pageNb);
+		JSONArray array = jsonParser.getJSONFromUrl(URL_AUTHORS+"?NumPager=2500");
+//		JSONArray array = jsonParser.getJSONFromUrl(URL_AUTHORS+"?page="+pageNb);
 		if (array != null) 
 			for (int i = 0; i < array.length(); i++) {
 				try {

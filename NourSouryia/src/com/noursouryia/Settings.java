@@ -28,7 +28,7 @@ public class Settings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
-
+		mManager = NSManager.getInstance(this);
 
 		notif_text	= (TextView) findViewById(R.id.notif_text);
 		notif_sound_text	= (TextView) findViewById(R.id.notif_sound_text);
@@ -42,6 +42,9 @@ public class Settings extends Activity {
 		notif_sound_text.setTypeface(NSFonts.getKufah());
 
 
+		notif_switch.setChecked(mManager.isNotificationEnabled());
+		notif_sound_switch.setChecked(mManager.isNotificationSoundEnabled());
+		
 		notif_switch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -57,7 +60,26 @@ public class Settings extends Activity {
 
 				}
 
+				mManager.setNotificationSettings(isChecked);
+			}
+		});
+		
+		notif_sound_switch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+
+				if(isChecked){
+					//Switch is currently ON
+
+
+				}else{
+					//Switch is currently OFF"
+
+				}
+
+				mManager.setNotificationSoundSettings(isChecked);
 			}
 		});
 

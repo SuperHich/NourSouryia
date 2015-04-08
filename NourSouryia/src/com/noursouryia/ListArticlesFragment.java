@@ -51,6 +51,7 @@ public class ListArticlesFragment extends BaseFragment {
 	private int pageNb = 0;
 	
 	private String link, category, title;
+	private boolean withPagination = true;
 	
 	public ListArticlesFragment() {
 		// Empty constructor required for fragment subclasses
@@ -79,6 +80,8 @@ public class ListArticlesFragment extends BaseFragment {
 			link 		= getArguments().getString(ARG_ARTICLE_LINK);
 			category 	= getArguments().getString(ARG_ARTICLE_CATEGORY);
 			title 		= getArguments().getString(ARG_ARTICLE_TITLE);
+			
+			withPagination = !link.contains("NumPager");
 		}
 	}
 	
@@ -124,7 +127,7 @@ public class ListArticlesFragment extends BaseFragment {
 		}else{
 			toggleEmptyMessage();
 		
-			if(pageNb == 1)
+			if(pageNb == 1 && withPagination)
 				listView.getRefreshableView().addFooterView(footer, null, true);
 		}
 		
@@ -138,33 +141,36 @@ public class ListArticlesFragment extends BaseFragment {
 			}
 		});
 		
-		((InternalListView)listView.getRefreshableView()).setOnLoadMoreListener(new OnLoadMoreListener() {
-			public void onLoadMore() {
-				// Do the work to load more items at the end of list
-				// here
-				if(!Utils.isOnline(getActivity()))
-				{	
-//					((MainActivity)getActivity()).showOnLineModePopup();
-					((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
+		if(withPagination){
+			((InternalListView)listView.getRefreshableView()).setOnLoadMoreListener(new OnLoadMoreListener() {
+				public void onLoadMore() {
+					// Do the work to load more items at the end of list
+					// here
+					if(!Utils.isOnline(getActivity()))
+					{	
+						//					((MainActivity)getActivity()).showOnLineModePopup();
+						((InternalListView)listView.getRefreshableView()).onLoadMoreComplete();
+					}
+					else{
+						initData();
+					}
 				}
-				else{
-					initData();
+			});
+
+			footer.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if(Utils.isOnline(getActivity()))
+					{
+						txv_showMore.setVisibility(View.GONE);
+						progressBar.setVisibility(View.VISIBLE);
+						initData();
+					}
 				}
-			}
-		});
-		
-		footer.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(Utils.isOnline(getActivity()))
-				{
-					txv_showMore.setVisibility(View.GONE);
-					progressBar.setVisibility(View.VISIBLE);
-					initData();
-				}
-			}
-		});
+			});
+
+		}
 		
 		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
@@ -177,7 +183,7 @@ public class ListArticlesFragment extends BaseFragment {
 				}
 				else{
 					
-					if(pageNb==1)
+					if(pageNb==1 && withPagination)
 						listView.getRefreshableView().removeFooterView(footer);
 					
 					txv_showMore.setVisibility(View.VISIBLE);
@@ -215,10 +221,14 @@ public class ListArticlesFragment extends BaseFragment {
 							return ((NSActivity)getActivity()).NourSouryiaDB.getArticlesByStringID(NSManager.TYPE, category);
 					}
 					else if(Utils.isOnline(getActivity())){
+						String pagination = "";
 						if(pageNb == 0)
 							articles.clear();
 						
-						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticlesByUrl(link+"&page="+pageNb++);
+						if(withPagination)
+							pagination = "&page="+pageNb++;
+						
+						ArrayList<Article> list = NSManager.getInstance(getActivity()).getArticlesByUrl(link+pagination);
 						
 						if(list.size() > 0)
 							for(Article a : list){
@@ -249,13 +259,14 @@ public class ListArticlesFragment extends BaseFragment {
 					listView.onRefreshComplete();
 				
 				if(result != null){
-					
-					if(pageNb == 1)
-						listView.getRefreshableView().addFooterView(footer, null, true);
-					else 
-					if(pageNb == 2)
-						listView.getRefreshableView().removeFooterView(footer);
-					
+					if(withPagination)
+					{
+						if(pageNb == 1)
+							listView.getRefreshableView().addFooterView(footer, null, true);
+						else 
+							if(pageNb == 2)
+								listView.getRefreshableView().removeFooterView(footer);
+					}
 					articles.addAll(result);
 					adapter.notifyDataSetChanged();
 				}else
