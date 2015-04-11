@@ -39,6 +39,7 @@ import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 
 public class ArticleFragment extends BaseFragment {
@@ -292,8 +293,27 @@ public class ArticleFragment extends BaseFragment {
 		txv_article_content1.setText(formatText(contentParts[0]));
 		txv_article_content2.setText(formatText(contentParts[1]));
 
-		if(currentArticle.getFilePath().size() > 0)
-			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_article);
+		
+		Log.e("File Path SIZE ", "File Path SIZE "+currentArticle.getFilePath().size());
+		
+		if(currentArticle.getFilePath().size() > 0){
+			
+			
+			
+			String url = currentArticle.getFilePath().get(0) ;
+			
+			if (url.contains(" ")) {
+				url = url.replace(" ", "%20");
+			}
+			
+			Log.e("URL PHOTO ARTICLE ", "URL : "+url);
+			
+			Picasso.with(getActivity()).load(url).placeholder(R.drawable.btn_folder_photos).into(img_article);
+		}
+//			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_article);
+		
+		
+		
 
 	}
 
