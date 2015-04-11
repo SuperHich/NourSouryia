@@ -39,7 +39,6 @@ import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
 import com.noursouryia.utils.NSFonts;
 import com.noursouryia.utils.Utils;
-import com.squareup.picasso.Picasso;
 
 
 public class ArticleFragment extends BaseFragment {
