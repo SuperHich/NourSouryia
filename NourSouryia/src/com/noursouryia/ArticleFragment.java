@@ -308,9 +308,10 @@ public class ArticleFragment extends BaseFragment {
 			
 			Log.e("URL PHOTO ARTICLE ", "URL : "+url);
 			
-			Picasso.with(getActivity()).load(url).placeholder(R.drawable.btn_folder_photos).into(img_article);
+//			Picasso.with(getActivity()).load(url).placeholder(R.drawable.btn_folder_photos).into(img_article);
+			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_article);
 		}
-//			ImageLoader.getInstance().displayImage(currentArticle.getFilePath().get(0), img_article);
+
 		
 		
 		
