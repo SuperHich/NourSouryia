@@ -371,6 +371,13 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 		super.onStop();
 
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		isFirstStart = true;
+	}
 
 	@Override
 	public void onMenuItemClicked(int position) {
