@@ -3,9 +3,12 @@ package com.noursouryia;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -25,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -34,6 +38,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.noursouryia.adapters.CommentsAdapter;
 import com.noursouryia.entity.Article;
 import com.noursouryia.entity.Comment;
+import com.noursouryia.externals.LoopjRestClient;
 import com.noursouryia.externals.NSManager;
 import com.noursouryia.utils.BaseFragment;
 import com.noursouryia.utils.NSActivity;
@@ -45,7 +50,7 @@ public class ArticleFragment extends BaseFragment {
 
 	public static final String ARG_WITH_COMMENTS = "with_comments";
 	private TextView txv_article_title, txv_author_name, txv_article_content1, txv_article_content2;
-	private Button btn_share;
+	private Button btn_share, btn_open_pdf;
 	private ImageView img_article;
 	private Article currentArticle;
 	private boolean isFirstStart = true;
@@ -90,6 +95,7 @@ public class ArticleFragment extends BaseFragment {
 		txv_article_content2 = (TextView) rootView.findViewById(R.id.txv_article_content2);
 
 		btn_share = (Button) rootView.findViewById(R.id.btn_share);
+		btn_open_pdf = (Button) rootView.findViewById(R.id.btn_open_pdf);
 		img_article = (ImageView) rootView.findViewById(R.id.img_article);
 
 		comments_listview = (RelativeLayout) rootView.findViewById(R.id.comments_listview);
@@ -242,9 +248,13 @@ public class ArticleFragment extends BaseFragment {
 					refreshOldComments();
 				}else
 					toggleEmptyMessage();
+			
+			btn_open_pdf.setVisibility(currentArticle.getPdfLink() != null ? View.VISIBLE : View.GONE);
+				
 		}
 
 		btn_share.setOnTouchListener(this);
+		btn_open_pdf.setOnTouchListener(this);
 
 	}
 
@@ -266,6 +276,9 @@ public class ArticleFragment extends BaseFragment {
 			switch (v.getId()) {
 			case R.id.btn_share:
 				shareArticle();
+				break;
+			case R.id.btn_open_pdf:
+				openPDF();
 				break;
 
 			default:
@@ -508,5 +521,72 @@ public class ArticleFragment extends BaseFragment {
 		super.onDetach();
 
 		isCanceled  = true;
+	}
+	
+	private void openPDF() {
+
+		String url = currentArticle.getPdfLink();
+		File d = getActivity().getExternalFilesDir(null);
+
+		if(d != null){
+			String basePath = d.getAbsolutePath() + File.separator;
+			
+			String[] parts = url.split("/");
+			final String fileName = parts[parts.length - 1];
+			File pdfFile = new File(basePath, fileName);
+
+			if(!pdfFile.exists())
+			{
+				LoopjRestClient.getFromUrl(url, new FileAsyncHttpResponseHandler(pdfFile) {
+
+					private ProgressDialog progressDialog;
+
+					@Override
+					public void onStart() {
+						progressDialog = ProgressDialog.show(getActivity(), "",
+								"Please Wait...", true);
+					}
+
+					@Override
+					public void onFinish() {
+						progressDialog.dismiss();
+					}
+
+					@Override
+					public void onProgress(int bytesWritten, int totalSize) {
+						super.onProgress(bytesWritten, totalSize);
+
+						final int dl_progress = (int) ((double)bytesWritten / (double)totalSize * 100f);
+						progressDialog.setMessage("Please Wait... " + dl_progress + "%");
+					}
+
+					@Override
+					public void onSuccess(int arg0, Header[] arg1, File file) {
+						Toast.makeText(getActivity(), "Success loading PDF", Toast.LENGTH_LONG).show();
+						readPDF(file);
+					}
+
+					@Override
+					public void onFailure(int arg0, Header[] arg1, Throwable arg2, File arg3) {
+						Toast.makeText(getActivity(), "Failed to load PDF", Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+			else
+				readPDF(pdfFile);
+		}
+	}
+	
+	private void readPDF(File file){
+		try {
+			Intent intent = new Intent();
+			intent.setPackage("com.adobe.reader");
+			intent.setAction(android.content.Intent.ACTION_VIEW);
+			intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+			startActivity(intent);
+		} catch (android.content.ActivityNotFoundException e) {
+			Log.e(TAG, "Error loading file " + file.getName() + ":" + e.toString());
+//			Utils.displayMsgInDialogWithBack("No external application to display this document ! Install one and try again later", DocumentActivity.this);
+		}
 	}
 }

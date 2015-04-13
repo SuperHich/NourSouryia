@@ -24,6 +24,15 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/btn_share_article" />
 
+             <Button
+                android:id="@+id/btn_open_pdf"
+                android:layout_width="30dp"
+                android:layout_height="32dp"
+                android:layout_toRightOf="@+id/btn_share"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pdf_icon" />
+            
             <TextView
                 android:id="@+id/txv_article_title"
                 android:layout_width="match_parent"
@@ -32,7 +41,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/btn_share"
+                android:layout_toRightOf="@+id/btn_open_pdf"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
                 android:textColor="#37a13d"
