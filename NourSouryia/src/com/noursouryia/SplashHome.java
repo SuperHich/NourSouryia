@@ -109,7 +109,8 @@ public class SplashHome extends NSActivity {
 				ArrayList<Type> types = new ArrayList<Type>();
 				try{
 
-					if(Utils.isOnline(SplashHome.this) && mManager.isOnlineMode())
+//					if(Utils.isOnline(SplashHome.this) && mManager.isOnlineMode())
+					if(Utils.isOnline(SplashHome.this))
 					{
 						types =	mManager.getTypes(); // OK
 
