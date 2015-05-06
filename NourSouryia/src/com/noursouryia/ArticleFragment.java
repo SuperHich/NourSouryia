@@ -544,7 +544,7 @@ public class ArticleFragment extends BaseFragment {
 					@Override
 					public void onStart() {
 						progressDialog = ProgressDialog.show(getActivity(), "",
-								"Please Wait...", true);
+								getString(R.string.isdownloading), true);
 					}
 
 					@Override
@@ -557,18 +557,18 @@ public class ArticleFragment extends BaseFragment {
 						super.onProgress(bytesWritten, totalSize);
 
 						final int dl_progress = (int) ((double)bytesWritten / (double)totalSize * 100f);
-						progressDialog.setMessage("Please Wait... " + dl_progress + "%");
+						progressDialog.setMessage(getString(R.string.isdownloading) + " " + dl_progress + "%");
 					}
 
 					@Override
 					public void onSuccess(int arg0, Header[] arg1, File file) {
-						Toast.makeText(getActivity(), "Success loading PDF", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), getString(R.string.download_successful), Toast.LENGTH_LONG).show();
 						readPDF(file);
 					}
 
 					@Override
 					public void onFailure(int arg0, Header[] arg1, Throwable arg2, File arg3) {
-						Toast.makeText(getActivity(), "Failed to load PDF", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), getString(R.string.download_fail), Toast.LENGTH_LONG).show();
 					}
 				});
 			}

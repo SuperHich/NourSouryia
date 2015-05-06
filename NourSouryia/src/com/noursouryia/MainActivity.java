@@ -61,6 +61,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 	public static final String COMMENTS_FRAGMENT 		= "comments_fragment";
 	public static final String ADD_COMMENT_FRAGMENT 	= "add_comment_fragment";
 	public static final String SEARCH_FRAGMENT 			= "search_fragment";
+	public static final String SEARCH_WEB_FRAGMENT 		= "search_web_fragment";
 	public static final String THAWRA_DIARIES 			= "thawra_diaries";
 	public static final String LIST_NEWS_FRAGMENT 		= "list_news_fragment";
 	public static final String POLLS_FRAGMENT 			= "polls_fragment";
@@ -411,6 +412,8 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 			return new ListNewsFragment();
 		else if(fragTAG.equals(POLLS_FRAGMENT))
 			return new PollsFragment();
+		else if(fragTAG.equals(SEARCH_WEB_FRAGMENT))
+			return new SearchArticlesWebFragment();
 
 		return null;
 	}
@@ -541,7 +544,7 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	public void gotoArticleFragment(Article article, boolean withComments){
 
-		NSManager.getInstance(this).setCurrentArticle(article);
+		mManager.setCurrentArticle(article);
 		Bundle args = new Bundle();
 		args.putBoolean(ArticleFragment.ARG_WITH_COMMENTS, withComments);
 		gotoFragmentByTag(ARTICLE_FRAGMENT, args, true);
@@ -550,20 +553,29 @@ public class MainActivity extends NSActivity implements IMenuListener, OnTouchLi
 
 	public void gotoArticleFragment(Article article){
 
-		NSManager.getInstance(this).setCurrentArticle(article);
+		mManager.setCurrentArticle(article);
 		gotoFragmentByTag(ARTICLE_FRAGMENT, null, true);
 
 	}
 
 	public void gotoSearchArticlesFragment(String keyword){
 
-		if(currentFragment.equals(SEARCH_FRAGMENT))
+//		if(currentFragment.equals(SEARCH_FRAGMENT))
+//			mManager.getFragmentEnabler().resetSearch(keyword);
+//		else{
+//			popBackStackTillEntry(1);
+//			Bundle args = new Bundle();
+//			args.putString(SearchArticlesFragment.ARG_ARTICLE_KEYWORD, keyword);
+//			gotoFragmentByTag(SEARCH_FRAGMENT, args, true);
+//		}
+		
+		if(currentFragment.equals(SEARCH_WEB_FRAGMENT))
 			mManager.getFragmentEnabler().resetSearch(keyword);
 		else{
 			popBackStackTillEntry(1);
 			Bundle args = new Bundle();
-			args.putString(SearchArticlesFragment.ARG_ARTICLE_KEYWORD, keyword);
-			gotoFragmentByTag(SEARCH_FRAGMENT, args, true);
+			args.putString(SearchArticlesWebFragment.ARG_ARTICLE_KEYWORD, keyword);
+			gotoFragmentByTag(SEARCH_WEB_FRAGMENT, args, true);
 		}
 	}
 
